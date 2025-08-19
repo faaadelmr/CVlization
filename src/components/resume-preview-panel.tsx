@@ -8,7 +8,7 @@ import { ModernTemplatePreview } from "./templates/modern-template";
 import { ClassicTemplatePreview } from "./templates/classic-template";
 import { Skeleton } from "./ui/skeleton";
 import domtoimage from 'dom-to-image';
-import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
 
 const templateMap = {
   modern: {
@@ -31,14 +31,13 @@ export function ResumePreviewPanel() {
 
   const TemplatePreview = templateMap[selectedTemplate].preview;
 
-  const fileName = resumeData.personal.name ? `${resumeData.personal.name.replace(/\s+/g, '-')}-Resume.png` : 'resume.png';
+  const fileName = resumeData.personal.name ? `${resumeData.personal.name.replace(/\s+/g, '-')}-Resume.pdf` : 'resume.pdf';
   
   const handleDownload = async () => {
     if (!resumeRef.current) return;
     setLoading(true);
     try {
-      const blob = await domtoimage.toBlob(resumeRef.current, {
-         // The library struggles with external resources like fonts, so we need a little help.
+      const dataUrl = await domtoimage.toPng(resumeRef.current, {
         style: {
           '@font-face': {
             'font-family': 'Inter',
@@ -48,7 +47,13 @@ export function ResumePreviewPanel() {
           },
         }
       });
-      saveAs(blob, fileName);
+      
+      const pdf = new jsPDF();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(fileName);
+
     } catch (error) {
       console.error('oops, something went wrong!', error);
     } finally {
@@ -66,12 +71,12 @@ export function ResumePreviewPanel() {
             ) : (
               <Download className="mr-2 h-4 w-4" />
             )}
-            {loading ? "Generating..." : "Download Image"}
+            {loading ? "Generating..." : "Download PDF"}
           </Button>
         ) : (
           <Button disabled>
             <Download className="mr-2 h-4 w-4" />
-            Download Image
+            Download PDF
           </Button>
         )}
       </div>
