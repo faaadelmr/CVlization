@@ -13,17 +13,23 @@ import type { ResumeData } from "@/lib/types";
 export function ResumeForm() {
   const { resumeData, setResumeData } = useResume();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: keyof ResumeData, index?: number, field?: string) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: keyof Omit<ResumeData, 'experience' | 'education'>) => {
     const { name, value } = e.target;
-    
-    setResumeData(prev => {
-      const newData = { ...prev };
-      if (section === 'personal' || section === 'skills' || section === 'references') {
-        (newData[section] as any)[name] = value;
-      } else if ((section === 'experience' || section === 'education') && index !== undefined && field) {
-        (newData[section][index] as any)[field] = value;
+    setResumeData(prev => ({
+      ...prev,
+      [section]: {
+        ...(prev[section] as any),
+        [name]: value,
       }
-      return newData;
+    }));
+  };
+  
+  const handleIndexedChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: 'experience' | 'education', index: number) => {
+    const { name, value } = e.target;
+    setResumeData(prev => {
+      const newSection = [...prev[section]];
+      (newSection[index] as any)[name] = value;
+      return { ...prev, [section]: newSection };
     });
   };
 
@@ -93,20 +99,20 @@ export function ResumeForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Company</Label>
-                  <Input value={exp.company} onChange={(e) => handleChange(e, 'experience', index, 'company')} />
+                  <Input name="company" value={exp.company} onChange={(e) => handleIndexedChange(e, 'experience', index)} />
                 </div>
                 <div className="space-y-2">
                   <Label>Role</Label>
-                  <Input value={exp.role} onChange={(e) => handleChange(e, 'experience', index, 'role')} />
+                  <Input name="role" value={exp.role} onChange={(e) => handleIndexedChange(e, 'experience', index)} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Date</Label>
-                <Input value={exp.date} onChange={(e) => handleChange(e, 'experience', index, 'date')} />
+                <Input name="date" value={exp.date} onChange={(e) => handleIndexedChange(e, 'experience', index)} />
               </div>
               <div className="space-y-2">
                 <Label>Description</Label>
-                <Textarea value={exp.description} onChange={(e) => handleChange(e, 'experience', index, 'description')} rows={4} />
+                <Textarea name="description" value={exp.description} onChange={(e) => handleIndexedChange(e, 'experience', index)} rows={4} />
               </div>
               <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive" onClick={() => removeExperience(exp.id)}><MinusCircle /></Button>
             </div>
@@ -123,20 +129,20 @@ export function ResumeForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Institution</Label>
-                  <Input value={edu.institution} onChange={(e) => handleChange(e, 'education', index, 'institution')} />
+                  <Input name="institution" value={edu.institution} onChange={(e) => handleIndexedChange(e, 'education', index)} />
                 </div>
                 <div className="space-y-2">
                   <Label>Degree</Label>
-                  <Input value={edu.degree} onChange={(e) => handleChange(e, 'education', index, 'degree')} />
+                  <Input name="degree" value={edu.degree} onChange={(e) => handleIndexedChange(e, 'education', index)} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Date</Label>
-                <Input value={edu.date} onChange={(e) => handleChange(e, 'education', index, 'date')} />
+                <Input name="date" value={edu.date} onChange={(e) => handleIndexedChange(e, 'education', index)} />
               </div>
               <div className="space-y-2">
                 <Label>Description</Label>
-                <Textarea value={edu.description} onChange={(e) => handleChange(e, 'education', index, 'description')} rows={2}/>
+                <Textarea name="description" value={edu.description} onChange={(e) => handleIndexedChange(e, 'education', index)} rows={2}/>
               </div>
               <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive" onClick={() => removeEducation(edu.id)}><MinusCircle /></Button>
             </div>
