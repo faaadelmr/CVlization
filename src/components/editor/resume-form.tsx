@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Briefcase, GraduationCap, MinusCircle, PlusCircle, User, Wrench } from "lucide-react";
+import { Briefcase, BookUser, GraduationCap, MinusCircle, PlusCircle, User, Wrench } from "lucide-react";
 import type { ChangeEvent } from "react";
 import type { ResumeData } from "@/lib/types";
 
 export function ResumeForm() {
   const { resumeData, setResumeData } = useResume();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: keyof Omit<ResumeData, 'experience' | 'education'>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: keyof Omit<ResumeData, 'experience' | 'education' | 'skills' | 'references'>) => {
     const { name, value } = e.target;
     setResumeData(prev => ({
       ...prev,
@@ -156,6 +156,14 @@ export function ResumeForm() {
         <AccordionContent className="p-4 pt-0 space-y-2">
           <Label htmlFor="skills">Skills (comma-separated)</Label>
           <Textarea id="skills" name="skills" value={resumeData.skills} onChange={(e) => setResumeData({...resumeData, skills: e.target.value})} rows={4}/>
+        </AccordionContent>
+      </AccordionItem>
+      
+      <AccordionItem value="references" className="border rounded-lg bg-background">
+        <AccordionTrigger className="p-4 font-headline text-lg hover:no-underline"><BookUser className="mr-2 text-primary" /> References</AccordionTrigger>
+        <AccordionContent className="p-4 pt-0 space-y-2">
+          <Label htmlFor="references">References</Label>
+          <Textarea id="references" name="references" value={resumeData.references} onChange={(e) => setResumeData({...resumeData, references: e.target.value})} rows={2}/>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

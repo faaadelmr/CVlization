@@ -140,7 +140,7 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
       <section>
         <h2 className="text-2xl font-headline font-bold uppercase border-b-2 pb-1 mb-4" style={sectionTitleStyle}>Skills</h2>
         <div className="flex flex-wrap gap-2">
-          {data.skills.split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+          {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
             <span key={skill} className="text-sm font-medium py-1 px-3 rounded-full" style={skillStyle}>{skill}</span>
           ))}
         </div>
@@ -170,9 +170,9 @@ export const ModernTemplatePDF = ({ data, color }: { data: ResumeData, color: st
     <Document title={`${data.personal.name} - Resume`} author={data.personal.name}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={[styles.name, dynamicStyles.name]}>{data.personal.name}</Text>
+          <Text style={[styles.name, dynamicStyles.name]}>{data.personal.name || ''}</Text>
           <Text style={styles.contactInfo}>
-            {data.personal.email} | {data.personal.phone} | {data.personal.location}
+            {(data.personal.email || '')} | {(data.personal.phone || '')} | {(data.personal.location || '')}
             {data.personal.website && (
               <Text> | <Link src={`https://${data.personal.website}`} style={{color: 'blue', textDecoration: 'underline'}}>{data.personal.website}</Link></Text>
             )}
@@ -184,11 +184,11 @@ export const ModernTemplatePDF = ({ data, color }: { data: ResumeData, color: st
           {data.experience.map(exp => (
             <View key={exp.id} style={styles.entry}>
               <View style={styles.entryHeader}>
-                <Text style={styles.title}>{exp.role}</Text>
-                <Text style={styles.date}>{exp.date}</Text>
+                <Text style={styles.title}>{exp.role || ''}</Text>
+                <Text style={styles.date}>{exp.date || ''}</Text>
               </View>
-              <Text style={styles.subtitle}>{exp.company}</Text>
-              <Text style={styles.description}>{exp.description}</Text>
+              <Text style={styles.subtitle}>{exp.company || ''}</Text>
+              <Text style={styles.description}>{exp.description || ''}</Text>
             </View>
           ))}
         </View>
@@ -198,11 +198,11 @@ export const ModernTemplatePDF = ({ data, color }: { data: ResumeData, color: st
           {data.education.map(edu => (
             <View key={edu.id} style={styles.entry}>
                <View style={styles.entryHeader}>
-                <Text style={styles.title}>{edu.institution}</Text>
-                <Text style={styles.date}>{edu.date}</Text>
+                <Text style={styles.title}>{edu.institution || ''}</Text>
+                <Text style={styles.date}>{edu.date || ''}</Text>
               </View>
-              <Text style={styles.subtitle}>{edu.degree}</Text>
-              <Text style={styles.description}>{edu.description}</Text>
+              <Text style={styles.subtitle}>{edu.degree || ''}</Text>
+              <Text style={styles.description}>{edu.description || ''}</Text>
             </View>
           ))}
         </View>
@@ -210,7 +210,7 @@ export const ModernTemplatePDF = ({ data, color }: { data: ResumeData, color: st
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Skills</Text>
           <View style={styles.skills}>
-            {data.skills.split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+            {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
               <Text key={skill} style={[styles.skill, {backgroundColor: `${color}20`, color: '#333'}]}>{skill}</Text>
             ))}
           </View>

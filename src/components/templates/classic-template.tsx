@@ -94,15 +94,17 @@ export const ClassicTemplatePreview = ({ data, color }: { data: ResumeData, colo
           <div>
             <h3 className="font-bold text-base mb-1" style={nameStyle}>Skills</h3>
             <ul className="list-disc list-inside">
-              {data.skills.split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
                 <li key={skill}>{skill}</li>
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="font-bold text-base mb-1" style={nameStyle}>References</h3>
-            <p>{data.references}</p>
-          </div>
+          {data.references && (
+            <div>
+              <h3 className="font-bold text-base mb-1" style={nameStyle}>References</h3>
+              <p className="whitespace-pre-line">{data.references}</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -157,27 +159,29 @@ export const ClassicTemplatePDF = ({ data, color }: { data: ResumeData, color: s
     <Document title={`${data.personal.name} - Resume`} author={data.personal.name}>
       <Page size="A4" style={styles.page}>
         <View style={[styles.leftColumn, dynamicStyles.leftColumn]}>
-          <Text style={[styles.name, dynamicStyles.name]}>{data.personal.name}</Text>
+          <Text style={[styles.name, dynamicStyles.name]}>{data.personal.name || ''}</Text>
           
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, {color: color, borderBottomColor: color}]}>Contact</Text>
-            <Text style={styles.contactItem}>{data.personal.phone}</Text>
-            <Text style={styles.contactItem}>{data.personal.email}</Text>
-            <Text style={styles.contactItem}>{data.personal.location}</Text>
+            <Text style={styles.contactItem}>{data.personal.phone || ''}</Text>
+            <Text style={styles.contactItem}>{data.personal.email || ''}</Text>
+            <Text style={styles.contactItem}>{data.personal.location || ''}</Text>
             {data.personal.website && <Link src={`https://${data.personal.website}`} style={[styles.contactItem, {color: 'blue', textDecoration: 'underline'}]}>{data.personal.website}</Link>}
           </View>
 
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, {color: color, borderBottomColor: color}]}>Skills</Text>
-            {data.skills.split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+            {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
                 <Text key={skill} style={styles.skill}>{skill}</Text>
             ))}
           </View>
           
-          <View style={styles.section}>
-            <Text style={[styles.sectionTitle, {color: color, borderBottomColor: color}]}>References</Text>
-            <Text style={styles.skill}>{data.references}</Text>
-          </View>
+          {data.references && (
+            <View style={styles.section}>
+              <Text style={[styles.sectionTitle, {color: color, borderBottomColor: color}]}>References</Text>
+              <Text style={styles.description}>{data.references}</Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.rightColumn}>
@@ -186,11 +190,11 @@ export const ClassicTemplatePDF = ({ data, color }: { data: ResumeData, color: s
             {data.experience.map(exp => (
               <View key={exp.id} style={styles.entry}>
                 <View style={styles.entryHeader}>
-                  <Text style={styles.title}>{exp.role}</Text>
-                  <Text style={styles.date}>{exp.date}</Text>
+                  <Text style={styles.title}>{exp.role || ''}</Text>
+                  <Text style={styles.date}>{exp.date || ''}</Text>
                 </View>
-                <Text style={styles.subtitle}>{exp.company}</Text>
-                <Text style={styles.description}>{exp.description}</Text>
+                <Text style={styles.subtitle}>{exp.company || ''}</Text>
+                <Text style={styles.description}>{exp.description || ''}</Text>
               </View>
             ))}
           </View>
@@ -200,11 +204,11 @@ export const ClassicTemplatePDF = ({ data, color }: { data: ResumeData, color: s
             {data.education.map(edu => (
               <View key={edu.id} style={styles.entry}>
                 <View style={styles.entryHeader}>
-                  <Text style={styles.title}>{edu.institution}</Text>
-                  <Text style={styles.date}>{edu.date}</Text>
+                  <Text style={styles.title}>{edu.institution || ''}</Text>
+                  <Text style={styles.date}>{edu.date || ''}</Text>
                 </View>
-                <Text style={styles.subtitle}>{edu.degree}</Text>
-                <Text style={styles.description}>{edu.description}</Text>
+                <Text style={styles.subtitle}>{edu.degree || ''}</Text>
+                <Text style={styles.description}>{edu.description || ''}</Text>
               </View>
             ))}
           </View>
