@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ResumeProvider } from '@/context/resume-context';
 
 export const metadata: Metadata = {
-  title: 'CVlization',
+  title: 'CV-lization',
   description: 'faaadelmr - #CobaAjaDulu',
 };
 
