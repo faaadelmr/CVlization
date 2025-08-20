@@ -15,7 +15,7 @@ export const ProfessionalTemplatePreview = ({ data, color }: { data: ResumeData,
       {/* Header */}
       <header className="flex items-center justify-between mb-8 pb-4 border-b">
         <div>
-          <h1 className="text-5xl font-bold" style={{ ...fontStyle, ...accentColorStyle }}>{data.personal.name}</h1>
+          <h1 className="text-4xl font-bold" style={{ ...fontStyle, ...accentColorStyle }}>{data.personal.name}</h1>
           <p className="text-xl font-light text-gray-600 mt-1" style={fontStyle}>{data.personal.role}</p>
         </div>
         <div className="text-right text-xs space-y-1">

@@ -14,7 +14,7 @@ export const SwissTemplatePreview = ({ data, color }: { data: ResumeData, color:
       <div className="grid grid-cols-12 gap-x-12">
         {/* Header */}
         <header className="col-span-12 border-b-4 border-gray-800 pb-6 mb-8">
-          <h1 className="text-6xl font-bold tracking-tighter uppercase" style={fontStyle}>{data.personal.name}</h1>
+          <h1 className="text-4xl font-bold tracking-tighter uppercase" style={fontStyle}>{data.personal.name}</h1>
           <p className="text-2xl font-light text-gray-600 mt-1" style={fontStyle}>{data.personal.role}</p>
         </header>
         
