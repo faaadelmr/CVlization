@@ -1,7 +1,7 @@
 
 "use client";
 import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Star, BookUser, Briefcase, GraduationCap } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Star, BookUser, Briefcase, GraduationCap, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
 
 export const ElegantTemplatePreview = ({ data, color }: { data: ResumeData, color: string }) => {
@@ -13,7 +13,7 @@ export const ElegantTemplatePreview = ({ data, color }: { data: ResumeData, colo
     <div className="bg-white text-gray-700 h-full p-10 flex flex-col" style={fontStyle}>
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold tracking-widest uppercase" style={{ ...fontStyle, color }}>{data.personal.name}</h1>
-        <p className="text-lg font-light text-gray-500 mt-2 tracking-wider" style={fontStyle}>Frontend Developer</p>
+        <p className="text-lg font-light text-gray-500 mt-2 tracking-wider" style={fontStyle}>{data.personal.role}</p>
       </header>
 
       <div className="border-t-2 border-b-2 my-4" style={{ borderColor: color }}>
@@ -29,6 +29,14 @@ export const ElegantTemplatePreview = ({ data, color }: { data: ResumeData, colo
       
       <main className="grid grid-cols-12 gap-10 flex-grow mt-8">
         <div className="col-span-8 pr-8">
+          <section className="mb-10">
+             <h2 className="text-xl font-semibold uppercase tracking-wider mb-5 flex items-center gap-3" style={{ ...accentColorStyle, ...fontStyle }}>
+              <User />
+              Profile
+            </h2>
+            <p className="text-sm text-gray-600 whitespace-pre-line">{data.personal.description}</p>
+          </section>
+
           <section className="mb-10">
             <h2 className="text-xl font-semibold uppercase tracking-wider mb-5 flex items-center gap-3" style={{ ...accentColorStyle, ...fontStyle }}>
               <Briefcase />

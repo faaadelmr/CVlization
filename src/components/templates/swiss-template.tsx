@@ -1,7 +1,7 @@
 
 "use client";
 import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
 
 export const SwissTemplatePreview = ({ data, color }: { data: ResumeData, color: string }) => {
@@ -15,7 +15,7 @@ export const SwissTemplatePreview = ({ data, color }: { data: ResumeData, color:
         {/* Header */}
         <header className="col-span-12 border-b-4 border-gray-800 pb-6 mb-8">
           <h1 className="text-6xl font-bold tracking-tighter uppercase" style={fontStyle}>{data.personal.name}</h1>
-          <p className="text-2xl font-light text-gray-600 mt-1" style={fontStyle}>Frontend Developer</p>
+          <p className="text-2xl font-light text-gray-600 mt-1" style={fontStyle}>{data.personal.role}</p>
         </header>
         
         {/* Left Column */}
@@ -65,6 +65,11 @@ export const SwissTemplatePreview = ({ data, color }: { data: ResumeData, color:
 
         {/* Right Column */}
         <main className="col-span-8">
+          <section className="mb-10">
+            <h2 className="text-sm font-bold uppercase tracking-[0.2em] mb-5" style={{...accentColor, ...fontStyle}}>Profile</h2>
+            <p className="text-sm text-gray-600 whitespace-pre-line">{data.personal.description}</p>
+          </section>
+
           <section className="mb-10">
             <h2 className="text-sm font-bold uppercase tracking-[0.2em] mb-5" style={{...accentColor, ...fontStyle}}>Experience</h2>
             {data.experience.map(exp => (

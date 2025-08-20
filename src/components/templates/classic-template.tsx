@@ -1,7 +1,7 @@
 
 "use client";
 import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Wrench, BookUser, Briefcase, GraduationCap } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Wrench, BookUser, Briefcase, GraduationCap, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
 
 // Web Preview Component
@@ -17,7 +17,7 @@ export const ClassicTemplatePreview = ({ data, color }: { data: ResumeData, colo
       {/* Left Column */}
       <div className="w-2/5 p-8" style={leftColStyle}>
         <h1 className="text-4xl font-bold mb-2" style={{...nameStyle, ...fontStyle}}>{data.personal.name}</h1>
-        <p className="text-lg font-medium text-gray-600 mb-8" style={fontStyle}>Frontend Developer</p>
+        <p className="text-lg font-medium text-gray-600 mb-8" style={fontStyle}>{data.personal.role}</p>
         
         <div className="space-y-6 text-sm">
           <div>
@@ -46,6 +46,10 @@ export const ClassicTemplatePreview = ({ data, color }: { data: ResumeData, colo
 
       {/* Right Column */}
       <div className="w-3/5 p-8">
+        <section className="mb-8">
+            <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><User /> Profile</h2>
+            <p className="text-sm text-gray-600 whitespace-pre-line">{data.personal.description}</p>
+        </section>
         <section className="mb-8">
           <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Briefcase /> Experience</h2>
           {data.experience.map(exp => (

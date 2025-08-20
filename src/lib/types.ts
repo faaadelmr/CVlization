@@ -2,10 +2,12 @@
 export interface ResumeData {
   personal: {
     name: string;
+    role: string;
     email: string;
     phone: string;
     location: string;
     website: string;
+    description: string;
   };
   experience: {
     id: string;
@@ -38,4 +40,6 @@ export interface ResumeContextProps {
   setSelectedColor: React.Dispatch<React.SetStateAction<string>>;
   selectedFont: Font;
   setSelectedFont: React.Dispatch<React.SetStateAction<Font>>;
+  handleAnalyzeResume: (photoDataUri: string) => Promise<void>;
+  isAiLoading: boolean;
 }

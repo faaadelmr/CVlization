@@ -1,7 +1,7 @@
 
 "use client";
 import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
 
 // Web Preview Component
@@ -25,7 +25,7 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
       {/* Header */}
       <header className="text-center mb-10 border-b-2 pb-6" style={{borderColor: color}}>
         <h1 className="text-5xl font-bold" style={{ ...fontStyle, color }}>{data.personal.name}</h1>
-        <p className="text-xl font-light text-gray-600 mt-2" style={fontStyle}>Frontend Developer</p>
+        <p className="text-xl font-light text-gray-600 mt-2" style={fontStyle}>{data.personal.role}</p>
         <div className="flex justify-center items-center gap-x-4 text-sm text-gray-600 mt-4">
           <div className="flex items-center gap-2"><Mail size={14}/> {data.personal.email}</div>
           <span className="opacity-50">&bull;</span>
@@ -40,6 +40,12 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
           )}
         </div>
       </header>
+      
+      {/* Profile */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><User />Profile</h2>
+        <p className="text-sm text-gray-600 whitespace-pre-line">{data.personal.description}</p>
+      </section>
 
       {/* Experience */}
       <section className="mb-8">

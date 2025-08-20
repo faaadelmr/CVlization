@@ -71,6 +71,10 @@ export function ResumeForm() {
               <Label htmlFor="name">Full Name</Label>
               <Input id="name" name="name" value={resumeData.personal.name} onChange={(e) => handleChange(e, 'personal')} />
             </div>
+             <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
+              <Input id="role" name="role" value={resumeData.personal.role} onChange={(e) => handleChange(e, 'personal')} />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" type="email" value={resumeData.personal.email} onChange={(e) => handleChange(e, 'personal')} />
@@ -83,10 +87,14 @@ export function ResumeForm() {
               <Label htmlFor="location">Location</Label>
               <Input id="location" name="location" value={resumeData.personal.location} onChange={(e) => handleChange(e, 'personal')} />
             </div>
-          </div>
-           <div className="space-y-2">
+             <div className="space-y-2">
               <Label htmlFor="website">Website/Portfolio</Label>
               <Input id="website" name="website" value={resumeData.personal.website} onChange={(e) => handleChange(e, 'personal')} />
+            </div>
+          </div>
+           <div className="space-y-2">
+              <Label htmlFor="description">Personal Description</Label>
+              <Textarea id="description" name="description" value={resumeData.personal.description} onChange={(e) => handleChange(e, 'personal')} rows={3}/>
             </div>
         </AccordionContent>
       </AccordionItem>
