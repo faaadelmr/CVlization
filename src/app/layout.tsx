@@ -5,7 +5,7 @@ import { ResumeProvider } from '@/context/resume-context';
 
 export const metadata: Metadata = {
   title: 'CVlization',
-  description: 'Craft your professional story.',
+  description: 'faaadelmr - #CobaAjaDulu',
 };
 
 export default function RootLayout({

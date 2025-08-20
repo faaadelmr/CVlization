@@ -4,12 +4,12 @@ import type { ResumeData } from './types';
 export const initialData: ResumeData = {
   personal: {
     name: "Fadel Muhamad Rifai",
-    role: "Frontend Developer",
+    role: "Web Developer",
     email: "faaadelmr@gmail.com",
     phone: "0812-3456-7890",
-    location: "Jakarta, Indonesia",
+    location: "Tangerang, Indonesia",
     website: "faaadelmr.pages.dev",
-    description: "Frontend developer with over 5 years of experience in building modern and responsive web applications using React, Next.js, and TypeScript. Passionate about creating great user experiences and clean code.",
+    description: "Mahasiswa yang lagi memperdalam teknik 'Pernapasan AI, gerakan pertama: aplikasi berbasis web'",
   },
   experience: [
     {
@@ -35,10 +35,10 @@ export const initialData: ResumeData = {
       id: "edu1",
       institution: "Universitas Dian Nusantara",
       degree: "S.Kom, Ilmu Komputer",
-      date: "2013 - 2017",
+      date: "2022 - Sekarang",
       description: "",
     },
   ],
-  skills: "React, Next.js, TypeScript, Tailwind CSS, JavaScript, HTML, CSS, Laravel",
+  skills: "React, Next.js, TypeScript, Tailwind CSS, JavaScript, Laravel",
   references: "Tersedia berdasarkan permintaan",
 };
