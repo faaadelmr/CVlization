@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { ResumeProvider } from '@/context/resume-context';
 
 export const metadata: Metadata = {
-  title: 'CV-lization',
-  description: 'faaadelmr - #CobaAjaDulu',
+  title: 'CV-lization by faaadelmr',
+  description: 'Apps Resume Builder with preview and AI for old your CV',
 };
 
 export default function RootLayout({
