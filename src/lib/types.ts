@@ -1,3 +1,4 @@
+
 export interface ResumeData {
   personal: {
     name: string;
@@ -24,7 +25,9 @@ export interface ResumeData {
   references: string;
 }
 
-export type Template = 'modern' | 'classic';
+export type Template = 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional';
+export type Font = 'Inter' | 'Space Grotesk' | 'Roboto' | 'Lato' | 'Montserrat' | 'Open Sans' | 'Merriweather' | 'Source Sans Pro' | 'Playfair Display';
+
 
 export interface ResumeContextProps {
   resumeData: ResumeData;
@@ -33,4 +36,6 @@ export interface ResumeContextProps {
   setSelectedTemplate: React.Dispatch<React.SetStateAction<Template>>;
   selectedColor: string;
   setSelectedColor: React.Dispatch<React.SetStateAction<string>>;
+  selectedFont: Font;
+  setSelectedFont: React.Dispatch<React.SetStateAction<Font>>;
 }

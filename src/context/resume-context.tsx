@@ -1,15 +1,17 @@
+
 "use client";
 
 import React, { createContext, useContext, useState } from 'react';
-import type { ResumeContextProps, ResumeData, Template } from '@/lib/types';
+import type { ResumeContextProps, ResumeData, Template, Font } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 
 const ResumeContext = createContext<ResumeContextProps | undefined>(undefined);
 
 export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [resumeData, setResumeData] = useState<ResumeData>(initialData);
-  const [selectedTemplate, setSelectedTemplate] = useState<Template>('modern');
-  const [selectedColor, setSelectedColor] = useState<string>('#6A89CC'); // Dusty Blue
+  const [selectedTemplate, setSelectedTemplate] = useState<Template>('professional');
+  const [selectedColor, setSelectedColor] = useState<string>('#2c3e50'); // Midnight Blue
+  const [selectedFont, setSelectedFont] = useState<Font>('Lato');
 
   const value = {
     resumeData,
@@ -18,6 +20,8 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setSelectedTemplate,
     selectedColor,
     setSelectedColor,
+    selectedFont,
+    setSelectedFont,
   };
 
   return (

@@ -3,8 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResumeForm } from "./editor/resume-form";
 import { StylePanel } from "./editor/style-panel";
-import { AiAssistPanel } from "./editor/ai-assist-panel";
-import { FileText, Palette, Sparkles } from "lucide-react";
+import { FileText, Palette } from "lucide-react";
 
 export function EditorPanel() {
   return (
@@ -15,10 +14,9 @@ export function EditorPanel() {
       </header>
       <Tabs defaultValue="content" className="flex-1 flex flex-col overflow-hidden">
         <div className="px-6 py-4 border-b">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="content"><FileText className="mr-2 h-4 w-4" /> Content</TabsTrigger>
             <TabsTrigger value="style"><Palette className="mr-2 h-4 w-4" /> Style</TabsTrigger>
-            <TabsTrigger value="ai"><Sparkles className="mr-2 h-4 w-4" /> AI Assist</TabsTrigger>
           </TabsList>
         </div>
         <ScrollArea className="flex-1">
@@ -28,9 +26,6 @@ export function EditorPanel() {
             </TabsContent>
             <TabsContent value="style" className="mt-0">
               <StylePanel />
-            </TabsContent>
-            <TabsContent value="ai" className="mt-0">
-              <AiAssistPanel />
             </TabsContent>
           </div>
         </ScrollArea>
