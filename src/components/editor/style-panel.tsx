@@ -10,14 +10,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import type { Font, Template } from "@/lib/types";
 import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
+import { ProfessionalTemplatePreview } from "../templates/professional-template";
+import { ModernTemplatePreview } from "../templates/modern-template";
+import { ClassicTemplatePreview } from "../templates/classic-template";
+import { CreativeTemplatePreview } from "../templates/creative-template";
+import { SwissTemplatePreview } from "../templates/swiss-template";
+import { ElegantTemplatePreview } from "../templates/elegant-template";
 
-const templates: { id: Template, name: string, image: string, hint: string }[] = [
-  { id: 'professional', name: 'Professional', image: 'https://placehold.co/400x565', hint: 'resume professional' },
-  { id: 'modern', name: 'Modern', image: 'https://placehold.co/400x565' , hint: 'resume modern'},
-  { id: 'classic', name: 'Classic', image: 'https://placehold.co/400x565', hint: 'resume classic' },
-  { id: 'creative', name: 'Creative', image: 'https://placehold.co/400x565', hint: 'resume creative' },
-  { id: 'swiss', name: 'Swiss', image: 'https://placehold.co/400x565', hint: 'resume swiss design' },
-  { id: 'elegant', name: 'Elegant', image: 'https://placehold.co/400x565', hint: 'resume elegant' },
+const templates: { id: Template, name: string, component: React.FC<any> }[] = [
+  { id: 'professional', name: 'Professional', component: ProfessionalTemplatePreview },
+  { id: 'modern', name: 'Modern', component: ModernTemplatePreview },
+  { id: 'classic', name: 'Classic', component: ClassicTemplatePreview },
+  { id: 'creative', name: 'Creative', component: CreativeTemplatePreview },
+  { id: 'swiss', name: 'Swiss', component: SwissTemplatePreview },
+  { id: 'elegant', name: 'Elegant', component: ElegantTemplatePreview },
 ];
 
 const colors = [
@@ -52,30 +58,29 @@ const fonts: { id: Font; name: string }[] = [
   { id: 'Playfair Display', name: 'Playfair Display' },
 ];
 
-const TemplateCard = ({ template, isSelected, onClick }: { template: typeof templates[0], isSelected: boolean, onClick: () => void }) => {
-  const [isLoading, setIsLoading] = useState(true);
+const TemplateCard = ({ template, isSelected, onClick, resumeData, color }: { template: typeof templates[0], isSelected: boolean, onClick: () => void, resumeData: any, color: string }) => {
+  const TemplateComponent = template.component;
   return (
       <Card
         onClick={onClick}
         className={cn(
-          "cursor-pointer transition-all",
+          "cursor-pointer transition-all overflow-hidden",
           isSelected ? "ring-2 ring-primary" : "hover:shadow-md"
         )}
       >
         <CardHeader className="p-4">
           <CardTitle className="text-base font-body">{template.name}</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="aspect-[400/565] relative">
-            {isLoading && <Skeleton className="absolute inset-0 rounded-b-lg" />}
-            <Image
-              src={template.image}
-              alt={`${template.name} template preview`}
-              fill
-              data-ai-hint={template.hint}
-              className="rounded-b-lg object-cover"
-              onLoad={() => setIsLoading(false)}
-            />
+        <CardContent className="p-0 bg-white">
+           <div className="aspect-[210/297] w-full h-full relative overflow-hidden">
+             <div className="absolute inset-0 scale-[0.25] origin-top-left" style={{
+               transform: 'scale(0.25)', // Adjust scale as needed
+               transformOrigin: 'top left',
+               width: '400%',
+               height: '400%',
+             }}>
+              <TemplateComponent data={resumeData} color={color} />
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -83,7 +88,7 @@ const TemplateCard = ({ template, isSelected, onClick }: { template: typeof temp
 }
 
 export function StylePanel() {
-  const { selectedTemplate, setSelectedTemplate, selectedColor, setSelectedColor, selectedFont, setSelectedFont } = useResume();
+  const { resumeData, selectedTemplate, setSelectedTemplate, selectedColor, setSelectedColor, selectedFont, setSelectedFont } = useResume();
 
   return (
     <div className="space-y-8">
@@ -96,6 +101,8 @@ export function StylePanel() {
               template={template}
               isSelected={selectedTemplate === template.id}
               onClick={() => setSelectedTemplate(template.id)}
+              resumeData={resumeData}
+              color={selectedColor}
             />
           ))}
         </div>
