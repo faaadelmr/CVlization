@@ -45,6 +45,16 @@ const colors = [
   { id: 'charcoal', value: '#34495e', name: 'Charcoal' },
   { id: 'deep-ocean', value: '#005f73', name: 'Deep Ocean' },
 ];
+const bgColors = [
+    { id: 'white', value: '#FFFFFF', name: 'White' },
+    { id: 'ivory', value: '#FFFFF0', name: 'Ivory' },
+    { id: 'light-gray', value: '#F5F5F5', name: 'Light Gray' },
+    { id: 'beige', value: '#F5F5DC', name: 'Beige' },
+    { id: 'light-blue', value: '#E6F0FF', name: 'Light Blue' },
+    { id: 'dark-charcoal', value: '#2C2C2C', name: 'Dark Charcoal' },
+    { id: 'navy', value: '#1A2A45', name: 'Navy' },
+];
+
 
 const fonts: { id: Font; name: string }[] = [
   { id: 'Lato', name: 'Lato' },
@@ -58,7 +68,7 @@ const fonts: { id: Font; name: string }[] = [
   { id: 'Playfair Display', name: 'Playfair Display' },
 ];
 
-const TemplateCard = ({ template, isSelected, onClick, resumeData, color }: { template: typeof templates[0], isSelected: boolean, onClick: () => void, resumeData: any, color: string }) => {
+const TemplateCard = ({ template, isSelected, onClick, resumeData, color, bgColor, textColor }: { template: typeof templates[0], isSelected: boolean, onClick: () => void, resumeData: any, color: string, bgColor: string, textColor: string }) => {
   const TemplateComponent = template.component;
   return (
       <Card
@@ -71,15 +81,15 @@ const TemplateCard = ({ template, isSelected, onClick, resumeData, color }: { te
         <CardHeader className="p-4">
           <CardTitle className="text-base font-body">{template.name}</CardTitle>
         </CardHeader>
-        <CardContent className="p-0 bg-white">
-           <div className="aspect-[210/297] w-full h-full relative overflow-hidden">
+        <CardContent className="p-0">
+           <div className="aspect-[210/297] w-full h-full relative overflow-hidden" style={{ background: bgColor }}>
              <div className="absolute inset-0 scale-[0.25] origin-top-left" style={{
                transform: 'scale(0.25)', // Adjust scale as needed
                transformOrigin: 'top left',
                width: '400%',
                height: '400%',
              }}>
-              <TemplateComponent data={resumeData} color={color} />
+              <TemplateComponent data={resumeData} color={color} bgColor={bgColor} textColor={textColor} />
             </div>
           </div>
         </CardContent>
@@ -88,7 +98,7 @@ const TemplateCard = ({ template, isSelected, onClick, resumeData, color }: { te
 }
 
 export function StylePanel() {
-  const { resumeData, selectedTemplate, setSelectedTemplate, selectedColor, setSelectedColor, selectedFont, setSelectedFont } = useResume();
+  const { resumeData, selectedTemplate, setSelectedTemplate, selectedColor, setSelectedColor, selectedFont, setSelectedFont, selectedBgColor, setSelectedBgColor, selectedTextColor } = useResume();
 
   return (
     <div className="space-y-8">
@@ -103,12 +113,14 @@ export function StylePanel() {
               onClick={() => setSelectedTemplate(template.id)}
               resumeData={resumeData}
               color={selectedColor}
+              bgColor={selectedBgColor}
+              textColor={selectedTextColor}
             />
           ))}
         </div>
       </div>
       <div>
-        <h3 className="text-xl font-headline mb-4">Color Scheme</h3>
+        <h3 className="text-xl font-headline mb-4">Text Color</h3>
         <div className="flex flex-wrap gap-3">
           {colors.map(color => (
             <button
@@ -116,8 +128,25 @@ export function StylePanel() {
               title={color.name}
               onClick={() => setSelectedColor(color.value)}
               className={cn(
-                "w-8 h-8 rounded-full transition-transform transform hover:scale-110",
+                "w-8 h-8 rounded-full transition-transform transform hover:scale-110 border",
                 selectedColor === color.value ? "ring-2 ring-primary ring-offset-2" : ""
+              )}
+              style={{ backgroundColor: color.value }}
+            />
+          ))}
+        </div>
+      </div>
+       <div>
+        <h3 className="text-xl font-headline mb-4">Background Color</h3>
+        <div className="flex flex-wrap gap-3">
+          {bgColors.map(color => (
+            <button
+              key={color.id}
+              title={color.name}
+              onClick={() => setSelectedBgColor(color.value)}
+              className={cn(
+                "w-8 h-8 rounded-full transition-transform transform hover:scale-110 border",
+                selectedBgColor === color.value ? "ring-2 ring-primary ring-offset-2" : ""
               )}
               style={{ backgroundColor: color.value }}
             />

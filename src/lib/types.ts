@@ -38,6 +38,10 @@ export interface ResumeContextProps {
   setSelectedTemplate: React.Dispatch<React.SetStateAction<Template>>;
   selectedColor: string;
   setSelectedColor: React.Dispatch<React.SetStateAction<string>>;
+  selectedBgColor: string;
+  setSelectedBgColor: React.Dispatch<React.SetStateAction<string>>;
+  selectedTextColor: string;
+  setSelectedTextColor: React.Dispatch<React.SetStateAction<string>>;
   selectedFont: Font;
   setSelectedFont: React.Dispatch<React.SetStateAction<Font>>;
   handleAnalyzeResume: (photoDataUri: string) => Promise<void>;

@@ -4,21 +4,21 @@ import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Star, BookUser, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
 
-export const CreativeTemplatePreview = ({ data, color }: { data: ResumeData, color: string }) => {
+export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
   const headerStyle = { backgroundColor: color };
   const accentColorStyle = { color: color };
   const skillTagStyle = { backgroundColor: `${color}20`, color: color, borderColor: `${color}80` };
   const fontStyle = { fontFamily: selectedFont };
-
+  const lightTextStyle = { color: textColor, opacity: 0.8 };
 
   return (
-    <div className="bg-white text-gray-700 h-full overflow-auto" style={fontStyle}>
+    <div className="h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       <header style={headerStyle} className="p-10 text-white relative">
         <div className="absolute top-8 right-8 w-24 h-24 bg-white/20 rounded-full"></div>
         <div className="absolute bottom-4 left-12 w-16 h-16 bg-white/20 rounded-lg transform rotate-12"></div>
-        <h1 className="text-5xl font-bold relative z-10" style={fontStyle}>{data.personal.name}</h1>
-        <p className="text-xl font-light mt-2 relative z-10" style={fontStyle}>{data.personal.role}</p>
+        <h1 className="font-bold relative z-10" style={{...fontStyle, fontSize: '3rem'}}>{data.personal.name}</h1>
+        <p className="font-light mt-2 relative z-10" style={{...fontStyle, fontSize: '1.25rem'}}>{data.personal.role}</p>
         <div className="grid grid-cols-2 gap-x-6 gap-y-3 mt-6 text-sm relative z-10">
           <div className="flex items-center gap-2">
             <Mail size={16} />
@@ -48,7 +48,7 @@ export const CreativeTemplatePreview = ({ data, color }: { data: ResumeData, col
                 <User />
                 Profile
             </h2>
-            <p className="text-sm text-gray-600 whitespace-pre-line">{data.personal.description}</p>
+            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
           </section>
 
           <section className="mb-10">
@@ -59,11 +59,11 @@ export const CreativeTemplatePreview = ({ data, color }: { data: ResumeData, col
             {data.experience.map(exp => (
               <div key={exp.id} className="mb-6 relative pl-6 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:rounded-full" style={{ '::before': { backgroundColor: color } }}>
                 <div className="flex justify-between items-baseline">
-                  <h3 className="text-lg font-bold text-gray-800" style={fontStyle}>{exp.role}</h3>
-                  <p className="text-xs font-mono text-gray-500">{exp.date}</p>
+                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.125rem', color: textColor}}>{exp.role}</h3>
+                  <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
                 </div>
-                <h4 className="text-md font-semibold text-gray-600 mb-2" style={fontStyle}>{exp.company}</h4>
-                <div className="text-sm text-gray-600 whitespace-pre-line prose max-w-none prose-sm">{exp.description}</div>
+                <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1rem', ...lightTextStyle, opacity: 0.9}}>{exp.company}</h4>
+                <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={lightTextStyle}>{exp.description}</div>
               </div>
             ))}
           </section>
@@ -76,11 +76,11 @@ export const CreativeTemplatePreview = ({ data, color }: { data: ResumeData, col
             {data.education.map(edu => (
                <div key={edu.id} className="mb-6 relative pl-6 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:rounded-full" style={{ '::before': { backgroundColor: color } }}>
                 <div className="flex justify-between items-baseline">
-                  <h3 className="text-lg font-bold text-gray-800" style={fontStyle}>{edu.institution}</h3>
-                  <p className="text-xs font-mono text-gray-500">{edu.date}</p>
+                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.125rem', color: textColor}}>{edu.institution}</h3>
+                  <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
                 </div>
-                <h4 className="text-md font-semibold text-gray-600 mb-2" style={fontStyle}>{edu.degree}</h4>
-                <p className="text-sm text-gray-600 whitespace-pre-line">{edu.description}</p>
+                <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1rem', ...lightTextStyle, opacity: 0.9}}>{edu.degree}</h4>
+                <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
               </div>
             ))}
           </section>
@@ -106,7 +106,7 @@ export const CreativeTemplatePreview = ({ data, color }: { data: ResumeData, col
                 <BookUser />
                 References
               </h2>
-              <p className="text-sm whitespace-pre-line">{data.references}</p>
+              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
             </section>
           )}
         </div>

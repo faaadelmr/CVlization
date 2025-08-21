@@ -54,9 +54,9 @@ export function AiAssistPanel() {
   return (
     <Card className="bg-background border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 font-headline"><Wand2 /> AI Assist</CardTitle>
+        <CardTitle className="flex items-center gap-2 font-headline"><Wand2 /> AI Re-write</CardTitle>
         <CardDescription>
-          Upload an image of your existing resume, and our AI will automatically fill in the fields for you.
+          Upload image your old CV, and AI will re-write for you.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">

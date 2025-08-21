@@ -5,7 +5,7 @@ import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser,
 import { useResume } from '@/context/resume-context';
 
 // Web Preview Component
-export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color: string }) => {
+export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
   const sectionTitleStyle = {
     borderColor: color,
@@ -19,14 +19,16 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
   }
   
   const fontStyle = { fontFamily: selectedFont };
+  const textStyle = { color: textColor };
+  const lightTextStyle = { color: textColor, opacity: 0.8 };
 
   return (
-    <div className="p-8 bg-white text-gray-800 h-full overflow-auto" style={fontStyle}>
+    <div className="p-8 h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       {/* Header */}
       <header className="text-center mb-10 border-b-2 pb-6" style={{borderColor: color}}>
-        <h1 className="text-5xl font-bold" style={{ ...fontStyle, color }}>{data.personal.name}</h1>
-        <p className="text-xl font-light text-gray-600 mt-2" style={fontStyle}>{data.personal.role}</p>
-        <div className="flex justify-center items-center gap-x-4 text-sm text-gray-600 mt-4">
+        <h1 className="font-bold" style={{ ...fontStyle, color, fontSize: '3rem' }}>{data.personal.name}</h1>
+        <p className="font-light mt-2" style={{...fontStyle, fontSize: '1.25rem', ...lightTextStyle}}>{data.personal.role}</p>
+        <div className="flex justify-center items-center gap-x-4 text-sm mt-4" style={lightTextStyle}>
           <div className="flex items-center gap-2"><Mail size={14}/> {data.personal.email}</div>
           <span className="opacity-50">&bull;</span>
           <div className="flex items-center gap-2"><Phone size={14}/> {data.personal.phone}</div>
@@ -35,7 +37,7 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
           {data.personal.website && (
             <>
                <span className="opacity-50">&bull;</span>
-              <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="text-primary hover:underline flex items-center gap-2"><Globe size={14}/>{data.personal.website}</a>
+              <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-2" style={{color}}><Globe size={14}/>{data.personal.website}</a>
             </>
           )}
         </div>
@@ -44,7 +46,7 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
       {/* Profile */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><User />Profile</h2>
-        <p className="text-sm text-gray-600 whitespace-pre-line">{data.personal.description}</p>
+        <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
       </section>
 
       {/* Experience */}
@@ -53,11 +55,11 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
         {data.experience.map(exp => (
           <div key={exp.id} className="mb-5">
             <div className="flex justify-between items-baseline">
-              <h3 className="text-xl font-bold" style={fontStyle}>{exp.role}</h3>
-              <p className="text-sm text-gray-500 font-mono">{exp.date}</p>
+              <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{exp.role}</h3>
+              <p className="text-sm font-mono" style={lightTextStyle}>{exp.date}</p>
             </div>
-            <h4 className="text-lg font-semibold mb-2" style={{...fontStyle, color}}>{exp.company}</h4>
-            <div className="text-sm text-gray-600 whitespace-pre-line prose max-w-none prose-sm">{exp.description}</div>
+            <h4 className="text-lg font-semibold mb-2" style={{...fontStyle, color, fontSize: '1.125rem'}}>{exp.company}</h4>
+            <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={lightTextStyle}>{exp.description}</div>
           </div>
         ))}
       </section>
@@ -68,11 +70,11 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
         {data.education.map(edu => (
           <div key={edu.id} className="mb-5">
             <div className="flex justify-between items-baseline">
-              <h3 className="text-xl font-bold" style={fontStyle}>{edu.institution}</h3>
-              <p className="text-sm text-gray-500 font-mono">{edu.date}</p>
+              <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{edu.institution}</h3>
+              <p className="text-sm font-mono" style={lightTextStyle}>{edu.date}</p>
             </div>
-            <h4 className="text-lg font-semibold mb-1" style={{...fontStyle, color}}>{edu.degree}</h4>
-            <p className="text-sm text-gray-600 whitespace-pre-line">{edu.description}</p>
+            <h4 className="text-lg font-semibold mb-1" style={{...fontStyle, color, fontSize: '1.125rem'}}>{edu.degree}</h4>
+            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
           </div>
         ))}
       </section>
@@ -90,7 +92,7 @@ export const ModernTemplatePreview = ({ data, color }: { data: ResumeData, color
         {data.references && (
            <section>
             <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><BookUser />References</h2>
-            <p className="text-sm whitespace-pre-line">{data.references}</p>
+            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
           </section>
         )}
       </div>

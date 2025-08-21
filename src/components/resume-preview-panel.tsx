@@ -38,7 +38,7 @@ const templateMap = {
 };
 
 export function ResumePreviewPanel() {
-  const { resumeData, selectedTemplate, selectedColor, selectedFont } = useResume();
+  const { resumeData, selectedTemplate, selectedColor, selectedFont, selectedBgColor, selectedTextColor } = useResume();
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
   const resumeRef = useRef<HTMLDivElement>(null);
@@ -110,10 +110,10 @@ export function ResumePreviewPanel() {
       </div>
       <div className="w-full max-w-4xl mx-auto flex-grow flex items-center justify-center">
         <div className="bg-white dark:bg-card-foreground/5 shadow-2xl rounded-lg w-full aspect-[210/297] overflow-hidden">
-          <div ref={resumeRef} className={cn("w-full h-full", fontClass)} style={{ fontFamily: selectedFont }}>
+          <div ref={resumeRef} className={cn("w-full h-full", fontClass)} style={{ fontFamily: selectedFont, background: selectedBgColor }}>
               {isClient ? (
                 <div className="w-full h-full overflow-auto">
-                  <TemplatePreview data={resumeData} color={selectedColor} />
+                  <TemplatePreview data={resumeData} color={selectedColor} bgColor={selectedBgColor} textColor={selectedTextColor}/>
                 </div>
               ) : (
                 <Skeleton className="w-full h-full rounded-lg" />
