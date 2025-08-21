@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useResume } from "@/context/resume-context";
@@ -6,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Briefcase, BookUser, GraduationCap, MinusCircle, PlusCircle, User, Wrench } from "lucide-react";
+import { Briefcase, BookUser, GraduationCap, MinusCircle, PlusCircle, User, Wrench, X } from "lucide-react";
 import type { ChangeEvent } from "react";
 import type { ResumeData } from "@/lib/types";
+import Image from "next/image";
 
 export function ResumeForm() {
   const { resumeData, setResumeData } = useResume();
@@ -23,6 +25,33 @@ export function ResumeForm() {
       }
     }));
   };
+
+  const handlePhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setResumeData(prev => ({
+          ...prev,
+          personal: {
+            ...prev.personal,
+            photo: reader.result as string,
+          }
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removePhoto = () => {
+     setResumeData(prev => ({
+      ...prev,
+      personal: {
+        ...prev.personal,
+        photo: "",
+      }
+    }));
+  }
   
   const handleIndexedChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: 'experience' | 'education', index: number) => {
     const { name, value } = e.target;
@@ -66,6 +95,18 @@ export function ResumeForm() {
       <AccordionItem value="personal" className="border rounded-lg bg-background">
         <AccordionTrigger className="p-4 font-headline text-lg hover:no-underline"><User className="mr-2 text-primary" /> Personal Details</AccordionTrigger>
         <AccordionContent className="p-4 pt-0 space-y-4">
+           <div className="space-y-2">
+            <Label>Profile Photo</Label>
+            {resumeData.personal.photo ? (
+              <div className="relative w-32 h-32">
+                <Image src={resumeData.personal.photo} alt="Profile" layout="fill" className="rounded-full object-cover" />
+                <Button variant="ghost" size="icon" className="absolute top-0 right-0 text-destructive" onClick={removePhoto}><X className="w-4 h-4"/></Button>
+              </div>
+            ) : (
+               <Input id="photo" name="photo" type="file" accept="image/*" onChange={handlePhotoChange}/>
+            )}
+           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>

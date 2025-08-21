@@ -9,6 +9,7 @@ export const initialData: ResumeData = {
     phone: "0812-3456-7890",
     location: "Tangerang, Indonesia",
     website: "faaadelmr.pages.dev",
+    photo: "",
     description: "Mahasiswa yang lagi memperdalam teknik 'Pernapasan AI, gerakan pertama: aplikasi berbasis web'",
   },
   experience: [

@@ -3,6 +3,8 @@
 import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 // Web Preview Component
 export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
@@ -25,21 +27,28 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { dat
   return (
     <div className="p-8 h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       {/* Header */}
-      <header className="text-center mb-10 border-b-2 pb-6" style={{borderColor: color}}>
-        <h1 className="font-bold" style={{ ...fontStyle, color, fontSize: '3rem' }}>{data.personal.name}</h1>
-        <p className="font-light mt-2" style={{...fontStyle, fontSize: '1.25rem', ...lightTextStyle}}>{data.personal.role}</p>
-        <div className="flex justify-center items-center gap-x-4 text-sm mt-4" style={lightTextStyle}>
-          <div className="flex items-center gap-2"><Mail size={14}/> {data.personal.email}</div>
-          <span className="opacity-50">&bull;</span>
-          <div className="flex items-center gap-2"><Phone size={14}/> {data.personal.phone}</div>
-           <span className="opacity-50">&bull;</span>
-          <div className="flex items-center gap-2"><MapPin size={14}/> {data.personal.location}</div>
-          {data.personal.website && (
-            <>
+      <header className="text-center mb-10 border-b-2 pb-6 flex items-center justify-between" style={{borderColor: color}}>
+        {data.personal.photo && (
+            <div className="w-28 h-28 relative rounded-full overflow-hidden shadow-md flex-shrink-0">
+                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+            </div>
+        )}
+        <div className={data.personal.photo ? "text-right flex-grow" : "text-center w-full"}>
+            <h1 className="font-bold" style={{ ...fontStyle, color, fontSize: '3rem' }}>{data.personal.name}</h1>
+            <p className="font-light mt-2" style={{...fontStyle, fontSize: '1.25rem', ...lightTextStyle}}>{data.personal.role}</p>
+            <div className={cn("flex items-center gap-x-4 text-sm mt-4", data.personal.photo ? "justify-end" : "justify-center")} style={lightTextStyle}>
+              <div className="flex items-center gap-2"><Mail size={14}/> {data.personal.email}</div>
+              <span className="opacity-50">&bull;</span>
+              <div className="flex items-center gap-2"><Phone size={14}/> {data.personal.phone}</div>
                <span className="opacity-50">&bull;</span>
-              <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-2" style={{color}}><Globe size={14}/>{data.personal.website}</a>
-            </>
-          )}
+              <div className="flex items-center gap-2"><MapPin size={14}/> {data.personal.location}</div>
+              {data.personal.website && (
+                <>
+                   <span className="opacity-50">&bull;</span>
+                  <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-2" style={{color}}><Globe size={14}/>{data.personal.website}</a>
+                </>
+              )}
+            </div>
         </div>
       </header>
       

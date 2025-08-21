@@ -3,6 +3,7 @@
 import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Star, BookUser, Briefcase, GraduationCap, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
+import Image from 'next/image';
 
 export const ElegantTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
@@ -12,7 +13,12 @@ export const ElegantTemplatePreview = ({ data, color, bgColor, textColor }: { da
 
   return (
     <div className="h-full p-10 flex flex-col" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
-      <header className="text-center mb-8">
+      <header className="text-center mb-8 flex flex-col items-center">
+        {data.personal.photo && (
+            <div className="w-28 h-28 relative mb-4 rounded-full overflow-hidden shadow-lg border-4" style={{borderColor: color}}>
+                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+            </div>
+        )}
         <h1 className="font-bold tracking-widest uppercase" style={{ ...fontStyle, color, fontSize: '2.5rem' }}>{data.personal.name}</h1>
         <p className="font-light mt-2 tracking-wider" style={{...fontStyle, fontSize: '1.25rem', ...lightTextStyle}}>{data.personal.role}</p>
       </header>

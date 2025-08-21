@@ -16,6 +16,7 @@ import { ClassicTemplatePreview } from "../templates/classic-template";
 import { CreativeTemplatePreview } from "../templates/creative-template";
 import { SwissTemplatePreview } from "../templates/swiss-template";
 import { ElegantTemplatePreview } from "../templates/elegant-template";
+import { TimelineTemplatePreview } from "../templates/timeline-template";
 
 const templates: { id: Template, name: string, component: React.FC<any> }[] = [
   { id: 'professional', name: 'Professional', component: ProfessionalTemplatePreview },
@@ -24,6 +25,7 @@ const templates: { id: Template, name: string, component: React.FC<any> }[] = [
   { id: 'creative', name: 'Creative', component: CreativeTemplatePreview },
   { id: 'swiss', name: 'Swiss', component: SwissTemplatePreview },
   { id: 'elegant', name: 'Elegant', component: ElegantTemplatePreview },
+  { id: 'timeline', name: 'Timeline', component: TimelineTemplatePreview },
 ];
 
 const colors = [
@@ -82,16 +84,18 @@ const TemplateCard = ({ template, isSelected, onClick, resumeData, color, bgColo
           <CardTitle className="text-base font-body">{template.name}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-           <div className="aspect-[210/297] w-full h-full relative overflow-hidden" style={{ background: bgColor }}>
-             <div className="absolute inset-0 scale-[0.25] origin-top-left" style={{
-               transform: 'scale(0.25)', // Adjust scale as needed
-               transformOrigin: 'top left',
-               width: '400%',
-               height: '400%',
-             }}>
-              <TemplateComponent data={resumeData} color={color} bgColor={bgColor} textColor={textColor} />
+           <div className="aspect-[210/297] w-full h-full relative overflow-hidden bg-background" >
+              {/* This inner div scales the preview */}
+              <div className="absolute w-[840px] h-[1188px] top-0 left-0 origin-top-left 
+                            scale-[var(--template-scale,0.25)]
+                            sm:scale-[var(--template-scale,0.22)] 
+                            md:scale-[var(--template-scale,0.18)]
+                            lg:scale-[var(--template-scale,0.25)]
+                            xl:scale-[var(--template-scale,0.2)]
+              ">
+                <TemplateComponent data={resumeData} color={color} bgColor={bgColor} textColor={textColor} />
+              </div>
             </div>
-          </div>
         </CardContent>
       </Card>
   )
@@ -104,7 +108,7 @@ export function StylePanel() {
     <div className="space-y-8">
       <div>
         <h3 className="text-xl font-headline mb-4">Template</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {templates.map(template => (
             <TemplateCard
               key={template.id}

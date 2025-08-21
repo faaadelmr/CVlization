@@ -3,6 +3,7 @@
 import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Star, BookUser, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
+import Image from 'next/image';
 
 export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
@@ -14,42 +15,48 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { d
 
   return (
     <div className="h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
-      <header style={headerStyle} className="p-10 text-white relative">
-        <div className="absolute top-8 right-8 w-24 h-24 bg-white/20 rounded-full"></div>
-        <div className="absolute bottom-4 left-12 w-16 h-16 bg-white/20 rounded-lg transform rotate-12"></div>
-        <h1 className="font-bold relative z-10" style={{...fontStyle, fontSize: '3rem'}}>{data.personal.name}</h1>
-        <p className="font-light mt-2 relative z-10" style={{...fontStyle, fontSize: '1.25rem'}}>{data.personal.role}</p>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3 mt-6 text-sm relative z-10">
-          <div className="flex items-center gap-2">
-            <Mail size={16} />
-            <span>{data.personal.email}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Phone size={16} />
-            <span>{data.personal.phone}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <MapPin size={16} />
-            <span>{data.personal.location}</span>
-          </div>
-          {data.personal.website && (
-            <div className="flex items-center gap-2">
-              <Globe size={16} />
-              <a href={`https://${data.personal.website}`} className="hover:underline">{data.personal.website}</a>
+      <header style={headerStyle} className="p-10 text-white relative flex items-center gap-8">
+        {data.personal.photo && (
+            <div className="w-32 h-32 relative flex-shrink-0">
+                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover rounded-full border-4 border-white/50 shadow-lg" />
             </div>
-          )}
+        )}
+        <div className="flex-grow">
+            <h1 className="font-bold relative z-10" style={{...fontStyle, fontSize: '2.5rem'}}>{data.personal.name}</h1>
+            <p className="font-light mt-1 relative z-10" style={{...fontStyle, fontSize: '1.25rem'}}>{data.personal.role}</p>
         </div>
       </header>
 
       <main className="p-10 grid grid-cols-3 gap-10">
         <div className="col-span-2">
-          <section className="mb-10">
-            <h2 className="flex items-center gap-3 text-2xl font-bold mb-5" style={{...accentColorStyle, ...fontStyle}}>
-                <User />
-                Profile
-            </h2>
-            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-          </section>
+            <section className="mb-10">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm relative z-10 mb-6" style={{color: textColor}}>
+                    <div className="flex items-center gap-2">
+                        <Mail size={16} style={accentColorStyle}/>
+                        <span>{data.personal.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Phone size={16} style={accentColorStyle}/>
+                        <span>{data.personal.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <MapPin size={16} style={accentColorStyle}/>
+                        <span>{data.personal.location}</span>
+                    </div>
+                    {data.personal.website && (
+                        <div className="flex items-center gap-2">
+                        <Globe size={16} style={accentColorStyle}/>
+                        <a href={`https://${data.personal.website}`} className="hover:underline">{data.personal.website}</a>
+                        </div>
+                    )}
+                </div>
+
+                <h2 className="flex items-center gap-3 text-2xl font-bold mb-5" style={{...accentColorStyle, ...fontStyle}}>
+                    <User />
+                    Profile
+                </h2>
+                <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
+            </section>
 
           <section className="mb-10">
             <h2 className="flex items-center gap-3 text-2xl font-bold mb-5" style={{...accentColorStyle, ...fontStyle}}>

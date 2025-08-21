@@ -8,6 +8,7 @@ export interface ResumeData {
     location: string;
     website: string;
     description: string;
+    photo?: string;
   };
   experience: {
     id: string;
@@ -27,7 +28,7 @@ export interface ResumeData {
   references: string;
 }
 
-export type Template = 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional';
+export type Template = 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional' | 'timeline';
 export type Font = 'Inter' | 'Space Grotesk' | 'Roboto' | 'Lato' | 'Montserrat' | 'Open Sans' | 'Merriweather' | 'Source Sans Pro' | 'Playfair Display';
 
 

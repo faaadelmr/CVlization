@@ -11,6 +11,7 @@ import { CreativeTemplatePreview } from "./templates/creative-template";
 import { SwissTemplatePreview } from "./templates/swiss-template";
 import { ElegantTemplatePreview } from "./templates/elegant-template";
 import { ProfessionalTemplatePreview } from "./templates/professional-template";
+import { TimelineTemplatePreview } from "./templates/timeline-template";
 import { Skeleton } from "./ui/skeleton";
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
@@ -34,6 +35,9 @@ const templateMap = {
   },
   professional: {
     preview: ProfessionalTemplatePreview,
+  },
+  timeline: {
+    preview: TimelineTemplatePreview,
   }
 };
 

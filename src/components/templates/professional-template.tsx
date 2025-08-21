@@ -3,6 +3,8 @@
 import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser, Star, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
@@ -31,7 +33,7 @@ export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor }:
       {/* Main Content */}
       <main className="grid grid-cols-12 gap-x-12">
         {/* Left Column */}
-        <div className="col-span-8">
+        <div className={cn("col-span-8", !data.personal.photo && "col-span-12")}>
            <section className="mb-8">
             <h2 className="text-2xl font-bold uppercase mb-5 flex items-center gap-3" style={{...fontStyle, ...accentColorStyle}}>
               <User />
@@ -78,28 +80,33 @@ export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor }:
         </div>
 
         {/* Right Column (Sidebar) */}
-        <div className="col-span-4">
-          <section className="mb-8 p-6 rounded-lg" style={{ backgroundColor: `${color}1A` }}>
-            <h2 className="text-xl font-bold uppercase mb-4 flex items-center gap-3" style={{...fontStyle, ...accentColorStyle}}>
-              <Star />
-              Skills
-            </h2>
-            <ul className="space-y-2 text-sm" style={textStyle}>
-              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                <li key={skill}>{skill}</li>
-              ))}
-            </ul>
-          </section>
-          {data.references && (
-            <section className="p-6 rounded-lg" style={{ backgroundColor: `${color}1A` }}>
-              <h2 className="text-xl font-bold uppercase mb-4 flex items-center gap-3" style={{...fontStyle, ...accentColorStyle}}>
-                <BookUser />
-                References
-              </h2>
-              <p className="text-sm whitespace-pre-line" style={textStyle}>{data.references}</p>
-            </section>
-          )}
-        </div>
+        {data.personal.photo && (
+            <div className="col-span-4">
+                <div className="w-full aspect-square relative rounded-lg overflow-hidden mb-8 shadow-lg">
+                    <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                </div>
+                <section className="mb-8 p-6 rounded-lg" style={{ backgroundColor: `${color}1A` }}>
+                    <h2 className="text-xl font-bold uppercase mb-4 flex items-center gap-3" style={{...fontStyle, ...accentColorStyle}}>
+                    <Star />
+                    Skills
+                    </h2>
+                    <ul className="space-y-2 text-sm" style={textStyle}>
+                    {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                        <li key={skill}>{skill}</li>
+                    ))}
+                    </ul>
+                </section>
+                {data.references && (
+                    <section className="p-6 rounded-lg" style={{ backgroundColor: `${color}1A` }}>
+                    <h2 className="text-xl font-bold uppercase mb-4 flex items-center gap-3" style={{...fontStyle, ...accentColorStyle}}>
+                        <BookUser />
+                        References
+                    </h2>
+                    <p className="text-sm whitespace-pre-line" style={textStyle}>{data.references}</p>
+                    </section>
+                )}
+            </div>
+        )}
       </main>
     </div>
   );

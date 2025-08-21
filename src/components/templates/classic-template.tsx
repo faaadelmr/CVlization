@@ -3,6 +3,7 @@
 import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Wrench, BookUser, Briefcase, GraduationCap, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
+import Image from 'next/image';
 
 // Web Preview Component
 export const ClassicTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
@@ -17,11 +18,16 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor }: { da
   return (
     <div className="flex h-full" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       {/* Left Column */}
-      <div className="w-2/5 p-8" style={leftColStyle}>
-        <h1 className="font-bold mb-2" style={{...nameStyle, ...fontStyle, fontSize: '2.5rem'}}>{data.personal.name}</h1>
-        <p className="font-medium mb-8" style={{...fontStyle, fontSize: '1.25rem', ...lightTextStyle}}>{data.personal.role}</p>
+      <div className="w-2/5 p-8 flex flex-col items-center text-center" style={leftColStyle}>
+        {data.personal.photo && (
+            <div className="w-32 h-32 relative mb-6 rounded-full overflow-hidden shadow-lg">
+                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+            </div>
+        )}
+        <h1 className="font-bold mb-2" style={{...nameStyle, ...fontStyle, fontSize: '2rem'}}>{data.personal.name}</h1>
+        <p className="font-medium mb-8" style={{...fontStyle, fontSize: '1rem', ...lightTextStyle}}>{data.personal.role}</p>
         
-        <div className="space-y-6 text-sm">
+        <div className="space-y-6 text-sm text-left">
           <div>
             <h3 className="font-bold text-base mb-2 flex items-center gap-2" style={{...nameStyle, ...fontStyle}}><Mail size={16}/> Contact</h3>
             <p className="pl-6">{data.personal.phone}</p>

@@ -3,6 +3,7 @@
 import type { ResumeData } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, User } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
+import Image from 'next/image';
 
 export const SwissTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
@@ -16,9 +17,16 @@ export const SwissTemplatePreview = ({ data, color, bgColor, textColor }: { data
     <div className="p-10 h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       <div className="grid grid-cols-12 gap-x-12">
         {/* Header */}
-        <header className="col-span-12 border-b-4 pb-6 mb-8" style={{ borderColor: textColor }}>
-          <h1 className="font-bold tracking-tighter uppercase" style={{...fontStyle, ...accentColor, fontSize: '2.5rem'}}>{data.personal.name}</h1>
-          <p className="font-light mt-1" style={{...fontStyle, fontSize: '1.5rem', ...lightTextStyle}}>{data.personal.role}</p>
+        <header className="col-span-12 border-b-4 pb-6 mb-8 flex items-center justify-between" style={{ borderColor: textColor }}>
+            <div>
+                <h1 className="font-bold tracking-tighter uppercase" style={{...fontStyle, ...accentColor, fontSize: '2.5rem'}}>{data.personal.name}</h1>
+                <p className="font-light mt-1" style={{...fontStyle, fontSize: '1.5rem', ...lightTextStyle}}>{data.personal.role}</p>
+            </div>
+            {data.personal.photo && (
+                <div className="w-24 h-24 relative rounded-full overflow-hidden shadow-md flex-shrink-0 border-2" style={{borderColor: color}}>
+                    <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                </div>
+            )}
         </header>
         
         {/* Left Column */}
