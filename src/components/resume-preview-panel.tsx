@@ -16,6 +16,13 @@ import { Skeleton } from "./ui/skeleton";
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import { cn } from "@/lib/utils";
+import { SmartStartTemplatePreview } from "./templates/smart-start-template";
+import { VektoristikTemplatePreview } from "./templates/vektoristik-template";
+import { AwesomeTemplatePreview } from "./templates/awesome-template";
+import { CooperTemplatePreview } from "./templates/cooper-template";
+import { QueteTemplatePreview } from "./templates/quete-template";
+import { DiamondTemplatePreview } from "./templates/diamond-template";
+import { HexagonvyTemplatePreview } from "./templates/hexagonvy-template";
 
 const templateMap = {
   modern: {
@@ -38,7 +45,28 @@ const templateMap = {
   },
   timeline: {
     preview: TimelineTemplatePreview,
-  }
+  },
+  'smart-start': {
+    preview: SmartStartTemplatePreview,
+  },
+  vektoristik: {
+    preview: VektoristikTemplatePreview,
+  },
+  awesome: {
+    preview: AwesomeTemplatePreview,
+  },
+  cooper: {
+    preview: CooperTemplatePreview,
+  },
+  quete: {
+    preview: QueteTemplatePreview,
+  },
+  diamond: {
+    preview: DiamondTemplatePreview,
+  },
+  hexagonvy: {
+    preview: HexagonvyTemplatePreview,
+  },
 };
 
 export function ResumePreviewPanel() {

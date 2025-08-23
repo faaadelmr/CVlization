@@ -1,123 +1,123 @@
 
 "use client";
 import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Star, BookUser, User } from 'lucide-react';
+import { Mail, Phone, Globe, User, Briefcase, GraduationCap, Star, Heart, MapPin } from 'lucide-react';
 import { useResume } from '@/context/resume-context';
 import Image from 'next/image';
 
+// Helper function to determine if a color is light or dark
+const isColorLight = (hexColor: string) => {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 155;
+};
+
+
 export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
   const { selectedFont } = useResume();
-  const headerStyle = { backgroundColor: color };
-  const accentColorStyle = { color: color };
-  const skillTagStyle = { backgroundColor: `${color}20`, color: color, borderColor: `${color}80` };
   const fontStyle = { fontFamily: selectedFont };
-  const lightTextStyle = { color: textColor, opacity: 0.8 };
+
+  // Use a dark color for the sidebar, ignoring user's bgColor selection for this specific template style
+  const sidebarBgColor = '#2C3E50'; // A dark blue-gray
+  const sidebarTextColor = '#FFFFFF'; // White text on dark sidebar
+
+  const Section = ({ icon, title, children }: { icon: React.ReactNode, title: string, children: React.ReactNode }) => (
+    <section className="mb-8">
+      <div className="flex items-center mb-4">
+        <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4" style={{ backgroundColor: color }}>
+          {icon}
+        </div>
+        <h2 className="text-2xl font-bold" style={{ color: textColor }}>{title}</h2>
+      </div>
+      <div className="border-l-2 pl-10 ml-5" style={{ borderColor: color }}>
+        {children}
+      </div>
+    </section>
+  );
 
   return (
-    <div className="h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
-      <header style={headerStyle} className="p-10 text-white relative flex items-center gap-8">
-        {data.personal.photo && (
-            <div className="w-32 h-32 relative flex-shrink-0">
-                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover rounded-full border-4 border-white/50 shadow-lg" />
-            </div>
-        )}
-        <div className="flex-grow">
-            <h1 className="font-bold relative z-10" style={{...fontStyle, fontSize: '2.5rem'}}>{data.personal.name}</h1>
-            <p className="font-light mt-1 relative z-10" style={{...fontStyle, fontSize: '1.25rem'}}>{data.personal.role}</p>
-        </div>
-      </header>
-
-      <main className="p-10 grid grid-cols-3 gap-10">
-        <div className="col-span-2">
-            <section className="mb-10">
-                <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm relative z-10 mb-6" style={{color: textColor}}>
-                    <div className="flex items-center gap-2">
-                        <Mail size={16} style={accentColorStyle}/>
-                        <span>{data.personal.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Phone size={16} style={accentColorStyle}/>
-                        <span>{data.personal.phone}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <MapPin size={16} style={accentColorStyle}/>
-                        <span>{data.personal.location}</span>
-                    </div>
-                    {data.personal.website && (
-                        <div className="flex items-center gap-2">
-                        <Globe size={16} style={accentColorStyle}/>
-                        <a href={`https://${data.personal.website}`} className="hover:underline">{data.personal.website}</a>
-                        </div>
-                    )}
-                </div>
-
-                <h2 className="flex items-center gap-3 text-2xl font-bold mb-5" style={{...accentColorStyle, ...fontStyle}}>
-                    <User />
-                    Profile
-                </h2>
-                <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-            </section>
-
-          <section className="mb-10">
-            <h2 className="flex items-center gap-3 text-2xl font-bold mb-5" style={{...accentColorStyle, ...fontStyle}}>
-              <Briefcase />
-              Experience
-            </h2>
-            {data.experience.map(exp => (
-              <div key={exp.id} className="mb-6 relative pl-6 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:rounded-full" style={{ '::before': { backgroundColor: color } }}>
-                <div className="flex justify-between items-baseline">
-                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.125rem', color: textColor}}>{exp.role}</h3>
-                  <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
-                </div>
-                <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1rem', ...lightTextStyle, opacity: 0.9}}>{exp.company}</h4>
-                <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={lightTextStyle}>{exp.description}</div>
+    <div className="flex h-full" style={{ ...fontStyle, backgroundColor: bgColor }}>
+      {/* Left Sidebar */}
+      <div className="w-1/3 text-white" style={{ backgroundColor: sidebarBgColor, color: sidebarTextColor }}>
+        <div className="h-48" style={{ backgroundColor: color }}></div>
+        <div className="px-8 -mt-24">
+            {data.personal.photo ? (
+              <div className="relative w-40 h-40 mx-auto rounded-full border-4 overflow-hidden shadow-lg" style={{ borderColor: color }}>
+                  <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
               </div>
-            ))}
-          </section>
-
-          <section>
-            <h2 className="flex items-center gap-3 text-2xl font-bold mb-5" style={{...accentColorStyle, ...fontStyle}}>
-              <GraduationCap />
-              Education
-            </h2>
-            {data.education.map(edu => (
-               <div key={edu.id} className="mb-6 relative pl-6 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:rounded-full" style={{ '::before': { backgroundColor: color } }}>
-                <div className="flex justify-between items-baseline">
-                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.125rem', color: textColor}}>{edu.institution}</h3>
-                  <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
-                </div>
-                <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1rem', ...lightTextStyle, opacity: 0.9}}>{edu.degree}</h4>
-                <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
+            ) : (
+                <div className="w-40 h-40 mx-auto"></div> // Placeholder to maintain layout
+            )}
+          <div className="text-center mt-4">
+            <h1 className="text-3xl font-bold">{data.personal.name}</h1>
+            <p className="text-lg font-light" style={{color: sidebarTextColor, opacity: 0.8}}>{data.personal.role}</p>
+          </div>
+          
+          <div className="mt-10 space-y-8">
+             <div>
+              <h3 className="text-lg font-semibold border-b-2 pb-1 mb-3 flex items-center" style={{ borderColor: color, color: color }}>
+                <Phone size={18} className="mr-2"/> Contact
+              </h3>
+              <div className="space-y-2 text-sm" style={{color: sidebarTextColor, opacity: 0.9}}>
+                <p><strong className="font-semibold block" style={{color}}>Email</strong> {data.personal.email}</p>
+                <p><strong className="font-semibold block" style={{color}}>Phone</strong> {data.personal.phone}</p>
+                 {data.personal.website && <p><strong className="font-semibold block" style={{color}}>Website</strong> <a href={`https://${data.personal.website}`} className="hover:underline">{data.personal.website}</a></p>}
               </div>
-            ))}
-          </section>
-        </div>
-
-        <div className="col-span-1 space-y-10">
-          <section>
-            <h2 className="flex items-center gap-3 text-2xl font-bold mb-4" style={{...accentColorStyle, ...fontStyle}}>
-              <Star />
-              Skills
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                <span key={skill} className="text-xs font-medium py-1 px-3 rounded-full border" style={skillTagStyle}>
-                  {skill}
-                </span>
-              ))}
             </div>
-          </section>
-          {data.references && (
-            <section>
-              <h2 className="flex items-center gap-3 text-2xl font-bold mb-4" style={{...accentColorStyle, ...fontStyle}}>
-                <BookUser />
-                References
-              </h2>
-              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
-            </section>
-          )}
+
+            <div>
+              <h3 className="text-lg font-semibold border-b-2 pb-1 mb-3 flex items-center" style={{ borderColor: color, color: color }}>
+                <Star size={18} className="mr-2"/> Skills
+              </h3>
+              <ul className="space-y-1 text-sm" style={{color: sidebarTextColor, opacity: 0.9}}>
+                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                  <li key={skill}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+             {data.references && (
+                <div>
+                    <h3 className="text-lg font-semibold border-b-2 pb-1 mb-3 flex items-center" style={{ borderColor: color, color: color }}>
+                    <Heart size={18} className="mr-2"/> Interests
+                    </h3>
+                    <p className="text-sm whitespace-pre-line" style={{color: sidebarTextColor, opacity: 0.9}}>{data.references}</p>
+                </div>
+            )}
+          </div>
         </div>
-      </main>
+      </div>
+
+      {/* Right Column */}
+      <div className="w-2/3 p-10 overflow-auto">
+        <Section icon={<User size={24} color={sidebarTextColor} />} title="Profile">
+          <p className="text-sm whitespace-pre-line" style={{color: textColor, opacity: 0.8}}>{data.personal.description}</p>
+        </Section>
+        
+        <Section icon={<Briefcase size={24} color={sidebarTextColor} />} title="Experience">
+          {data.experience.map(exp => (
+            <div key={exp.id} className="pb-6">
+              <h3 className="text-xl font-bold" style={{color: textColor}}>{exp.role}</h3>
+              <p className="text-md font-semibold mb-1" style={{color: textColor, opacity: 0.9}}>{exp.company}</p>
+              <p className="text-xs text-gray-500 mb-2">{exp.date}</p>
+              <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{exp.description}</div>
+            </div>
+          ))}
+        </Section>
+        
+        <Section icon={<GraduationCap size={24} color={sidebarTextColor} />} title="Education">
+          {data.education.map(edu => (
+            <div key={edu.id} className="pb-6">
+              <h3 className="text-xl font-bold" style={{color: textColor}}>{edu.degree}</h3>
+              <p className="text-md font-semibold mb-1" style={{color: textColor, opacity: 0.9}}>{edu.institution}</p>
+              <p className="text-xs text-gray-500">{edu.date}</p>
+               <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{edu.description}</div>
+            </div>
+          ))}
+        </Section>
+      </div>
     </div>
   );
 };
