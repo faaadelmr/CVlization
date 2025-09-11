@@ -1,6 +1,7 @@
+
 'use server';
 /**
- * @fileOverview An AI flow to analyze a resume image and extract structured data.
+ * @fileOverview An AI flow to analyze a resume image or PDF text and extract structured data.
  *
  * - analyzeResume - A function that handles the resume analysis process.
  * - AnalyzeResumeInput - The input type for the analyzeResume function.
@@ -48,7 +49,7 @@ const AnalyzeResumeInputSchema = z.object({
   photoDataUri: z
     .string()
     .describe(
-      "An image of a resume, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
+      "An image of a resume or a PDF file, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
     ),
 });
 export type AnalyzeResumeInput = z.infer<typeof AnalyzeResumeInputSchema>;
@@ -62,7 +63,7 @@ const prompt = ai.definePrompt({
   name: 'analyzeResumePrompt',
   input: { schema: AnalyzeResumeInputSchema },
   output: { schema: AnalyzeResumeOutputSchema },
-  prompt: `You are an expert resume parser. Analyze the provided resume image and extract the information into a structured JSON format.
+  prompt: `You are an expert resume parser. Analyze the provided resume content (which can be from an image or extracted text from a PDF) and extract the information into a structured JSON format.
 
 Extract the following sections:
 - Personal Details (name, role, email, phone, location, website, and a professional summary/objective as description)
@@ -73,7 +74,9 @@ Extract the following sections:
 
 Pay close attention to formatting the extracted text correctly, especially for descriptions which may contain bullet points. Maintain the original language of the resume.
 
-Resume Image: {{media url=photoDataUri}}`,
+Resume Content:
+{{media url=photoDataUri}}
+`,
 });
 
 const analyzeResumeFlow = ai.defineFlow(
@@ -84,6 +87,7 @@ const analyzeResumeFlow = ai.defineFlow(
   },
   async (input) => {
     const { output } = await prompt(input);
+
     if (!output) {
       throw new Error('Failed to get a structured response from the AI.');
     }

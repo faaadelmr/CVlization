@@ -20,6 +20,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const handleAnalyzeResume = async (photoDataUri: string) => {
     setIsAiLoading(true);
     try {
+      // The AI flow can now handle both images and PDFs directly.
       const analyzedData = await analyzeResume({ photoDataUri });
       
       // Add unique IDs to experience and education items

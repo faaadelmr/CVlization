@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, type ChangeEvent } from "react";
@@ -6,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Upload, Wand2 } from "lucide-react";
+import { Loader2, Wand2, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 
@@ -14,28 +15,39 @@ export function AiAssistPanel() {
   const { handleAnalyzeResume, isAiLoading } = useResume();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isPdf, setIsPdf] = useState(false);
   const { toast } = useToast();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Check if file is an image
-      if (!file.type.startsWith('image/')) {
+      if (file.type.startsWith('image/')) {
+        setIsPdf(false);
+        setSelectedFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type === 'application/pdf') {
+        setIsPdf(true);
+        setSelectedFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
         toast({
           variant: "destructive",
           title: "Invalid File Type",
-          description: "Please upload an image file (e.g., PNG, JPG).",
+          description: "Please upload an image or PDF file.",
         });
         e.target.value = ''; // Reset the input
-        return;
+        setPreviewUrl(null);
+        setSelectedFile(null);
+        setIsPdf(false);
       }
-      
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -46,7 +58,7 @@ export function AiAssistPanel() {
        toast({
         variant: "destructive",
         title: "No file selected",
-        description: "Please upload an image of your resume first.",
+        description: "Please upload an image or PDF of your resume first.",
       });
     }
   };
@@ -56,26 +68,34 @@ export function AiAssistPanel() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline"><Wand2 /> AI Re-write</CardTitle>
         <CardDescription>
-          Upload image your old CV, and AI will re-write for you.
+          Upload an image or PDF of your old CV, and AI will re-write it for you.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="resume-upload">Upload Resume Image</Label>
-          <Input id="resume-upload" type="file" onChange={handleFileChange} accept="image/*" />
+          <Label htmlFor="resume-upload">Upload Resume (Image or PDF)</Label>
+          <Input id="resume-upload" type="file" onChange={handleFileChange} accept="image/*,application/pdf" />
         </div>
 
-        {previewUrl && (
+        {selectedFile && previewUrl && (
           <div className="space-y-4">
-             <p className="text-sm text-muted-foreground">Image Preview:</p>
-            <div className="border rounded-lg p-2 bg-secondary/50">
-              <Image
-                src={previewUrl}
-                alt="Resume preview"
-                width={300}
-                height={424}
-                className="rounded-md object-contain max-h-[424px] w-auto mx-auto"
-              />
+            <p className="text-sm text-muted-foreground">File Preview:</p>
+            <div className="border rounded-lg p-4 bg-secondary/50 flex items-center justify-center">
+              {isPdf ? (
+                 <div className="flex flex-col items-center gap-2 text-center">
+                    <FileText className="w-16 h-16 text-primary" />
+                    <p className="text-sm font-medium">{selectedFile.name}</p>
+                    <p className="text-xs text-muted-foreground">PDF preview is not available. Ready to be analyzed.</p>
+                 </div>
+              ) : (
+                <Image
+                  src={previewUrl}
+                  alt="Resume preview"
+                  width={300}
+                  height={424}
+                  className="rounded-md object-contain max-h-[424px] w-auto mx-auto"
+                />
+              )}
             </div>
           </div>
         )}
