@@ -28,7 +28,7 @@ export interface ResumeData {
   references: string;
 }
 
-export type Template = 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional' | 'timeline' | 'smart-start' | 'vektoristik' | 'awesome' | 'cooper' | 'quete' | 'diamond' | 'hexagonvy';
+export type Template = 'ledger' | 'construct' | 'starlight' | 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional' | 'timeline' | 'smart-start' | 'vektoristik' | 'awesome' | 'cooper' | 'quete' | 'diamond' | 'hexagonvy';
 export type Font = 'Inter' | 'Space Grotesk' | 'Roboto' | 'Lato' | 'Montserrat' | 'Open Sans' | 'Merriweather' | 'Source Sans Pro' | 'Playfair Display';
 
 

@@ -23,6 +23,9 @@ import { CooperTemplatePreview } from "./templates/cooper-template";
 import { QueteTemplatePreview } from "./templates/quete-template";
 import { DiamondTemplatePreview } from "./templates/diamond-template";
 import { HexagonvyTemplatePreview } from "./templates/hexagonvy-template";
+import { StarlightTemplatePreview } from "./templates/starlight-template";
+import { ConstructTemplatePreview } from "./templates/construct-template";
+import { LedgerTemplatePreview } from "./templates/ledger-template";
 
 const templateMap = {
   modern: {
@@ -52,7 +55,7 @@ const templateMap = {
   vektoristik: {
     preview: VektoristikTemplatePreview,
   },
-  awesome: {
+awesome: {
     preview: AwesomeTemplatePreview,
   },
   cooper: {
@@ -66,6 +69,15 @@ const templateMap = {
   },
   hexagonvy: {
     preview: HexagonvyTemplatePreview,
+  },
+  starlight: {
+    preview: StarlightTemplatePreview,
+  },
+  construct: {
+    preview: ConstructTemplatePreview,
+  },
+  ledger: {
+    preview: LedgerTemplatePreview,
   },
 };
 

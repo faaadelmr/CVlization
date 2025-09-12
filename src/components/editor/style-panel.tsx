@@ -21,10 +21,16 @@ import { CooperTemplatePreview } from "../templates/cooper-template";
 import { QueteTemplatePreview } from "../templates/quete-template";
 import { DiamondTemplatePreview } from "../templates/diamond-template";
 import { HexagonvyTemplatePreview } from "../templates/hexagonvy-template";
+import { StarlightTemplatePreview } from "../templates/starlight-template";
+import { ConstructTemplatePreview } from "../templates/construct-template";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { LedgerTemplatePreview } from "../templates/ledger-template";
 
 const templates: { id: Template, name: string, component: React.FC<any> }[] = [
+  { id: 'ledger', name: 'Ledger', component: LedgerTemplatePreview },
+  { id: 'construct', name: 'Construct', component: ConstructTemplatePreview },
+  { id: 'starlight', name: 'Starlight', component: StarlightTemplatePreview },
   { id: 'hexagonvy', name: 'Hexagonvy', component: HexagonvyTemplatePreview },
   { id: 'diamond', name: 'Diamond', component: DiamondTemplatePreview },
   { id: 'cooper', name: 'Cooper', component: CooperTemplatePreview },
