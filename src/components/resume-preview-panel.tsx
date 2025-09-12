@@ -26,8 +26,48 @@ import { HexagonvyTemplatePreview } from "./templates/hexagonvy-template";
 import { StarlightTemplatePreview } from "./templates/starlight-template";
 import { ConstructTemplatePreview } from "./templates/construct-template";
 import { LedgerTemplatePreview } from "./templates/ledger-template";
+import { BloxTemplatePreview } from "./templates/blox-template";
 
 const templateMap = {
+  blox: {
+    preview: BloxTemplatePreview,
+  },
+  ledger: {
+    preview: LedgerTemplatePreview,
+  },
+  construct: {
+    preview: ConstructTemplatePreview,
+  },
+  starlight: {
+    preview: StarlightTemplatePreview,
+  },
+  hexagonvy: {
+    preview: HexagonvyTemplatePreview,
+  },
+  diamond: {
+    preview: DiamondTemplatePreview,
+  },
+  quete: {
+    preview: QueteTemplatePreview,
+  },
+  cooper: {
+    preview: CooperTemplatePreview,
+  },
+  awesome: {
+    preview: AwesomeTemplatePreview,
+  },
+  vektoristik: {
+    preview: VektoristikTemplatePreview,
+  },
+  'smart-start': {
+    preview: SmartStartTemplatePreview,
+  },
+  timeline: {
+    preview: TimelineTemplatePreview,
+  },
+  professional: {
+    preview: ProfessionalTemplatePreview,
+  },
   modern: {
     preview: ModernTemplatePreview,
   },
@@ -42,42 +82,6 @@ const templateMap = {
   },
   elegant: {
     preview: ElegantTemplatePreview,
-  },
-  professional: {
-    preview: ProfessionalTemplatePreview,
-  },
-  timeline: {
-    preview: TimelineTemplatePreview,
-  },
-  'smart-start': {
-    preview: SmartStartTemplatePreview,
-  },
-  vektoristik: {
-    preview: VektoristikTemplatePreview,
-  },
-awesome: {
-    preview: AwesomeTemplatePreview,
-  },
-  cooper: {
-    preview: CooperTemplatePreview,
-  },
-  quete: {
-    preview: QueteTemplatePreview,
-  },
-  diamond: {
-    preview: DiamondTemplatePreview,
-  },
-  hexagonvy: {
-    preview: HexagonvyTemplatePreview,
-  },
-  starlight: {
-    preview: StarlightTemplatePreview,
-  },
-  construct: {
-    preview: ConstructTemplatePreview,
-  },
-  ledger: {
-    preview: LedgerTemplatePreview,
   },
 };
 
@@ -101,7 +105,7 @@ export function ResumePreviewPanel() {
 
     const a4WidthMm = 210;
     const a4HeightMm = 297;
-    const scale = 2;
+    const scale = 2; // Increase scale for better quality
 
     try {
       const dataUrl = await domtoimage.toPng(resumeRef.current, {

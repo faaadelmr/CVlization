@@ -26,8 +26,10 @@ import { ConstructTemplatePreview } from "../templates/construct-template";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { LedgerTemplatePreview } from "../templates/ledger-template";
+import { BloxTemplatePreview } from "../templates/blox-template";
 
 const templates: { id: Template, name: string, component: React.FC<any> }[] = [
+  { id: 'blox', name: 'Blox', component: BloxTemplatePreview },
   { id: 'ledger', name: 'Ledger', component: LedgerTemplatePreview },
   { id: 'construct', name: 'Construct', component: ConstructTemplatePreview },
   { id: 'starlight', name: 'Starlight', component: StarlightTemplatePreview },
