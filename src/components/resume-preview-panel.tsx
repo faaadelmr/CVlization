@@ -13,7 +13,7 @@ import { ElegantTemplatePreview } from "./templates/elegant-template";
 import { ProfessionalTemplatePreview } from "./templates/professional-template";
 import { TimelineTemplatePreview } from "./templates/timeline-template";
 import { Skeleton } from "./ui/skeleton";
-import domtoimage from 'dom-to-image';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { cn } from "@/lib/utils";
 import { SmartStartTemplatePreview } from "./templates/smart-start-template";
@@ -105,35 +105,31 @@ export function ResumePreviewPanel() {
 
     const a4WidthMm = 210;
     const a4HeightMm = 297;
-    const scale = 2; // Increase scale for better quality
 
     try {
-      const dataUrl = await domtoimage.toPng(resumeRef.current, {
-        width: resumeRef.current.clientWidth * scale,
-        height: resumeRef.current.clientHeight * scale,
-        style: {
-          transform: `scale(${scale})`,
-          transformOrigin: 'top left',
-          width: `${resumeRef.current.clientWidth}px`,
-          height: `${resumeRef.current.clientHeight}px`,
-        },
-      });
-      
-      const pdf = new jsPDF({
-        orientation: 'p',
-        unit: 'mm',
-        format: 'a4',
-      });
-      
-      pdf.addImage(dataUrl, 'PNG', 0, 0, a4WidthMm, a4HeightMm);
-      pdf.save(fileName);
+        const canvas = await html2canvas(resumeRef.current, {
+            scale: 2, // Increase scale for better quality
+            useCORS: true,
+        });
+
+        const dataUrl = canvas.toDataURL('image/png');
+        
+        const pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+        });
+        
+        pdf.addImage(dataUrl, 'PNG', 0, 0, a4WidthMm, a4HeightMm);
+        pdf.save(fileName);
 
     } catch (error) {
-      console.error('oops, something went wrong!', error);
+        console.error('oops, something went wrong!', error);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
+
 
   const fontClass = `font-${selectedFont.toLowerCase().replace(' ', '-')}`;
 
@@ -158,7 +154,7 @@ export function ResumePreviewPanel() {
       </div>
       <div className="w-full max-w-4xl mx-auto flex-grow flex items-center justify-center">
         <div className="bg-white dark:bg-card-foreground/5 shadow-2xl rounded-lg w-full aspect-[210/297] overflow-hidden">
-          <div ref={resumeRef} className={cn("w-full h-full", fontClass)} style={{ fontFamily: selectedFont, background: selectedBgColor }}>
+           <div id="resume-preview" ref={resumeRef} className={cn("w-full h-full", fontClass)} style={{ fontFamily: selectedFont, background: selectedBgColor }}>
               {isClient ? (
                 <div className="w-full h-full overflow-auto">
                   <TemplatePreview data={resumeData} color={selectedColor} bgColor={selectedBgColor} textColor={selectedTextColor}/>
