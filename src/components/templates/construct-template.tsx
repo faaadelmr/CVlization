@@ -14,6 +14,24 @@ const SectionHeader = ({ title, color, textColor, icon }: { title: string, color
     </div>
 );
 
+const CautionTapePattern = ({ color }: { color: string }) => (
+    <svg className="absolute inset-0 w-full h-full opacity-20" aria-hidden="true">
+        <defs>
+            <pattern
+                id="caution-stripes"
+                width="40"
+                height="40"
+                patternUnits="userSpaceOnUse"
+                patternTransform="rotate(45)"
+            >
+                <rect width="20" height="40" fill={color}></rect>
+                <rect x="20" width="20" height="40" fill="transparent"></rect>
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#caution-stripes)"></rect>
+    </svg>
+);
+
 
 export const ConstructTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
     const { selectedFont } = useResume();
@@ -24,10 +42,8 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor }: { 
         <div className="relative h-full overflow-hidden p-8" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             {/* Header with Caution Tape effect */}
             <header className="relative flex items-center justify-between mb-8 p-4 z-10" style={{ border: `3px solid ${color}`}}>
-                 <div className="absolute inset-0 opacity-20" style={{
-                    backgroundImage: `repeating-linear-gradient(45deg, ${color}, ${color} 20px, transparent 20px, transparent 40px)`,
-                }}></div>
-                <div className='relative flex-grow'>
+                 <CautionTapePattern color={color} />
+                <div className='relative flex-grow w-0'>
                     <h1 className="text-4xl font-bold uppercase" style={{ color: color }}>{data.personal.name}</h1>
                     <p className="text-lg font-semibold">{data.personal.role}</p>
                 </div>
