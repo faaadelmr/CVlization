@@ -103,28 +103,28 @@ export function ResumePreviewPanel() {
     if (!resumeRef.current) return;
     setLoading(true);
 
-    const a4WidthMm = 210;
-    const a4HeightMm = 297;
-
     try {
         const canvas = await html2canvas(resumeRef.current, {
             scale: 2, // Increase scale for better quality
-            useCORS: true,
+            useCORS: true, // Important for external images and some CSS properties
         });
 
-        const dataUrl = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL('image/png');
         
         const pdf = new jsPDF({
-            orientation: 'p',
+            orientation: 'portrait',
             unit: 'mm',
             format: 'a4',
         });
         
-        pdf.addImage(dataUrl, 'PNG', 0, 0, a4WidthMm, a4HeightMm);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save(fileName);
 
     } catch (error) {
-        console.error('oops, something went wrong!', error);
+        console.error('Oops, something went wrong!', error);
     } finally {
         setLoading(false);
     }
