@@ -25,20 +25,20 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
 const templates: { id: Template, name: string, component: React.FC<any> }[] = [
-  { id: 'hexagonvy', name: 'Hexagonvy (New!!)', component: HexagonvyTemplatePreview },
-  { id: 'diamond', name: 'Diamond (New!!)', component: DiamondTemplatePreview },
-  { id: 'cooper', name: 'Cooper (New!!)', component: CooperTemplatePreview },
-  { id: 'awesome', name: 'Awesome (New!!)', component: AwesomeTemplatePreview },
-  { id: 'timeline', name: 'Timeline (New!!)', component: TimelineTemplatePreview },
-  { id: 'smart-start', name: 'SmartStart (New!!)', component: SmartStartTemplatePreview },
-  { id: 'vektoristik', name: 'Vektoristik (New!!)', component: VektoristikTemplatePreview },
-  { id: 'quete', name: 'Quete (New!!)', component: QueteTemplatePreview },
+  { id: 'hexagonvy', name: 'Hexagonvy', component: HexagonvyTemplatePreview },
+  { id: 'diamond', name: 'Diamond', component: DiamondTemplatePreview },
+  { id: 'cooper', name: 'Cooper', component: CooperTemplatePreview },
+  { id: 'awesome', name: 'Awesome', component: AwesomeTemplatePreview },
+  { id: 'timeline', name: 'Timeline', component: TimelineTemplatePreview },
+  { id: 'smart-start', name: 'SmartStart', component: SmartStartTemplatePreview },
+  { id: 'vektoristik', name: 'Vektoristik', component: VektoristikTemplatePreview },
+  { id: 'quete', name: 'Quete', component: QueteTemplatePreview },
+  { id: 'elegant', name: 'Elegant', component: ElegantTemplatePreview },
   { id: 'professional', name: 'Professional', component: ProfessionalTemplatePreview },
   { id: 'modern', name: 'Modern', component: ModernTemplatePreview },
   { id: 'classic', name: 'Classic', component: ClassicTemplatePreview },
   { id: 'creative', name: 'Creative', component: CreativeTemplatePreview },
   { id: 'swiss', name: 'Swiss', component: SwissTemplatePreview },
-  { id: 'elegant', name: 'Elegant', component: ElegantTemplatePreview },
 ];
 
 const accentColors = [
