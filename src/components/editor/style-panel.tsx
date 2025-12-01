@@ -27,8 +27,10 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { LedgerTemplatePreview } from "../templates/ledger-template";
 import { BloxTemplatePreview } from "../templates/blox-template";
+import { AtsFriendlyTemplatePreview } from "../templates/ats-friendly-template";
 
 const templates: { id: Template, name: string, component: React.FC<any> }[] = [
+  { id: 'ats-friendly', name: 'ATS Friendly', component: AtsFriendlyTemplatePreview },
   { id: 'blox', name: 'Blox', component: BloxTemplatePreview },
   { id: 'ledger', name: 'Ledger', component: LedgerTemplatePreview },
   { id: 'construct', name: 'Construct', component: ConstructTemplatePreview },
@@ -252,3 +254,5 @@ export function StylePanel() {
     </div>
   );
 }
+
+    

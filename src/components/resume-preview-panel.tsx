@@ -27,8 +27,12 @@ import { StarlightTemplatePreview } from "./templates/starlight-template";
 import { ConstructTemplatePreview } from "./templates/construct-template";
 import { LedgerTemplatePreview } from "./templates/ledger-template";
 import { BloxTemplatePreview } from "./templates/blox-template";
+import { AtsFriendlyTemplatePreview } from "./templates/ats-friendly-template";
 
 const templateMap = {
+  'ats-friendly': {
+    preview: AtsFriendlyTemplatePreview,
+  },
   blox: {
     preview: BloxTemplatePreview,
   },
@@ -168,3 +172,5 @@ export function ResumePreviewPanel() {
     </div>
   );
 }
+
+    
