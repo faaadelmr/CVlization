@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, HardHat, Wrench, Briefcase, GraduationCap, User, Ruler } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, HardHat, Wrench, Briefcase, GraduationCap, User, Ruler, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const SectionHeader = ({ title, color, textColor, icon }: { title: string, color: string, textColor: string, icon: React.ReactNode }) => (
@@ -33,13 +32,12 @@ const CautionTapePattern = ({ color }: { color: string }) => (
 );
 
 
-export const ConstructTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const ConstructTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+    const fontStyle = { fontFamily: font };
     const lightTextStyle = { color: textColor, opacity: 0.8 };
     
     return (
-        <div className="relative h-full overflow-hidden p-8" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
+        <div className="relative h-full overflow-auto p-8" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             {/* Header with Caution Tape effect */}
             <header className="relative flex items-center justify-between gap-6 mb-8 p-4 z-10" style={{ border: `3px solid ${color}`}}>
                  <CautionTapePattern color={color} />
@@ -74,14 +72,6 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor }: { 
                             ))}
                         </ul>
                     </section>
-                    {data.references && (
-                         <section>
-                            <h3 className="font-bold text-lg uppercase flex items-center gap-2 mb-3" style={{ color }}><User size={20}/> Referensi</h3>
-                            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>
-                                {data.references}
-                            </p>
-                        </section>
-                    )}
                 </aside>
 
                 {/* Right Column */}
@@ -124,8 +114,24 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor }: { 
                             ))}
                         </div>
                     </section>
+                     {data.projects && data.projects.length > 0 && (
+                        <section>
+                            <SectionHeader title="Proyek" icon={<Code size={16} color={bgColor} />} color={color} textColor={textColor} />
+                            <div className="space-y-5">
+                                {data.projects.map(proj => (
+                                    <div key={proj.id}>
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-md hover:underline" style={{color}}>{proj.name}</a>
+                                        <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{proj.description}</div>
+                                        <p className="text-sm font-semibold mt-1" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                 </main>
             </main>
         </div>
     );
 };
+
+    

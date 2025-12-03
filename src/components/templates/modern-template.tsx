@@ -1,14 +1,12 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser, User } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, Code, User } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 // Web Preview Component
-export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
+export const ModernTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
   const sectionTitleStyle = {
     borderColor: color,
     color: color,
@@ -20,7 +18,7 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { dat
     borderColor: `${color}80`
   }
   
-  const fontStyle = { fontFamily: selectedFont };
+  const fontStyle = { fontFamily: font };
   const textStyle = { color: textColor };
   const lightTextStyle = { color: textColor, opacity: 0.8 };
 
@@ -88,7 +86,7 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { dat
         ))}
       </section>
 
-      {/* Skills & References */}
+      {/* Skills & Projects */}
       <div className="grid grid-cols-2 gap-8">
         <section>
           <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Wrench />Skills</h2>
@@ -98,13 +96,28 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor }: { dat
             ))}
           </div>
         </section>
-        {data.references && (
+        {data.projects && data.projects.length > 0 && (
            <section>
-            <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><BookUser />References</h2>
-            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
+            <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Code />Projects</h2>
+            <div className="space-y-4">
+              {data.projects.map(proj => (
+                <div key={proj.id} className="text-sm">
+                  <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline inline-block" style={{color}}>{proj.name}</a>
+                  {proj.link && (
+                    <div className="text-xs mt-1" style={lightTextStyle}>
+                      Link: <a href={proj.link} target="_blank" rel="noreferrer" className="underline break-all" style={{color}}>{proj.link}</a>
+                    </div>
+                  )}
+                  <p className="text-xs mt-1" style={lightTextStyle}>{proj.description}</p>
+                   <p className="text-xs mt-1 font-semibold" style={skillStyle}>{proj.technologies}</p>
+                </div>
+              ))}
+            </div>
           </section>
         )}
       </div>
     </div>
   );
 };
+
+    

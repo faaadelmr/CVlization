@@ -23,9 +23,10 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // The AI flow can now handle both images and PDFs directly.
       const analyzedData = await analyzeResume({ photoDataUri });
       
-      // Add unique IDs to experience and education items
+      // Add unique IDs to experience, education and projects items
       const experienceWithIds = analyzedData.experience.map(exp => ({ ...exp, id: crypto.randomUUID() }));
       const educationWithIds = analyzedData.education.map(edu => ({ ...edu, id: crypto.randomUUID() }));
+      const projectsWithIds = (analyzedData.projects || []).map(proj => ({...proj, id: crypto.randomUUID()}));
       
       const fullData = {
           ...initialData,
@@ -36,6 +37,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           },
           experience: experienceWithIds,
           education: educationWithIds,
+          projects: projectsWithIds,
       }
 
       setResumeData(fullData);

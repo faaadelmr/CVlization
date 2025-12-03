@@ -1,17 +1,15 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Wrench, BookUser, Briefcase, GraduationCap, User } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Wrench, Code, Briefcase, GraduationCap, User } from 'lucide-react';
 import Image from 'next/image';
 
 // Web Preview Component
-export const ClassicTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
+export const ClassicTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
   const leftColStyle = { backgroundColor: `${color}1A` }; // 10% opacity
   const nameStyle = { color: color };
   const sectionTitleStyle = { borderBottomColor: color, color: color };
-  const fontStyle = { fontFamily: selectedFont };
+  const fontStyle = { fontFamily: font };
   const textStyle = { color: textColor };
   const lightTextStyle = { color: textColor, opacity: 0.8 };
 
@@ -43,17 +41,11 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor }: { da
               ))}
             </ul>
           </div>
-          {data.references && (
-            <div>
-              <h3 className="font-bold text-base mb-2 flex items-center gap-2" style={{...nameStyle, ...fontStyle}}><BookUser size={16}/> References</h3>
-              <p className="pl-6 whitespace-pre-line">{data.references}</p>
-            </div>
-          )}
         </div>
       </div>
 
       {/* Right Column */}
-      <div className="w-3/5 p-8">
+      <div className="w-3/5 p-8 overflow-y-auto">
         <section className="mb-8">
             <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><User /> Profile</h2>
             <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
@@ -68,6 +60,21 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor }: { da
               </div>
               <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1.125rem', ...lightTextStyle, opacity: 0.9}}>{exp.company}</h4>
               <div className="text-sm whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
+            </div>
+          ))}
+        </section>
+         <section className="mb-8">
+          <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Code /> Projects</h2>
+          {data.projects.map(proj => (
+            <div key={proj.id} className="mb-5">
+              <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{proj.name}</h3>
+              {proj.link && (
+                <div className="text-sm mt-1" style={lightTextStyle}>
+                  Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={nameStyle}>{proj.link}</a>
+                </div>
+              )}
+              <div className="text-sm whitespace-pre-line prose max-w-none my-1" style={lightTextStyle}>{proj.description}</div>
+              <p className="text-sm font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
             </div>
           ))}
         </section>
@@ -88,3 +95,5 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor }: { da
     </div>
   );
 };
+
+    

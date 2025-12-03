@@ -1,14 +1,12 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Star, BookUser, Briefcase, GraduationCap, User } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Star, Code, Briefcase, GraduationCap, User } from 'lucide-react';
 import Image from 'next/image';
 
-export const ElegantTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
+export const ElegantTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
   const accentColorStyle = { color: color };
-  const fontStyle = { fontFamily: selectedFont };
+  const fontStyle = { fontFamily: font };
   const lightTextStyle = { color: textColor, opacity: 0.8 };
 
   return (
@@ -93,13 +91,21 @@ export const ElegantTemplatePreview = ({ data, color, bgColor, textColor }: { da
               ))}
             </ul>
           </section>
-          {data.references && (
+          {data.projects && data.projects.length > 0 && (
             <section>
               <h2 className="text-xl font-semibold uppercase tracking-wider mb-4 flex items-center gap-3" style={{ ...accentColorStyle, ...fontStyle }}>
-                <BookUser />
-                References
+                <Code />
+                Projects
               </h2>
-              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
+              <div className="space-y-4">
+                {data.projects.map(proj => (
+                    <div key={proj.id} className="text-sm">
+                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline" style={accentColorStyle}>{proj.name}</a>
+                        <p className="text-xs mt-1" style={lightTextStyle}>{proj.description}</p>
+                        <p className="text-xs mt-1 font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                    </div>
+                ))}
+              </div>
             </section>
           )}
         </div>
@@ -107,3 +113,5 @@ export const ElegantTemplatePreview = ({ data, color, bgColor, textColor }: { da
     </div>
   );
 };
+
+    

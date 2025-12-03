@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, User, Wrench, Facebook, Twitter, Instagram, Linkedin, BookUser } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, User, Wrench, Facebook, Twitter, Instagram, Linkedin, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const WavyBackground = ({ color, position }: { color: string, position: 'top' | 'bottom' }) => (
@@ -35,9 +34,8 @@ const SectionHeader = ({ icon, title, color }: { icon: React.ReactNode, title: s
     </div>
 );
 
-export const QueteTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const QueteTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+    const fontStyle = { fontFamily: font };
     const textStyle = { color: textColor };
     const lightTextStyle = { color: textColor, opacity: 0.8 };
 
@@ -48,7 +46,7 @@ export const QueteTemplatePreview = ({ data, color, bgColor, textColor }: { data
             <WavyBackground color={color} position="top" />
             <WavyBackground color={color} position="bottom" />
 
-            <main className="relative z-10 w-full h-full flex flex-col pt-[72px]">
+            <main className="relative z-10 w-full h-full flex flex-col pt-[72px] overflow-y-auto">
                 {/* Header */}
                 <header className="flex items-center w-full mb-10 pl-8">
                     {data.personal.photo && (
@@ -87,6 +85,20 @@ export const QueteTemplatePreview = ({ data, color, bgColor, textColor }: { data
                                 ))}
                             </div>
                         </section>
+                         {data.projects && data.projects.length > 0 && (
+                            <section>
+                                <SectionHeader icon={<Code size={16} />} title="Projects" color={color} />
+                                <div className="space-y-4">
+                                    {data.projects.map(proj => (
+                                        <div key={proj.id}>
+                                            <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-md hover:underline" style={{color}}>{proj.name}</a>
+                                            <div className="text-xs whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{proj.description}</div>
+                                            <p className="text-xs font-semibold mt-1" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
                     </div>
 
                     {/* Right Column */}
@@ -118,17 +130,11 @@ export const QueteTemplatePreview = ({ data, color, bgColor, textColor }: { data
                                 ))}
                             </div>
                         </section>
-                        {data.references && (
-                             <section>
-                                <SectionHeader icon={<BookUser size={16} />} title="References" color={color} />
-                                <div className="text-sm whitespace-pre-line" style={lightTextStyle}>
-                                    {data.references}
-                                </div>
-                            </section>
-                        )}
                     </div>
                 </div>
             </main>
         </div>
     );
 };
+
+    

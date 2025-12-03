@@ -1,9 +1,9 @@
 
 "use client";
 import type { ResumeData } from '@/lib/types';
-import { useResume } from '@/context/resume-context';
 import Image from 'next/image';
-import { Phone, Mail, Globe, MapPin } from 'lucide-react';
+import { Phone, Mail, Globe, MapPin, Code } from 'lucide-react';
+import type { Font } from "@/lib/types";
 
 const Section = ({ title, children, className, titleClassName, contentClassName, color, textColor }: { title: string, children: React.ReactNode, className?: string, titleClassName?: string, contentClassName?: string, color: string, textColor: string }) => (
     <div className={className}>
@@ -15,9 +15,8 @@ const Section = ({ title, children, className, titleClassName, contentClassName,
 );
 
 
-export const DiamondTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const DiamondTemplatePreview = ({ data, color, bgColor, textColor, font, isPdf = false }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font, isPdf?: boolean }) => {
+    const fontStyle = { fontFamily: font };
 
     const isColorLight = (hexColor: string) => {
         if (!hexColor.startsWith('#')) return false;
@@ -36,7 +35,7 @@ export const DiamondTemplatePreview = ({ data, color, bgColor, textColor }: { da
     const skills = (data.skills || '').split(',').map(s => s.trim()).filter(Boolean);
 
     return (
-        <div className="p-6 md:p-8 h-full w-full" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
+        <div className="p-6 md:p-8 h-full w-full overflow-y-auto" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             <div className="grid grid-cols-3 grid-rows-auto gap-6 h-full">
 
                 {/* Header */}
@@ -60,7 +59,12 @@ export const DiamondTemplatePreview = ({ data, color, bgColor, textColor }: { da
                     {data.personal.photo && (
                          <div className="w-48 h-48 rounded-full border-2 p-2 border-gray-200">
                              <div className="relative w-full h-full rounded-full overflow-hidden">
-                                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                                {isPdf ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={data.personal.photo} alt={data.personal.name} className="object-cover w-full h-full" />
+                                 ) : (
+                                    <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                                 )}
                              </div>
                          </div>
                     )}
@@ -106,7 +110,7 @@ export const DiamondTemplatePreview = ({ data, color, bgColor, textColor }: { da
                     </Section>
                 </div>
 
-                {/* Skills & References container */}
+                {/* Skills & Projects container */}
                 <div className="col-span-3 grid grid-cols-2 gap-6">
                     <div className="p-6 rounded-lg border" style={{ borderColor: `${textColor}20`}}>
                         <Section title="Skills" color={color} textColor={textColor}>
@@ -117,11 +121,17 @@ export const DiamondTemplatePreview = ({ data, color, bgColor, textColor }: { da
                             </div>
                         </Section>
                     </div>
-                    {data.references && (
+                    {data.projects && data.projects.length > 0 && (
                      <div className="p-6 rounded-lg border" style={{ borderColor: `${textColor}20`}}>
-                        <Section title="References" color={color} textColor={textColor}>
-                             <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>
-                                {data.references}
+                        <Section title="Projects" color={color} textColor={textColor}>
+                             <div className="space-y-4">
+                                {data.projects.map(proj => (
+                                    <div key={proj.id} className="text-sm">
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline" style={{color}}>{proj.name}</a>
+                                        <p className="text-xs mt-1" style={{color: textColor, opacity: 0.8}}>{proj.description}</p>
+                                        <p className="text-xs mt-1 font-semibold" style={{color: textColor, opacity: 0.8}}>Technologies: {proj.technologies}</p>
+                                    </div>
+                                ))}
                             </div>
                         </Section>
                     </div>
@@ -131,3 +141,5 @@ export const DiamondTemplatePreview = ({ data, color, bgColor, textColor }: { da
         </div>
     );
 };
+
+    

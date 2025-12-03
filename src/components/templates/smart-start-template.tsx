@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, CheckSquare, Briefcase, GraduationCap, Star } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, CheckSquare, Briefcase, GraduationCap, Star, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const SectionHeader = ({ icon, title, color }: { icon: React.ReactNode, title: string, color: string }) => (
@@ -27,9 +26,8 @@ const VectoristicPattern = ({ color }: { color: string }) => (
     </div>
 );
 
-export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+    const fontStyle = { fontFamily: font };
     const sidebarBgStyle = { backgroundColor: color };
     const sidebarTextStyle = { color: '#FFFFFF' };
     const mainBgStyle = { backgroundColor: bgColor };
@@ -40,7 +38,7 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor }: {
     return (
         <div className="flex h-full" style={fontStyle}>
             {/* Left Column (Sidebar) */}
-            <aside className="w-1/3 p-8 flex flex-col gap-8 relative" style={sidebarBgStyle}>
+            <aside className="w-1/3 p-8 flex flex-col gap-8 relative overflow-hidden" style={sidebarBgStyle}>
                 <div className="absolute top-8 -right-8">
                     {data.personal.photo ? (
                         <div className="bg-white p-2 shadow-lg">
@@ -76,7 +74,7 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor }: {
             </aside>
 
             {/* Right Column (Main Content) */}
-            <main className="w-2/3 p-8 relative overflow-hidden" style={mainBgStyle}>
+            <main className="w-2/3 p-8 relative overflow-auto" style={mainBgStyle}>
                 <VectoristicPattern color={color} />
                 <div className="relative z-10">
                     <header className="mb-8">
@@ -102,7 +100,7 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor }: {
                             ))}
                         </div>
                     </section>
-                    <section>
+                    <section className="mb-8">
                         <SectionHeader icon={<GraduationCap size={16} color="white" />} title="Pendidikan" color={color} />
                         <div className="space-y-4">
                             {data.education.map(edu => (
@@ -114,8 +112,24 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor }: {
                             ))}
                         </div>
                     </section>
+                    {data.projects && data.projects.length > 0 && (
+                        <section>
+                            <SectionHeader icon={<Code size={16} color="white" />} title="Proyek" color={color} />
+                             <div className="space-y-4">
+                                {data.projects.map(proj => (
+                                    <div key={proj.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-lg hover:underline" style={mainAccentColorStyle}>{proj.name}</a>
+                                        <p className="text-sm mt-1" style={lightTextStyle}>{proj.description}</p>
+                                        <p className="text-sm mt-1 font-semibold" style={lightTextStyle}>Teknologi: {proj.technologies}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                 </div>
             </main>
         </div>
     );
 };
+
+    

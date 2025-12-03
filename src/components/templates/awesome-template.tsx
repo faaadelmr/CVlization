@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, Globe, Award, Briefcase, GraduationCap, User, Wrench } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, Globe, Award, Briefcase, GraduationCap, User, Wrench, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const Section = ({ icon, title, children }: { icon: React.ReactNode, title: string, children: React.ReactNode }) => (
@@ -19,7 +18,7 @@ const Section = ({ icon, title, children }: { icon: React.ReactNode, title: stri
     </div>
 );
 
-const ContactItem = ({ icon, text }: { icon: React.ReactNode, text: string }) => (
+const ContactItem = ({ icon, text }: { icon: React.ReactNode, text: string | React.ReactNode }) => (
     <div className="flex items-center">
         <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-current">
             {icon}
@@ -29,9 +28,8 @@ const ContactItem = ({ icon, text }: { icon: React.ReactNode, text: string }) =>
 );
 
 
-export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+    const fontStyle = { fontFamily: font };
     const accentColorStyle = { color: color };
     const accentBgStyle = { backgroundColor: color };
 
@@ -54,7 +52,7 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor }: { da
             </header>
 
             {/* Main Content */}
-            <main className="p-12 pt-4 flex-grow grid grid-cols-2 gap-x-12">
+            <main className="p-12 pt-4 flex-grow grid grid-cols-2 gap-x-12 overflow-y-auto">
                  <div style={accentColorStyle}>
                     <Section icon={<User size={24} className="text-white"/>} title="Profile">
                         <div className="whitespace-pre-line prose prose-sm max-w-none" style={{color: textColor, opacity: 0.9}}>{data.personal.description}</div>
@@ -89,9 +87,22 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor }: { da
                             ))}
                         </ul>
                     </Section>
-                    {data.references && (
-                      <Section icon={<Award size={24} className="text-white"/>} title="References">
-                          <div className="whitespace-pre-line prose prose-sm max-w-none" style={{color: textColor, opacity: 0.9}}>{data.references}</div>
+                    {data.projects && data.projects.length > 0 && (
+                      <Section icon={<Code size={24} className="text-white"/>} title="Projects">
+                          <div className="space-y-4">
+                            {data.projects.map(proj => (
+                                <div key={proj.id}>
+                                    <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-md hover:underline inline-block" style={accentColorStyle}>{proj.name}</a>
+                                    {proj.link && (
+                                      <div className="text-xs mt-1" style={{color: textColor, opacity: 0.8}}>
+                                        Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={accentColorStyle}>{proj.link}</a>
+                                      </div>
+                                    )}
+                                    <div className="text-xs whitespace-pre-line prose max-w-none mt-1" style={{color: textColor, opacity: 0.8}}>{proj.description}</div>
+                                    <p className="text-xs font-semibold" style={{color: textColor, opacity: 0.9}}>Technologies: {proj.technologies}</p>
+                                </div>
+                            ))}
+                        </div>
                       </Section>
                     )}
                 </div>
@@ -102,9 +113,15 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor }: { da
                 <div className="grid grid-cols-3 gap-4">
                      <ContactItem icon={<Mail size={16} className="text-white"/>} text={data.personal.email} />
                      <ContactItem icon={<Phone size={16} className="text-white"/>} text={data.personal.phone} />
-                     <ContactItem icon={<Globe size={16} className="text-white"/>} text={data.personal.website} />
+                     {data.personal.website && (
+                       <ContactItem icon={<Globe size={16} className="text-white"/>} text={
+                         <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="hover:underline break-all">{data.personal.website}</a>
+                       } />
+                     )}
                 </div>
             </footer>
         </div>
     );
 };
+
+    

@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, BookUser, Wrench } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, BookUser, Wrench, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const TimelineItem = ({ date, title, description, color, textColor }: { date: string, title: string, description: string, color: string, textColor: string }) => (
@@ -32,9 +31,8 @@ const SidebarSection = ({ title, color, textColor, children, icon }: { title: st
 );
 
 
-export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+    const fontStyle = { fontFamily: font };
     
     const isSidebarColorLight = (hexColor: string) => {
         if (!hexColor.startsWith('#')) return false;
@@ -87,7 +85,7 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor }: 
                     )}
                 </div>
                 
-                <div className="p-8 pt-8 flex-grow">
+                <div className="p-8 pt-8 flex-grow overflow-y-auto">
                     <section className="mb-8">
                         <h2 className="text-sm font-bold uppercase tracking-wider p-2 text-center text-white mb-4" style={{ backgroundColor: color, color: headerTextColor }}>Education</h2>
                         <div className="space-y-0">
@@ -123,7 +121,7 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor }: 
             </main>
 
             {/* Sidebar (Right) */}
-            <aside className="w-1/3 p-8 space-y-10" style={{ backgroundColor: color, color: sidebarTextColor }}>
+            <aside className="w-1/3 p-8 space-y-10 overflow-y-auto" style={{ backgroundColor: color, color: sidebarTextColor }}>
                 <SidebarSection title="Contact Me" color={sidebarBorderColor} textColor={sidebarTextColor} icon={<Globe size={16} />}>
                     <div className="flex items-start gap-3">
                         <MapPin size={24} style={{ color: sidebarBorderColor }} className="flex-shrink-0 mt-1" />
@@ -157,10 +155,16 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor }: 
                     </div>
                 </SidebarSection>
 
-                {data.references && (
-                     <SidebarSection title="References" color={sidebarBorderColor} textColor={sidebarTextColor} icon={<BookUser size={16} />}>
-                        <div className="whitespace-pre-line opacity-80">
-                            {data.references}
+                {data.projects && data.projects.length > 0 && (
+                     <SidebarSection title="Projects" color={sidebarBorderColor} textColor={sidebarTextColor} icon={<Code size={16} />}>
+                        <div className="space-y-4">
+                            {data.projects.map(proj => (
+                                <div key={proj.id} className="text-sm">
+                                    <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline">{proj.name}</a>
+                                    <p className="opacity-80 text-xs mt-1">{proj.description}</p>
+                                    <p className="opacity-80 text-xs mt-1 font-semibold">{proj.technologies}</p>
+                                </div>
+                            ))}
                         </div>
                     </SidebarSection>
                 )}
@@ -168,3 +172,5 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor }: 
         </div>
     );
 };
+
+    

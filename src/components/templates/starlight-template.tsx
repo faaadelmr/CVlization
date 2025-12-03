@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Star, Sparkles, User, Briefcase, GraduationCap } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Star, Sparkles, User, Briefcase, GraduationCap, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const StarlightPattern = ({ color }: { color: string }) => (
@@ -35,16 +34,15 @@ const Section = ({ icon, title, children, color, textColor }: { icon: React.Reac
 );
 
 
-export const StarlightTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
-  const fontStyle = { fontFamily: selectedFont };
+export const StarlightTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+  const fontStyle = { fontFamily: font };
   const lightTextStyle = { color: textColor, opacity: 0.8 };
 
   return (
     <div className="w-full h-full p-8" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
         <div className="grid grid-cols-12 gap-x-10 h-full">
             {/* Left Column */}
-            <aside className="col-span-4 flex flex-col items-center text-center pt-8">
+            <aside className="col-span-4 flex flex-col items-center text-center pt-8 overflow-y-auto">
                 {data.personal.photo && (
                     <div className="relative w-40 h-40 mb-5">
                          <div className="absolute inset-0 rounded-full" style={{backgroundColor: color, filter: 'blur(20px)', opacity: 0.5}}></div>
@@ -74,17 +72,11 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor }: { 
                             ))}
                         </div>
                     </div>
-                     {data.references && (
-                        <div>
-                            <h3 className="font-bold text-md uppercase tracking-widest mb-3 flex items-center gap-2" style={{color: color}}><Sparkles size={16}/> Interests</h3>
-                            <p className="whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
-                        </div>
-                    )}
                 </div>
             </aside>
 
             {/* Right Column */}
-            <main className="col-span-8 p-8 rounded-2xl relative overflow-hidden" style={{backgroundColor: `${color}10`}}>
+            <main className="col-span-8 p-8 rounded-2xl relative overflow-auto" style={{backgroundColor: `${color}10`}}>
                 <StarlightPattern color={color} />
                 <div className="relative z-10">
                      <Section icon={<User size={20} style={{color}}/>} title="Profile" color={color} textColor={textColor}>
@@ -118,9 +110,24 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor }: { 
                             ))}
                         </div>
                     </Section>
+                    {data.projects && data.projects.length > 0 && (
+                        <Section icon={<Code size={20} style={{color}}/>} title="Projects" color={color} textColor={textColor}>
+                             <div className="space-y-5">
+                                {data.projects.map(proj => (
+                                    <div key={proj.id}>
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-lg hover:underline" style={{color}}>{proj.name}</a>
+                                        <div className="text-sm whitespace-pre-line prose max-w-none my-1" style={lightTextStyle}>{proj.description}</div>
+                                        <p className="text-sm font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Section>
+                    )}
                 </div>
             </main>
         </div>
     </div>
   );
 };
+
+    

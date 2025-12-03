@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, Globe, User, Briefcase, GraduationCap, Star, Heart, MapPin } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, Globe, User, Briefcase, GraduationCap, Star, Heart, MapPin, Code } from 'lucide-react';
 import Image from 'next/image';
 
 // Helper function to determine if a color is light or dark
@@ -16,9 +15,8 @@ const isColorLight = (hexColor: string) => {
 };
 
 
-export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
-  const fontStyle = { fontFamily: selectedFont };
+export const CreativeTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+  const fontStyle = { fontFamily: font };
 
   // Use a dark color for the sidebar, ignoring user's bgColor selection for this specific template style
   const sidebarBgColor = '#2C3E50'; // A dark blue-gray
@@ -41,7 +39,7 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { d
   return (
     <div className="flex h-full" style={{ ...fontStyle, backgroundColor: bgColor }}>
       {/* Left Sidebar */}
-      <div className="w-1/3 text-white" style={{ backgroundColor: sidebarBgColor, color: sidebarTextColor }}>
+      <div className="w-1/3 text-white overflow-y-auto" style={{ backgroundColor: sidebarBgColor, color: sidebarTextColor }}>
         <div className="h-48" style={{ backgroundColor: color }}></div>
         <div className="px-8 -mt-24">
             {data.personal.photo ? (
@@ -78,14 +76,6 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { d
                 ))}
               </ul>
             </div>
-             {data.references && (
-                <div>
-                    <h3 className="text-lg font-semibold border-b-2 pb-1 mb-3 flex items-center" style={{ borderColor: color, color: color }}>
-                    <Heart size={18} className="mr-2"/> Interests
-                    </h3>
-                    <p className="text-sm whitespace-pre-line" style={{color: sidebarTextColor, opacity: 0.9}}>{data.references}</p>
-                </div>
-            )}
           </div>
         </div>
       </div>
@@ -117,7 +107,26 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor }: { d
             </div>
           ))}
         </Section>
+
+        {data.projects && data.projects.length > 0 && (
+          <Section icon={<Code size={24} color={sidebarTextColor} />} title="Projects">
+            {data.projects.map(proj => (
+              <div key={proj.id} className="pb-6">
+                <h3 className="text-xl font-bold" style={{color: textColor}}>{proj.name}</h3>
+                {proj.link && (
+                  <div className="text-sm mt-1" style={{color: textColor, opacity: 0.8}}>
+                    Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={{color: color}}>{proj.link}</a>
+                  </div>
+                )}
+                <p className="text-sm whitespace-pre-line mt-1" style={{color: textColor, opacity: 0.8}}>{proj.description}</p>
+                <p className="text-sm font-semibold mt-2" style={{color: textColor, opacity: 0.9}}>Technologies: {proj.technologies}</p>
+              </div>
+            ))}
+          </Section>
+        )}
       </div>
     </div>
   );
 };
+
+    

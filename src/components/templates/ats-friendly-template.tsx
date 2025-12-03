@@ -1,7 +1,6 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
 
 const Section = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <section className="mb-6">
@@ -10,9 +9,8 @@ const Section = ({ title, children }: { title: string, children: React.ReactNode
     </section>
 );
 
-export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
-  const fontStyle = { fontFamily: selectedFont };
+export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+  const fontStyle = { fontFamily: font };
   const textStyle = { color: textColor };
   const lightTextStyle = { color: textColor, opacity: 0.8 };
   const sectionTitleStyle = { borderColor: textColor, color: textColor };
@@ -71,9 +69,13 @@ export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor }: 
             <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Projects</h2>
             {data.projects.map(proj => (
                 <div key={proj.id} className="mb-4">
-                     <div className="flex justify-between items-baseline">
+                     <div>
                         <h3 className="text-lg font-bold">{proj.name}</h3>
-                        {proj.link && <a href={proj.link} target="_blank" rel="noreferrer" className="text-sm hover:underline" style={linkStyle}>View Project</a>}
+                        {proj.link && (
+                          <div className="text-sm mt-1" style={lightTextStyle}>
+                            Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={linkStyle}>{proj.link}</a>
+                          </div>
+                        )}
                     </div>
                     <p className="font-semibold italic text-sm" style={lightTextStyle}>Technologies: {proj.technologies}</p>
                     <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{proj.description}</div>
@@ -96,13 +98,6 @@ export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor }: 
             ))}
         </Section>
         
-        {/* References */}
-        {data.references && (
-             <Section>
-                <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>References</h2>
-                <p className="text-sm whitespace-pre-line mt-2" style={lightTextStyle}>{data.references}</p>
-            </Section>
-        )}
     </div>
   );
 };

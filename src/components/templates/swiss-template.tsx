@@ -1,14 +1,12 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, User } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, User, Code } from 'lucide-react';
 import Image from 'next/image';
 
-export const SwissTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
+export const SwissTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
   const accentColor = { color: color };
-  const fontStyle = { fontFamily: selectedFont };
+  const fontStyle = { fontFamily: font };
   const textStyle = { color: textColor };
   const lightTextStyle = { color: textColor, opacity: 0.8 };
   const lighterTextStyle = { color: textColor, opacity: 0.6 };
@@ -66,12 +64,6 @@ export const SwissTemplatePreview = ({ data, color, bgColor, textColor }: { data
               ))}
             </ul>
           </section>
-          {data.references && (
-            <section>
-              <h2 className="text-sm font-bold uppercase tracking-[0.2em] mb-4" style={{...accentColor, ...fontStyle}}>References</h2>
-              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.references}</p>
-            </section>
-          )}
         </aside>
 
         {/* Right Column */}
@@ -95,7 +87,7 @@ export const SwissTemplatePreview = ({ data, color, bgColor, textColor }: { data
             ))}
           </section>
 
-          <section>
+          <section className="mb-10">
             <h2 className="text-sm font-bold uppercase tracking-[0.2em] mb-5" style={{...accentColor, ...fontStyle}}>Education</h2>
             {data.education.map(edu => (
               <div key={edu.id} className="mb-6">
@@ -108,8 +100,28 @@ export const SwissTemplatePreview = ({ data, color, bgColor, textColor }: { data
               </div>
             ))}
           </section>
+          
+          {data.projects && data.projects.length > 0 && (
+            <section>
+              <h2 className="text-sm font-bold uppercase tracking-[0.2em] mb-5" style={{...accentColor, ...fontStyle}}>Projects</h2>
+              {data.projects.map(proj => (
+                <div key={proj.id} className="mb-6">
+                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{proj.name}</h3>
+                   {proj.link && (
+                    <div className="text-sm mt-1" style={lightTextStyle}>
+                      Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={accentColor}>{proj.link}</a>
+                    </div>
+                  )}
+                  <p className="text-sm whitespace-pre-line my-1" style={lightTextStyle}>{proj.description}</p>
+                   <p className="text-sm font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                </div>
+              ))}
+            </section>
+          )}
         </main>
       </div>
     </div>
   );
 };
+
+    

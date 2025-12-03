@@ -1,13 +1,11 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Briefcase, GraduationCap, Award, User, Home } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Briefcase, GraduationCap, Award, User, Home, Code } from 'lucide-react';
 import Image from 'next/image';
 
-export const TimelineTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
-  const fontStyle = { fontFamily: selectedFont };
+export const TimelineTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+  const fontStyle = { fontFamily: font };
   
   // Use the selected color for the header background
   const headerBgStyle = { backgroundColor: color };
@@ -61,7 +59,7 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor }: { d
               </div>
             </div>
           </section>
-          <section>
+          <section className="mb-8">
             <h3 className="font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Skills</h3>
             <ul className="space-y-2 text-sm list-disc list-inside" style={bodyTextStyle}>
               {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
@@ -69,6 +67,20 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor }: { d
               ))}
             </ul>
           </section>
+           {data.projects && data.projects.length > 0 && (
+            <section>
+              <h3 className="font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Projects</h3>
+               <div className="space-y-4">
+                {data.projects.map(proj => (
+                  <div key={proj.id} className="text-sm">
+                    <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline" style={accentColorStyle}>{proj.name}</a>
+                    <p className="text-xs mt-1" style={{opacity: 0.8}}>{proj.description}</p>
+                    <p className="text-xs mt-1 font-semibold" style={{opacity: 0.8}}>Technologies: {proj.technologies}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </aside>
 
         {/* Right Main Content */}
@@ -106,3 +118,5 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor }: { d
     </div>
   );
 };
+
+    

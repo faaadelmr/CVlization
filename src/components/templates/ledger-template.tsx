@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Calculator, PenLine, FileText, Briefcase, GraduationCap, User, Star } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Calculator, PenLine, FileText, Briefcase, GraduationCap, User, Star, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const SectionHeader = ({ title, color, textColor, icon }: { title: string, color: string, textColor: string, icon: React.ReactNode }) => (
@@ -12,14 +11,13 @@ const SectionHeader = ({ title, color, textColor, icon }: { title: string, color
     </div>
 );
 
-export const LedgerTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-    const { selectedFont } = useResume();
-    const fontStyle = { fontFamily: selectedFont };
+export const LedgerTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+    const fontStyle = { fontFamily: font };
     const lightTextStyle = { color: textColor, opacity: 0.8 };
     const tableHeaderStyle = { backgroundColor: `${color}1A`, borderBottom: `2px solid ${color}` };
 
     return (
-        <div className="h-full flex flex-col p-8" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
+        <div className="h-full flex flex-col p-8 overflow-y-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
             
             {/* Header */}
             <header className="flex justify-between items-center mb-6">
@@ -62,14 +60,6 @@ export const LedgerTemplatePreview = ({ data, color, bgColor, textColor }: { dat
                             ))}
                         </ul>
                     </section>
-                    {data.references && (
-                         <section>
-                            <SectionHeader title="Sertifikasi" icon={<Star size={18} style={{color}} />} color={color} textColor={textColor} />
-                            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>
-                                {data.references}
-                            </p>
-                        </section>
-                    )}
                 </aside>
 
                 {/* Vertical Separator */}
@@ -108,8 +98,24 @@ export const LedgerTemplatePreview = ({ data, color, bgColor, textColor }: { dat
                             ))}
                         </div>
                     </section>
+                    {data.projects && data.projects.length > 0 && (
+                        <section>
+                            <SectionHeader title="Proyek" icon={<Code size={18} style={{color}} />} color={color} textColor={textColor} />
+                            <div className="space-y-4">
+                                {data.projects.map(proj => (
+                                    <div key={proj.id} className="text-sm">
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-md hover:underline" style={{color}}>{proj.name}</a>
+                                        <div className="whitespace-pre-line prose max-w-none text-xs mt-1" style={lightTextStyle}>{proj.description}</div>
+                                        <p className="text-xs font-semibold mt-1" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                 </main>
             </main>
         </div>
     );
 };
+
+    

@@ -32,10 +32,9 @@ export interface ResumeData {
     link: string;
   }[];
   skills: string;
-  references: string;
 }
 
-export type Template = 'ats-friendly' | 'blox' | 'ledger' | 'construct' | 'starlight' | 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional' | 'timeline' | 'smart-start' | 'vektoristik' | 'awesome' | 'cooper' | 'quete' | 'diamond' | 'hexagonvy';
+export type Template = 'git-folio' | 'ats-friendly' | 'blox' | 'ledger' | 'construct' | 'starlight' | 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional' | 'timeline' | 'smart-start' | 'vektoristik' | 'awesome' | 'cooper' | 'quete' | 'diamond' | 'hexagonvy';
 export type Font = 'Inter' | 'Space Grotesk' | 'Roboto' | 'Lato' | 'Montserrat' | 'Open Sans' | 'Merriweather' | 'Source Sans Pro' | 'Playfair Display';
 
 
@@ -55,5 +54,3 @@ export interface ResumeContextProps {
   handleAnalyzeResume: (photoDataUri: string) => Promise<void>;
   isAiLoading: boolean;
 }
-
-    

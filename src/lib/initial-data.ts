@@ -40,6 +40,14 @@ export const initialData: ResumeData = {
       description: "",
     },
   ],
+  projects: [
+    {
+      id: 'proj1',
+      name: 'Aplikasi Resume Builder',
+      description: 'Aplikasi web untuk membuat dan mendesain CV secara real-time dengan bantuan AI.',
+      technologies: 'Next.js, TypeScript, Tailwind CSS, Genkit AI',
+      link: 'github.com/faaadelmr/cv-lization'
+    }
+  ],
   skills: "React, Next.js, TypeScript, Tailwind CSS, JavaScript, Laravel",
-  references: "Tersedia berdasarkan permintaan",
 };

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Briefcase, BookUser, GraduationCap, MinusCircle, PlusCircle, User, Wrench, X } from "lucide-react";
+import { Briefcase, Code, GraduationCap, MinusCircle, PlusCircle, User, Wrench, X } from "lucide-react";
 import type { ChangeEvent } from "react";
 import type { ResumeData } from "@/lib/types";
 import Image from "next/image";
@@ -15,7 +15,7 @@ import Image from "next/image";
 export function ResumeForm() {
   const { resumeData, setResumeData } = useResume();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: keyof Omit<ResumeData, 'experience' | 'education' | 'skills' | 'references'>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: keyof Omit<ResumeData, 'experience' | 'education' | 'skills' | 'projects'>) => {
     const { name, value } = e.target;
     setResumeData(prev => ({
       ...prev,
@@ -53,7 +53,7 @@ export function ResumeForm() {
     }));
   }
   
-  const handleIndexedChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: 'experience' | 'education', index: number) => {
+  const handleIndexedChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, section: 'experience' | 'education' | 'projects', index: number) => {
     const { name, value } = e.target;
     setResumeData(prev => {
       const newSection = [...prev[section]];
@@ -87,6 +87,20 @@ export function ResumeForm() {
     setResumeData(prev => ({
       ...prev,
       education: prev.education.filter(item => item.id !== id)
+    }));
+  };
+  
+  const addProject = () => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: [...prev.projects, { id: crypto.randomUUID(), name: "", description: "", technologies: "", link: "" }]
+    }));
+  };
+
+  const removeProject = (id: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.filter(item => item.id !== id)
     }));
   };
 
@@ -199,20 +213,40 @@ export function ResumeForm() {
           <Button onClick={addEducation} variant="outline" className="w-full"><PlusCircle className="mr-2" /> Add Education</Button>
         </AccordionContent>
       </AccordionItem>
+
+      <AccordionItem value="projects" className="border rounded-lg bg-background">
+        <AccordionTrigger className="p-4 font-headline text-lg hover:no-underline"><Code className="mr-2 text-primary" /> Projects</AccordionTrigger>
+        <AccordionContent className="p-4 pt-0 space-y-4">
+          {resumeData.projects.map((proj, index) => (
+            <div key={proj.id} className="p-4 border rounded-md relative space-y-4">
+              <div className="space-y-2">
+                <Label>Project Name</Label>
+                <Input name="name" value={proj.name} onChange={(e) => handleIndexedChange(e, 'projects', index)} />
+              </div>
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <Textarea name="description" value={proj.description} onChange={(e) => handleIndexedChange(e, 'projects', index)} rows={3} />
+              </div>
+              <div className="space-y-2">
+                <Label>Technologies (comma-separated)</Label>
+                <Input name="technologies" value={proj.technologies} onChange={(e) => handleIndexedChange(e, 'projects', index)} />
+              </div>
+              <div className="space-y-2">
+                <Label>Link</Label>
+                <Input name="link" value={proj.link} onChange={(e) => handleIndexedChange(e, 'projects', index)} />
+              </div>
+              <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive" onClick={() => removeProject(proj.id)}><MinusCircle /></Button>
+            </div>
+          ))}
+          <Button onClick={addProject} variant="outline" className="w-full"><PlusCircle className="mr-2"/> Add Project</Button>
+        </AccordionContent>
+      </AccordionItem>
       
       <AccordionItem value="skills" className="border rounded-lg bg-background">
         <AccordionTrigger className="p-4 font-headline text-lg hover:no-underline"><Wrench className="mr-2 text-primary" /> Skills</AccordionTrigger>
         <AccordionContent className="p-4 pt-0 space-y-2">
           <Label htmlFor="skills">Skills (comma-separated)</Label>
           <Textarea id="skills" name="skills" value={resumeData.skills} onChange={(e) => setResumeData({...resumeData, skills: e.target.value})} rows={4}/>
-        </AccordionContent>
-      </AccordionItem>
-      
-      <AccordionItem value="references" className="border rounded-lg bg-background">
-        <AccordionTrigger className="p-4 font-headline text-lg hover:no-underline"><BookUser className="mr-2 text-primary" /> References</AccordionTrigger>
-        <AccordionContent className="p-4 pt-0 space-y-2">
-          <Label htmlFor="references">References</Label>
-          <Textarea id="references" name="references" value={resumeData.references} onChange={(e) => setResumeData({...resumeData, references: e.target.value})} rows={2}/>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

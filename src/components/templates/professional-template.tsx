@@ -1,14 +1,12 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, BookUser, Star, User } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, Briefcase, GraduationCap, Wrench, Code, Star, User } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
-  const { selectedFont } = useResume();
-  const fontStyle = { fontFamily: selectedFont };
+export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+  const fontStyle = { fontFamily: font };
   const accentColorStyle = { color };
   const accentBgStyle = { backgroundColor: color };
   const textStyle = { color: textColor };
@@ -96,13 +94,21 @@ export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor }:
                     ))}
                     </ul>
                 </section>
-                {data.references && (
+                {data.projects && data.projects.length > 0 && (
                     <section className="p-6 rounded-lg" style={{ backgroundColor: `${color}1A` }}>
                     <h2 className="text-xl font-bold uppercase mb-4 flex items-center gap-3" style={{...fontStyle, ...accentColorStyle}}>
-                        <BookUser />
-                        References
+                        <Code />
+                        Projects
                     </h2>
-                    <p className="text-sm whitespace-pre-line" style={textStyle}>{data.references}</p>
+                    <div className="space-y-4">
+                        {data.projects.map(proj => (
+                            <div key={proj.id} className="text-sm">
+                                <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline">{proj.name}</a>
+                                <p className="text-xs mt-1" style={lightTextStyle}>{proj.description}</p>
+                                <p className="text-xs mt-1 font-semibold" style={accentColorStyle}>{proj.technologies}</p>
+                            </div>
+                        ))}
+                    </div>
                     </section>
                 )}
             </div>
@@ -111,3 +117,5 @@ export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor }:
     </div>
   );
 };
+
+    

@@ -1,8 +1,7 @@
 
 "use client";
-import type { ResumeData } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe, User, Briefcase, GraduationCap, Gamepad2, Layers } from 'lucide-react';
-import { useResume } from '@/context/resume-context';
+import type { ResumeData, Font } from '@/lib/types';
+import { Mail, Phone, MapPin, Globe, User, Briefcase, GraduationCap, Gamepad2, Layers, Code } from 'lucide-react';
 import Image from 'next/image';
 
 const SectionHeader = ({ title, color, textColor, icon }: { title: string, color: string, textColor: string, icon: React.ReactNode }) => (
@@ -19,14 +18,14 @@ const SectionHeader = ({ title, color, textColor, icon }: { title: string, color
     </div>
 );
 
-export const BloxTemplatePreview = ({ data, color, bgColor, textColor }: { data: ResumeData, color: string, bgColor: string, textColor: string }) => {
+export const BloxTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
     // Force Space Grotesk font for the Roblox theme
     const fontStyle = { fontFamily: 'Space Grotesk, sans-serif' };
     const lightTextStyle = { color: textColor, opacity: 0.8 };
     const skills = (data.skills || '').split(',').map(s => s.trim()).filter(Boolean);
 
     return (
-        <div className="h-full p-6" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
+        <div className="h-full p-6 overflow-y-auto" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             <div className="h-full border-4 p-4" style={{ borderColor: textColor }}>
                 {/* Header */}
                 <header className="flex items-start justify-between gap-6 mb-6">
@@ -82,6 +81,20 @@ export const BloxTemplatePreview = ({ data, color, bgColor, textColor }: { data:
                                 ))}
                             </div>
                         </section>
+                         {data.projects && data.projects.length > 0 && (
+                            <section>
+                                <SectionHeader title="Projects" icon={<Code size={20} style={{color}} />} color={color} textColor={textColor} />
+                                 <div className="space-y-4">
+                                    {data.projects.map(proj => (
+                                        <div key={proj.id} className="pl-4">
+                                            <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-lg hover:underline" style={{color}}>{proj.name}</a>
+                                            <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{proj.description}</div>
+                                            <p className="text-sm font-semibold mt-1" style={lightTextStyle}>Technologies: {proj.technologies}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
                     </div>
 
                     {/* Right Column */}
@@ -105,17 +118,11 @@ export const BloxTemplatePreview = ({ data, color, bgColor, textColor }: { data:
                                 ))}
                             </div>
                         </section>
-                         {data.references && (
-                            <section>
-                                <SectionHeader title="Awards" icon={<Gamepad2 size={20} style={{color}} />} color={color} textColor={textColor} />
-                                <p className="text-sm whitespace-pre-line" style={lightTextStyle}>
-                                    {data.references}
-                                </p>
-                            </section>
-                        )}
                     </aside>
                 </main>
             </div>
         </div>
     );
 };
+
+    

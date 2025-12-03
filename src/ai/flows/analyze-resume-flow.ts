@@ -35,12 +35,20 @@ const EducationSchema = z.object({
   description: z.string().describe('Any additional details about the education.').optional(),
 });
 
+const ProjectSchema = z.object({
+  name: z.string().describe('The name of the project.'),
+  description: z.string().describe('A brief description of the project.'),
+  technologies: z.string().describe('A comma-separated list of technologies used in the project.'),
+  link: z.string().describe('A URL link to the project (e.g., GitHub, live demo).').optional(),
+});
+
+
 const AnalyzeResumeOutputSchema = z.object({
   personal: PersonalInfoSchema,
   experience: z.array(ExperienceSchema),
   education: z.array(EducationSchema),
+  projects: z.array(ProjectSchema).describe("A list of personal or professional projects.").optional(),
   skills: z.string().describe('A comma-separated list of skills.'),
-  references: z.string().describe('Information about references, or a statement like "Available upon request."'),
 });
 export type AnalyzeResumeOutput = z.infer<typeof AnalyzeResumeOutputSchema>;
 
@@ -69,10 +77,10 @@ Extract the following sections:
 - Personal Details (name, role, email, phone, location, website, and a professional summary/objective as description)
 - Work Experience (company, role, dates, description)
 - Education (institution, degree, dates, description)
+- Projects (name, description, technologies used, and a link)
 - Skills (as a single comma-separated string)
-- References
 
-Pay close attention to formatting the extracted text correctly, especially for descriptions which may contain bullet points. Maintain the original language of the resume.
+Pay close attention to formatting the extracted text correctly, especially for descriptions which may contain bullet points. Maintain the original language of the resume. If a section like 'Projects' is not found, return an empty array for it.
 
 Resume Content:
 {{media url=photoDataUri}}
