@@ -74,6 +74,7 @@ export const GitFolioTemplatePreview = ({ data, color, bgColor, textColor, font 
             </Section>
             
             {/* Projects */}
+            {data.projects && data.projects.length > 0 && (
             <Section title="projects" color={color}>
                 {data.projects.map(proj => (
                     <div key={proj.id} className="mb-4">
@@ -90,6 +91,7 @@ export const GitFolioTemplatePreview = ({ data, color, bgColor, textColor, font 
                     </div>
                 ))}
             </Section>
+            )}
             
             {/* Education */}
             <Section title="education" color={color}>

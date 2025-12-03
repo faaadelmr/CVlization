@@ -65,6 +65,7 @@ export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor, fo
         </Section>
         
         {/* Projects */}
+        {data.projects && data.projects.length > 0 && (
         <Section>
             <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Projects</h2>
             {data.projects.map(proj => (
@@ -82,6 +83,7 @@ export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor, fo
                 </div>
             ))}
         </Section>
+        )}
         
         {/* Education */}
         <Section>

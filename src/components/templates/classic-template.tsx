@@ -63,7 +63,8 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor, font }
             </div>
           ))}
         </section>
-         <section className="mb-8">
+         {data.projects && data.projects.length > 0 && (
+          <section className="mb-8">
           <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Code /> Projects</h2>
           {data.projects.map(proj => (
             <div key={proj.id} className="mb-5">
@@ -78,6 +79,7 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor, font }
             </div>
           ))}
         </section>
+        )}
         <section>
           <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><GraduationCap/> Education</h2>
           {data.education.map(edu => (
