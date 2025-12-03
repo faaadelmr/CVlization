@@ -13,8 +13,6 @@ import { ElegantTemplatePreview } from "./templates/elegant-template";
 import { ProfessionalTemplatePreview } from "./templates/professional-template";
 import { TimelineTemplatePreview } from "./templates/timeline-template";
 import { Skeleton } from "./ui/skeleton";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { cn } from "@/lib/utils";
 import { SmartStartTemplatePreview } from "./templates/smart-start-template";
 import { VektoristikTemplatePreview } from "./templates/vektoristik-template";
@@ -139,53 +137,31 @@ export function ResumePreviewPanel() {
   const fileName = resumeData.personal.name ? `${resumeData.personal.name.replace(/\s+/g, '-')}-Resume.pdf` : 'resume.pdf';
 
   const handleDownload = async () => {
-    const element = resumeRef.current;
-    if (!element) return;
-  
     setLoading(true);
-  
-    // Create a clone of the node to render it at full size for the capture
-    const clone = element.cloneNode(true) as HTMLElement;
-    
-    // Style the clone to be rendered off-screen
-    clone.style.transform = 'scale(1)';
-    clone.style.position = 'absolute';
-    clone.style.left = '-9999px';
-    clone.style.top = '0px';
-    clone.style.width = '840px';
-    clone.style.height = '1188px';
-    
-    document.body.appendChild(clone);
-  
+
     try {
-      const canvas = await html2canvas(clone, {
-        scale: 2, // Higher scale for better quality
-        useCORS: true,
-        logging: false,
-        width: 840,
-        height: 1188,
-        backgroundColor: selectedBgColor,
+      // Serialize the resume data and other settings to pass as URL parameters
+      const params = new URLSearchParams({
+        data: encodeURIComponent(JSON.stringify(resumeData)),
+        template: selectedTemplate,
+        color: selectedColor,
+        bgColor: selectedBgColor,
+        textColor: selectedTextColor,
+        font: selectedFont,
       });
-      
-      const imgData = canvas.toDataURL('image/png');
-  
-      const pdf = new jsPDF({
-        orientation: 'p',
-        unit: 'px',
-        format: 'a4',
-      });
-  
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(fileName);
-      
+
+      // Open the print page in a new window/tab with the data
+      const printWindow = window.open(`/print?${params.toString()}`, '_blank');
+
+      if (!printWindow) {
+        throw new Error('Popup blocked. Please allow popups for this site.');
+      }
+
+      // The print window will handle the printing automatically
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      console.error("Error opening print window:", error);
+      alert('Error opening print window: ' + error.message);
     } finally {
-      // Clean up the cloned node
-      document.body.removeChild(clone);
       setLoading(false);
     }
   };
