@@ -43,7 +43,13 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
                     {data.personal.photo ? (
                         <div className="bg-white p-2 shadow-lg">
                             <div className="relative w-48 h-56 border-8 border-white">
-                                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                                <Image
+                                  src={data.personal.photo}
+                                  alt={data.personal.name}
+                                  width={192}
+                                  height={224}
+                                  className="object-cover"
+                                />
                                 <div className="absolute inset-0 border-2" style={{ borderColor: color }}></div>
                             </div>
                         </div>
@@ -62,14 +68,16 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
                             <p className="flex items-center gap-3"><MapPin size={14} /> {data.personal.location}</p>
                         </div>
                     </section>
-                    <section>
-                        <SectionHeader icon={<CheckSquare size={16} color={color} />} title="Keahlian" color="white" />
-                        <div className="space-y-2 text-sm" style={sidebarTextStyle}>
-                            {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                                <p key={skill}>{skill}</p>
-                            ))}
-                        </div>
-                    </section>
+                    {data.skills && (
+                        <section>
+                            <SectionHeader icon={<CheckSquare size={16} color={color} />} title="Keahlian" color="white" />
+                            <div className="space-y-2 text-sm" style={sidebarTextStyle}>
+                                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                                    <p key={skill}>{skill}</p>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                 </div>
             </aside>
 
@@ -84,34 +92,40 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
                         <div className="p-4 border" style={{ borderColor: color }}>
                             <h2 className="text-2xl font-semibold" style={mainAccentColorStyle}>{data.personal.role}</h2>
                         </div>
-                        <p className="mt-4 text-sm whitespace-pre-line" style={lightTextStyle}>
-                            {data.personal.description}
-                        </p>
+                        {data.personal.description && (
+                          <p className="mt-4 text-sm whitespace-pre-line" style={lightTextStyle}>
+                              {data.personal.description}
+                          </p>
+                        )}
                     </header>
-                    <section className="mb-8">
-                        <SectionHeader icon={<Briefcase size={16} color="white" />} title="Pengalaman Kerja" color={color} />
-                        <div className="space-y-4">
-                            {data.experience.map(exp => (
-                                <div key={exp.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
-                                    <h3 className="font-bold text-lg" style={mainTextStyle}>{exp.role}</h3>
-                                    <p className="font-semibold" style={mainAccentColorStyle}>{exp.company} | {exp.date}</p>
-                                    <div className="text-sm mt-1 whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                    <section className="mb-8">
-                        <SectionHeader icon={<GraduationCap size={16} color="white" />} title="Pendidikan" color={color} />
-                        <div className="space-y-4">
-                            {data.education.map(edu => (
-                                <div key={edu.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
-                                    <h3 className="font-bold text-lg" style={mainTextStyle}>{edu.degree}</h3>
-                                    <p className="font-semibold" style={mainAccentColorStyle}>{edu.institution} | {edu.date}</p>
-                                    <div className="text-sm mt-1 whitespace-pre-line prose max-w-none" style={lightTextStyle}>{edu.description}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                    {data.experience && data.experience.length > 0 && (
+                      <section className="mb-8">
+                          <SectionHeader icon={<Briefcase size={16} color="white" />} title="Pengalaman Kerja" color={color} />
+                          <div className="space-y-4">
+                              {data.experience.map(exp => (
+                                  <div key={exp.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
+                                      <h3 className="font-bold text-lg" style={mainTextStyle}>{exp.role}</h3>
+                                      <p className="font-semibold" style={mainAccentColorStyle}>{exp.company} | {exp.date}</p>
+                                      <div className="text-sm mt-1 whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
+                                  </div>
+                              ))}
+                          </div>
+                      </section>
+                    )}
+                    {data.education && data.education.length > 0 && (
+                        <section className="mb-8">
+                            <SectionHeader icon={<GraduationCap size={16} color="white" />} title="Pendidikan" color={color} />
+                            <div className="space-y-4">
+                                {data.education.map(edu => (
+                                    <div key={edu.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
+                                        <h3 className="font-bold text-lg" style={mainTextStyle}>{edu.degree}</h3>
+                                        <p className="font-semibold" style={mainAccentColorStyle}>{edu.institution} | {edu.date}</p>
+                                        <div className="text-sm mt-1 whitespace-pre-line prose max-w-none" style={lightTextStyle}>{edu.description}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                     {data.projects && data.projects.length > 0 && (
                         <section>
                             <SectionHeader icon={<Code size={16} color="white" />} title="Proyek" color={color} />
@@ -131,5 +145,3 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
         </div>
     );
 };
-
-    

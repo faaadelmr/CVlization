@@ -46,7 +46,13 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor, font
                 {data.personal.photo && (
                     <div className="relative w-40 h-40 mb-5">
                          <div className="absolute inset-0 rounded-full" style={{backgroundColor: color, filter: 'blur(20px)', opacity: 0.5}}></div>
-                        <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover rounded-full border-4 border-white shadow-lg" />
+                        <Image
+                          src={data.personal.photo}
+                          alt={data.personal.name}
+                          width={160}
+                          height={160}
+                          className="object-cover rounded-full border-4 border-white shadow-lg"
+                        />
                     </div>
                 )}
                 <h1 className="text-3xl font-bold" style={{ color: color }}>{data.personal.name}</h1>
@@ -64,14 +70,16 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor, font
                              {data.personal.website && <p className="flex items-center gap-3"><Globe size={14}/> {data.personal.website}</p>}
                         </div>
                     </div>
-                     <div>
-                        <h3 className="font-bold text-md uppercase tracking-widest mb-3 flex items-center gap-2" style={{color: color}}><Star size={16}/> Skills</h3>
-                         <div className="flex flex-wrap gap-2">
-                             {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                                <span key={skill} className="text-xs py-1 px-3 rounded-full" style={{backgroundColor: `${color}20`, color: color}}>{skill}</span>
-                            ))}
+                     {data.skills && (
+                        <div>
+                          <h3 className="font-bold text-md uppercase tracking-widest mb-3 flex items-center gap-2" style={{color: color}}><Star size={16}/> Skills</h3>
+                           <div className="flex flex-wrap gap-2">
+                               {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                                  <span key={skill} className="text-xs py-1 px-3 rounded-full" style={{backgroundColor: `${color}20`, color: color}}>{skill}</span>
+                              ))}
+                          </div>
                         </div>
-                    </div>
+                     )}
                 </div>
             </aside>
 
@@ -79,37 +87,43 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor, font
             <main className="col-span-8 p-8 rounded-2xl relative overflow-auto" style={{backgroundColor: `${color}10`}}>
                 <StarlightPattern color={color} />
                 <div className="relative z-10">
-                     <Section icon={<User size={20} style={{color}}/>} title="Profile" color={color} textColor={textColor}>
-                        <p className="whitespace-pre-line text-sm" style={lightTextStyle}>{data.personal.description}</p>
-                    </Section>
-                    <Section icon={<Briefcase size={20} style={{color}}/>} title="Experience" color={color} textColor={textColor}>
-                        <div className="space-y-5">
-                            {data.experience.map(exp => (
-                                <div key={exp.id}>
-                                    <div className="flex justify-between items-baseline">
-                                        <h3 className="font-bold text-lg">{exp.role}</h3>
-                                        <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
-                                    </div>
-                                    <h4 className="font-semibold mb-1" style={{ color: color }}>{exp.company}</h4>
-                                    <div className="text-sm whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </Section>
-                     <Section icon={<GraduationCap size={20} style={{color}}/>} title="Education" color={color} textColor={textColor}>
-                         <div className="space-y-5">
-                            {data.education.map(edu => (
-                                <div key={edu.id}>
-                                    <div className="flex justify-between items-baseline">
-                                        <h3 className="font-bold text-lg">{edu.degree}</h3>
-                                        <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
-                                    </div>
-                                    <h4 className="font-semibold" style={{ color: color }}>{edu.institution}</h4>
-                                     <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </Section>
+                     {data.personal.description && (
+                        <Section icon={<User size={20} style={{color}}/>} title="Profile" color={color} textColor={textColor}>
+                          <p className="whitespace-pre-line text-sm" style={lightTextStyle}>{data.personal.description}</p>
+                        </Section>
+                     )}
+                    {data.experience && data.experience.length > 0 && (
+                      <Section icon={<Briefcase size={20} style={{color}}/>} title="Experience" color={color} textColor={textColor}>
+                          <div className="space-y-5">
+                              {data.experience.map(exp => (
+                                  <div key={exp.id}>
+                                      <div className="flex justify-between items-baseline">
+                                          <h3 className="font-bold text-lg">{exp.role}</h3>
+                                          <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
+                                      </div>
+                                      <h4 className="font-semibold mb-1" style={{ color: color }}>{exp.company}</h4>
+                                      <div className="text-sm whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
+                                  </div>
+                              ))}
+                          </div>
+                      </Section>
+                    )}
+                     {data.education && data.education.length > 0 && (
+                        <Section icon={<GraduationCap size={20} style={{color}}/>} title="Education" color={color} textColor={textColor}>
+                           <div className="space-y-5">
+                              {data.education.map(edu => (
+                                  <div key={edu.id}>
+                                      <div className="flex justify-between items-baseline">
+                                          <h3 className="font-bold text-lg">{edu.degree}</h3>
+                                          <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
+                                      </div>
+                                      <h4 className="font-semibold" style={{ color: color }}>{edu.institution}</h4>
+                                       <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
+                                  </div>
+                              ))}
+                          </div>
+                        </Section>
+                     )}
                     {data.projects && data.projects.length > 0 && (
                         <Section icon={<Code size={20} style={{color}}/>} title="Projects" color={color} textColor={textColor}>
                              <div className="space-y-5">
@@ -129,5 +143,3 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor, font
     </div>
   );
 };
-
-    

@@ -19,7 +19,13 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor, font }
       <div className="w-2/5 p-8 flex flex-col items-center text-center" style={leftColStyle}>
         {data.personal.photo && (
             <div className="w-32 h-32 relative mb-6 rounded-full overflow-hidden shadow-lg">
-                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                <Image
+                  src={data.personal.photo}
+                  alt={data.personal.name}
+                  width={128}
+                  height={128}
+                  className="object-cover"
+                />
             </div>
         )}
         <h1 className="font-bold mb-2" style={{...nameStyle, ...fontStyle, fontSize: '2rem'}}>{data.personal.name}</h1>
@@ -33,69 +39,75 @@ export const ClassicTemplatePreview = ({ data, color, bgColor, textColor, font }
             <p className="pl-6">{data.personal.location}</p>
             {data.personal.website && <a href={`https://${data.personal.website}`} className="pl-6 hover:underline" style={nameStyle}>{data.personal.website}</a>}
           </div>
-          <div>
-            <h3 className="font-bold text-base mb-2 flex items-center gap-2" style={{...nameStyle, ...fontStyle}}><Wrench size={16}/> Skills</h3>
-            <ul className="pl-6 list-disc list-inside">
-              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                <li key={skill}>{skill}</li>
-              ))}
-            </ul>
-          </div>
+          {data.skills && (
+            <div>
+              <h3 className="font-bold text-base mb-2 flex items-center gap-2" style={{...nameStyle, ...fontStyle}}><Wrench size={16}/> Skills</h3>
+              <ul className="pl-6 list-disc list-inside">
+                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                  <li key={skill}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Right Column */}
       <div className="w-3/5 p-8 overflow-y-auto">
-        <section className="mb-8">
-            <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><User /> Profile</h2>
-            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-        </section>
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Briefcase /> Experience</h2>
-          {data.experience.map(exp => (
-            <div key={exp.id} className="mb-5">
-              <div className="flex justify-between items-baseline">
-                <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{exp.role}</h3>
-                <p className="text-sm" style={lightTextStyle}>{exp.date}</p>
+        {data.personal.description && (
+          <section className="mb-8">
+              <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><User /> Profile</h2>
+              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
+          </section>
+        )}
+        {data.experience && data.experience.length > 0 && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Briefcase /> Experience</h2>
+            {data.experience.map(exp => (
+              <div key={exp.id} className="mb-5">
+                <div className="flex justify-between items-baseline">
+                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{exp.role}</h3>
+                  <p className="text-sm" style={lightTextStyle}>{exp.date}</p>
+                </div>
+                <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1.125rem', ...lightTextStyle, opacity: 0.9}}>{exp.company}</h4>
+                <div className="text-sm whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
               </div>
-              <h4 className="font-semibold mb-2" style={{...fontStyle, fontSize: '1.125rem', ...lightTextStyle, opacity: 0.9}}>{exp.company}</h4>
-              <div className="text-sm whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
-            </div>
-          ))}
-        </section>
+            ))}
+          </section>
+        )}
          {data.projects && data.projects.length > 0 && (
           <section className="mb-8">
-          <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Code /> Projects</h2>
-          {data.projects.map(proj => (
-            <div key={proj.id} className="mb-5">
-              <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{proj.name}</h3>
-              {proj.link && (
-                <div className="text-sm mt-1" style={lightTextStyle}>
-                  Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={nameStyle}>{proj.link}</a>
-                </div>
-              )}
-              <div className="text-sm whitespace-pre-line prose max-w-none my-1" style={lightTextStyle}>{proj.description}</div>
-              <p className="text-sm font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
-            </div>
-          ))}
-        </section>
-        )}
-        <section>
-          <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><GraduationCap/> Education</h2>
-          {data.education.map(edu => (
-            <div key={edu.id} className="mb-5">
-              <div className="flex justify-between items-baseline">
-                <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{edu.institution}</h3>
-                <p className="text-sm" style={lightTextStyle}>{edu.date}</p>
+            <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><Code /> Projects</h2>
+            {data.projects.map(proj => (
+              <div key={proj.id} className="mb-5">
+                <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{proj.name}</h3>
+                {proj.link && (
+                  <div className="text-sm mt-1" style={lightTextStyle}>
+                    Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={nameStyle}>{proj.link}</a>
+                  </div>
+                )}
+                <div className="text-sm whitespace-pre-line prose max-w-none my-1" style={lightTextStyle}>{proj.description}</div>
+                <p className="text-sm font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
               </div>
-              <h4 className="font-semibold mb-1" style={{...fontStyle, fontSize: '1.125rem', ...lightTextStyle, opacity: 0.9}}>{edu.degree}</h4>
-              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
-            </div>
-          ))}
-        </section>
+            ))}
+          </section>
+        )}
+        {data.education && data.education.length > 0 && (
+          <section>
+            <h2 className="text-2xl font-bold uppercase border-b-2 pb-2 mb-4 flex items-center gap-3" style={{...sectionTitleStyle, ...fontStyle}}><GraduationCap/> Education</h2>
+            {data.education.map(edu => (
+              <div key={edu.id} className="mb-5">
+                <div className="flex justify-between items-baseline">
+                  <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{edu.institution}</h3>
+                  <p className="text-sm" style={lightTextStyle}>{edu.date}</p>
+                </div>
+                <h4 className="font-semibold mb-1" style={{...fontStyle, fontSize: '1.125rem', ...lightTextStyle, opacity: 0.9}}>{edu.degree}</h4>
+                <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
+              </div>
+            ))}
+          </section>
+        )}
       </div>
     </div>
   );
 };
-
-    

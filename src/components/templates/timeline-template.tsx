@@ -31,13 +31,21 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor, font 
         <div className="w-1/3 flex items-center justify-center">
           {data.personal.photo && (
             <div className="w-36 h-36 relative rounded-full overflow-hidden border-4" style={{borderColor: bgColor}}>
-              <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+              <Image
+                src={data.personal.photo}
+                alt={data.personal.name}
+                width={144}
+                height={144}
+                className="object-cover"
+              />
             </div>
           )}
         </div>
         <div className="w-1/3 flex flex-col justify-center pl-6">
-          <h2 className="font-bold text-2xl mb-2" style={headerTextStyle}>HELLO!</h2>
-          <p className="text-xs whitespace-pre-line" style={{...headerTextStyle, opacity: 0.8}}>{data.personal.description}</p>
+          {data.personal.description && <>
+            <h2 className="font-bold text-2xl mb-2" style={headerTextStyle}>HELLO!</h2>
+            <p className="text-xs whitespace-pre-line" style={{...headerTextStyle, opacity: 0.8}}>{data.personal.description}</p>
+          </>}
         </div>
       </header>
 
@@ -59,14 +67,16 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor, font 
               </div>
             </div>
           </section>
-          <section className="mb-8">
-            <h3 className="font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Skills</h3>
-            <ul className="space-y-2 text-sm list-disc list-inside" style={bodyTextStyle}>
-              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                <li key={skill}>{skill}</li>
-              ))}
-            </ul>
-          </section>
+          {data.skills && (
+            <section className="mb-8">
+              <h3 className="font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Skills</h3>
+              <ul className="space-y-2 text-sm list-disc list-inside" style={bodyTextStyle}>
+                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                  <li key={skill}>{skill}</li>
+                ))}
+              </ul>
+            </section>
+          )}
            {data.projects && data.projects.length > 0 && (
             <section>
               <h3 className="font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Projects</h3>
@@ -85,38 +95,40 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor, font 
 
         {/* Right Main Content */}
         <div className="w-2/3 p-8" style={bodyTextStyle}>
-          <section className="mb-8">
-            <h3 className="text-xl font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Education</h3>
-            <div className="space-y-4">
-              {data.education.map(edu => (
-                <div key={edu.id}>
-                  <p className="text-sm font-semibold">{edu.date}</p>
-                  <h4 className="font-bold text-lg" style={bodyTextStyle}>{edu.degree}</h4>
-                  <p className="text-sm" style={{opacity: 0.8}}>{edu.institution}</p>
-                  <p className="text-sm whitespace-pre-line" style={{opacity: 0.8}}>{edu.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-          <section>
-            <h3 className="text-xl font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Work Experience</h3>
-            <div className="space-y-6">
-              {data.experience.map(exp => (
-                <div key={exp.id}>
-                  <div className="flex justify-between items-baseline">
-                    <h4 className="font-bold text-lg" style={bodyTextStyle}>{exp.role}</h4>
-                    <p className="text-sm font-semibold">{exp.date}</p>
+          {data.education && data.education.length > 0 && (
+            <section className="mb-8">
+              <h3 className="text-xl font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Education</h3>
+              <div className="space-y-4">
+                {data.education.map(edu => (
+                  <div key={edu.id}>
+                    <p className="text-sm font-semibold">{edu.date}</p>
+                    <h4 className="font-bold text-lg" style={bodyTextStyle}>{edu.degree}</h4>
+                    <p className="text-sm" style={{opacity: 0.8}}>{edu.institution}</p>
+                    <p className="text-sm whitespace-pre-line" style={{opacity: 0.8}}>{edu.description}</p>
                   </div>
-                  <p className="text-sm mb-2" style={{opacity: 0.8}}>{exp.company}</p>
-                  <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={{opacity: 0.8}}>{exp.description}</div>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
+          )}
+          {data.experience && data.experience.length > 0 && (
+            <section>
+              <h3 className="text-xl font-bold uppercase tracking-wider border-b-2 pb-2 mb-4" style={{...accentColorStyle, borderColor: color}}>Work Experience</h3>
+              <div className="space-y-6">
+                {data.experience.map(exp => (
+                  <div key={exp.id}>
+                    <div className="flex justify-between items-baseline">
+                      <h4 className="font-bold text-lg" style={bodyTextStyle}>{exp.role}</h4>
+                      <p className="text-sm font-semibold">{exp.date}</p>
+                    </div>
+                    <p className="text-sm mb-2" style={{opacity: 0.8}}>{exp.company}</p>
+                    <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={{opacity: 0.8}}>{exp.description}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </main>
     </div>
   );
 };
-
-    

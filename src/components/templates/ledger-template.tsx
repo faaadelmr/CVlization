@@ -23,7 +23,13 @@ export const LedgerTemplatePreview = ({ data, color, bgColor, textColor, font }:
             <header className="flex justify-between items-center mb-6">
                  {data.personal.photo && (
                     <div className="w-40 h-24 relative overflow-hidden shadow-md flex-shrink-0 border-2" style={{borderColor: color}}>
-                        <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                        <Image
+                          src={data.personal.photo}
+                          alt={data.personal.name}
+                          width={160}
+                          height={96}
+                          className="object-cover"
+                        />
                     </div>
                 )}
                 <div className="text-right flex-grow pl-6">
@@ -45,21 +51,25 @@ export const LedgerTemplatePreview = ({ data, color, bgColor, textColor, font }:
 
                 {/* Left Column: Assets */}
                 <aside className="col-span-5 space-y-6">
-                     <section>
-                        <SectionHeader title="Profil" icon={<User size={18} style={{color}} />} color={color} textColor={textColor} />
-                        <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-                    </section>
-                     <section>
-                        <SectionHeader title="Keahlian" icon={<Calculator size={18} style={{color}} />} color={color} textColor={textColor} />
-                         <ul className="text-sm space-y-1" style={lightTextStyle}>
-                            {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                                <li key={skill} className="flex items-center gap-2">
-                                  <div className="w-1.5 h-1.5 bg-current rounded-full" style={{backgroundColor: color}}></div>
-                                  {skill}
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
+                     {data.personal.description && (
+                        <section>
+                          <SectionHeader title="Profil" icon={<User size={18} style={{color}} />} color={color} textColor={textColor} />
+                          <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
+                        </section>
+                     )}
+                     {data.skills && (
+                        <section>
+                          <SectionHeader title="Keahlian" icon={<Calculator size={18} style={{color}} />} color={color} textColor={textColor} />
+                           <ul className="text-sm space-y-1" style={lightTextStyle}>
+                              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                                  <li key={skill} className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-current rounded-full" style={{backgroundColor: color}}></div>
+                                    {skill}
+                                  </li>
+                              ))}
+                          </ul>
+                        </section>
+                     )}
                 </aside>
 
                 {/* Vertical Separator */}
@@ -69,35 +79,39 @@ export const LedgerTemplatePreview = ({ data, color, bgColor, textColor, font }:
 
                 {/* Right Column: Transactions */}
                 <main className="col-span-6 space-y-6">
-                     <section>
-                        <SectionHeader title="Riwayat Pekerjaan" icon={<Briefcase size={18} style={{color}} />} color={color} textColor={textColor} />
-                        <div className="space-y-4">
-                             {data.experience.map(exp => (
-                                <div key={exp.id} className="text-sm">
-                                    <div className="flex justify-between items-baseline">
-                                        <h3 className="font-bold text-md">{exp.role}</h3>
-                                        <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
-                                    </div>
-                                    <h4 className="font-semibold text-sm mb-1" style={{ color }}>{exp.company}</h4>
-                                    <div className="whitespace-pre-line prose max-w-none text-xs" style={lightTextStyle}>{exp.description}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                     <section>
-                        <SectionHeader title="Riwayat Pendidikan" icon={<GraduationCap size={18} style={{color}} />} color={color} textColor={textColor} />
-                         <div className="space-y-4">
-                            {data.education.map(edu => (
-                                <div key={edu.id} className="text-sm">
-                                    <div className="flex justify-between items-baseline">
-                                        <h3 className="font-bold text-md">{edu.degree}</h3>
-                                        <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
-                                    </div>
-                                    <h4 className="font-semibold text-sm mb-1" style={{ color }}>{edu.institution}</h4>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                     {data.experience && data.experience.length > 0 && (
+                        <section>
+                          <SectionHeader title="Riwayat Pekerjaan" icon={<Briefcase size={18} style={{color}} />} color={color} textColor={textColor} />
+                          <div className="space-y-4">
+                               {data.experience.map(exp => (
+                                  <div key={exp.id} className="text-sm">
+                                      <div className="flex justify-between items-baseline">
+                                          <h3 className="font-bold text-md">{exp.role}</h3>
+                                          <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
+                                      </div>
+                                      <h4 className="font-semibold text-sm mb-1" style={{ color }}>{exp.company}</h4>
+                                      <div className="whitespace-pre-line prose max-w-none text-xs" style={lightTextStyle}>{exp.description}</div>
+                                  </div>
+                              ))}
+                          </div>
+                        </section>
+                     )}
+                     {data.education && data.education.length > 0 && (
+                        <section>
+                          <SectionHeader title="Riwayat Pendidikan" icon={<GraduationCap size={18} style={{color}} />} color={color} textColor={textColor} />
+                           <div className="space-y-4">
+                              {data.education.map(edu => (
+                                  <div key={edu.id} className="text-sm">
+                                      <div className="flex justify-between items-baseline">
+                                          <h3 className="font-bold text-md">{edu.degree}</h3>
+                                          <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
+                                      </div>
+                                      <h4 className="font-semibold text-sm mb-1" style={{ color }}>{edu.institution}</h4>
+                                  </div>
+                              ))}
+                          </div>
+                        </section>
+                     )}
                     {data.projects && data.projects.length > 0 && (
                         <section>
                             <SectionHeader title="Proyek" icon={<Code size={18} style={{color}} />} color={color} textColor={textColor} />
@@ -117,5 +131,3 @@ export const LedgerTemplatePreview = ({ data, color, bgColor, textColor, font }:
         </div>
     );
 };
-
-    

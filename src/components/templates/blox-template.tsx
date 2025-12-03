@@ -34,53 +34,66 @@ export const BloxTemplatePreview = ({ data, color, bgColor, textColor, font }: {
                         <p className="text-2xl font-semibold mt-1" style={lightTextStyle}>{data.personal.role}</p>
                     </div>
                     {data.personal.photo && (
-                        <div 
+                        <div
                             className="w-28 h-28 relative flex-shrink-0 border-4 bg-gray-300"
                             style={{ borderColor: textColor }}
                         >
-                            <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" style={{ imageRendering: 'pixelated' }} />
+                            <Image
+                              src={data.personal.photo}
+                              alt={data.personal.name}
+                              width={112}
+                              height={112}
+                              className="object-cover"
+                              style={{ imageRendering: 'pixelated' }}
+                            />
                         </div>
                     )}
                 </header>
                 
                 {/* Profile Description */}
-                <section className="mb-6">
-                    <p className="text-md whitespace-pre-line border-2 p-3" style={{ borderColor: `${textColor}40`}}>{data.personal.description}</p>
-                </section>
+                {data.personal.description && (
+                  <section className="mb-6">
+                      <p className="text-md whitespace-pre-line border-2 p-3" style={{ borderColor: `${textColor}40`}}>{data.personal.description}</p>
+                  </section>
+                )}
 
                 {/* Main Content Grid */}
                 <main className="grid grid-cols-3 gap-6">
                     {/* Left Column */}
                     <div className="col-span-2 space-y-6">
-                        <section>
-                            <SectionHeader title="Experience" icon={<Briefcase size={20} style={{color}} />} color={color} textColor={textColor} />
-                            <div className="space-y-4">
-                                {data.experience.map(exp => (
-                                    <div key={exp.id} className="pl-4">
-                                        <h3 className="font-bold text-lg">{exp.role}</h3>
-                                        <div className="flex justify-between items-baseline">
-                                            <p className="font-semibold" style={{ color: color }}>{exp.company}</p>
-                                            <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
-                                        </div>
-                                        <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-                         <section>
-                            <SectionHeader title="Education" icon={<GraduationCap size={20} style={{color}} />} color={color} textColor={textColor} />
-                            <div className="space-y-4">
-                                {data.education.map(edu => (
-                                    <div key={edu.id} className="pl-4">
-                                        <h3 className="font-bold text-lg">{edu.degree}</h3>
-                                         <div className="flex justify-between items-baseline">
-                                            <p className="font-semibold" style={{ color: color }}>{edu.institution}</p>
-                                            <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
+                        {data.experience && data.experience.length > 0 && (
+                          <section>
+                              <SectionHeader title="Experience" icon={<Briefcase size={20} style={{color}} />} color={color} textColor={textColor} />
+                              <div className="space-y-4">
+                                  {data.experience.map(exp => (
+                                      <div key={exp.id} className="pl-4">
+                                          <h3 className="font-bold text-lg">{exp.role}</h3>
+                                          <div className="flex justify-between items-baseline">
+                                              <p className="font-semibold" style={{ color: color }}>{exp.company}</p>
+                                              <p className="text-xs font-mono" style={lightTextStyle}>{exp.date}</p>
+                                          </div>
+                                          <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
+                                      </div>
+                                  ))}
+                              </div>
+                          </section>
+                        )}
+                         {data.education && data.education.length > 0 && (
+                            <section>
+                              <SectionHeader title="Education" icon={<GraduationCap size={20} style={{color}} />} color={color} textColor={textColor} />
+                              <div className="space-y-4">
+                                  {data.education.map(edu => (
+                                      <div key={edu.id} className="pl-4">
+                                          <h3 className="font-bold text-lg">{edu.degree}</h3>
+                                           <div className="flex justify-between items-baseline">
+                                              <p className="font-semibold" style={{ color: color }}>{edu.institution}</p>
+                                              <p className="text-xs font-mono" style={lightTextStyle}>{edu.date}</p>
+                                          </div>
+                                      </div>
+                                  ))}
+                              </div>
+                            </section>
+                         )}
                          {data.projects && data.projects.length > 0 && (
                             <section>
                                 <SectionHeader title="Projects" icon={<Code size={20} style={{color}} />} color={color} textColor={textColor} />
@@ -108,21 +121,21 @@ export const BloxTemplatePreview = ({ data, color, bgColor, textColor, font }: {
                                 {data.personal.website && <p className="flex items-center gap-2 break-all"><Globe size={14}/> {data.personal.website}</p>}
                             </div>
                         </section>
-                         <section>
-                            <SectionHeader title="Skills" icon={<Layers size={20} style={{color}} />} color={color} textColor={textColor} />
-                             <div className="flex flex-wrap gap-2">
-                                {skills.map(skill => (
-                                    <span key={skill} className="text-sm font-bold py-1 px-2 border-2" style={{ borderColor: `${textColor}80`, color: textColor }}>
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        </section>
+                         {skills.length > 0 && (
+                            <section>
+                              <SectionHeader title="Skills" icon={<Layers size={20} style={{color}} />} color={color} textColor={textColor} />
+                               <div className="flex flex-wrap gap-2">
+                                  {skills.map(skill => (
+                                      <span key={skill} className="text-sm font-bold py-1 px-2 border-2" style={{ borderColor: `${textColor}80`, color: textColor }}>
+                                          {skill}
+                                      </span>
+                                  ))}
+                              </div>
+                            </section>
+                         )}
                     </aside>
                 </main>
             </div>
         </div>
     );
 };
-
-    

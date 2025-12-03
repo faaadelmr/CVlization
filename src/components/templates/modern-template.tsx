@@ -28,7 +28,13 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor, font }:
       <header className="text-center mb-10 border-b-2 pb-6 flex items-center justify-between" style={{borderColor: color}}>
         {data.personal.photo && (
             <div className="w-28 h-28 relative rounded-full overflow-hidden shadow-md flex-shrink-0">
-                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                <Image
+                  src={data.personal.photo}
+                  alt={data.personal.name}
+                  width={112}
+                  height={112}
+                  className="object-cover"
+                />
             </div>
         )}
         <div className={data.personal.photo ? "text-right flex-grow" : "text-center w-full"}>
@@ -51,73 +57,81 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor, font }:
       </header>
       
       {/* Profile */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><User />Profile</h2>
-        <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-      </section>
+      {data.personal.description && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><User />Profile</h2>
+          <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
+        </section>
+      )}
 
       {/* Experience */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Briefcase />Experience</h2>
-        {data.experience.map(exp => (
-          <div key={exp.id} className="mb-5">
-            <div className="flex justify-between items-baseline">
-              <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{exp.role}</h3>
-              <p className="text-sm font-mono" style={lightTextStyle}>{exp.date}</p>
+      {data.experience && data.experience.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Briefcase />Experience</h2>
+          {data.experience.map(exp => (
+            <div key={exp.id} className="mb-5">
+              <div className="flex justify-between items-baseline">
+                <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{exp.role}</h3>
+                <p className="text-sm font-mono" style={lightTextStyle}>{exp.date}</p>
+              </div>
+              <h4 className="text-lg font-semibold mb-2" style={{...fontStyle, color, fontSize: '1.125rem'}}>{exp.company}</h4>
+              <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={lightTextStyle}>{exp.description}</div>
             </div>
-            <h4 className="text-lg font-semibold mb-2" style={{...fontStyle, color, fontSize: '1.125rem'}}>{exp.company}</h4>
-            <div className="text-sm whitespace-pre-line prose max-w-none prose-sm" style={lightTextStyle}>{exp.description}</div>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
 
       {/* Education */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><GraduationCap />Education</h2>
-        {data.education.map(edu => (
-          <div key={edu.id} className="mb-5">
-            <div className="flex justify-between items-baseline">
-              <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{edu.institution}</h3>
-              <p className="text-sm font-mono" style={lightTextStyle}>{edu.date}</p>
+      {data.education && data.education.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><GraduationCap />Education</h2>
+          {data.education.map(edu => (
+            <div key={edu.id} className="mb-5">
+              <div className="flex justify-between items-baseline">
+                <h3 className="font-bold" style={{...fontStyle, fontSize: '1.25rem', ...textStyle}}>{edu.institution}</h3>
+                <p className="text-sm font-mono" style={lightTextStyle}>{edu.date}</p>
+              </div>
+              <h4 className="text-lg font-semibold mb-1" style={{...fontStyle, color, fontSize: '1.125rem'}}>{edu.degree}</h4>
+              <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
             </div>
-            <h4 className="text-lg font-semibold mb-1" style={{...fontStyle, color, fontSize: '1.125rem'}}>{edu.degree}</h4>
-            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{edu.description}</p>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
 
       {/* Skills & Projects */}
-      <div className="grid grid-cols-2 gap-8">
-        <section>
-          <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Wrench />Skills</h2>
-          <div className="flex flex-wrap gap-2">
-            {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-              <span key={skill} className="text-sm font-medium py-1 px-3 rounded-full border" style={skillStyle}>{skill}</span>
-            ))}
-          </div>
-        </section>
-        {data.projects && data.projects.length > 0 && (
-           <section>
-            <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Code />Projects</h2>
-            <div className="space-y-4">
-              {data.projects.map(proj => (
-                <div key={proj.id} className="text-sm">
-                  <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline inline-block" style={{color}}>{proj.name}</a>
-                  {proj.link && (
-                    <div className="text-xs mt-1" style={lightTextStyle}>
-                      Link: <a href={proj.link} target="_blank" rel="noreferrer" className="underline break-all" style={{color}}>{proj.link}</a>
-                    </div>
-                  )}
-                  <p className="text-xs mt-1" style={lightTextStyle}>{proj.description}</p>
-                   <p className="text-xs mt-1 font-semibold" style={skillStyle}>{proj.technologies}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
+      {(data.skills || (data.projects && data.projects.length > 0)) && (
+        <div className="grid grid-cols-2 gap-8">
+          {data.skills && (
+            <section>
+              <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Wrench />Skills</h2>
+              <div className="flex flex-wrap gap-2">
+                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                  <span key={skill} className="text-sm font-medium py-1 px-3 rounded-full border" style={skillStyle}>{skill}</span>
+                ))}
+              </div>
+            </section>
+          )}
+          {data.projects && data.projects.length > 0 && (
+             <section>
+              <h2 className="text-2xl font-bold uppercase flex items-center gap-3 mb-5" style={{...sectionTitleStyle, ...fontStyle}}><Code />Projects</h2>
+              <div className="space-y-4">
+                {data.projects.map(proj => (
+                  <div key={proj.id} className="text-sm">
+                    <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline inline-block" style={{color}}>{proj.name}</a>
+                    {proj.link && (
+                      <div className="text-xs mt-1" style={lightTextStyle}>
+                        Link: <a href={proj.link} target="_blank" rel="noreferrer" className="underline break-all" style={{color}}>{proj.link}</a>
+                      </div>
+                    )}
+                    <p className="text-xs mt-1" style={lightTextStyle}>{proj.description}</p>
+                     <p className="text-xs mt-1 font-semibold" style={skillStyle}>{proj.technologies}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      )}
     </div>
   );
 };
-
-    

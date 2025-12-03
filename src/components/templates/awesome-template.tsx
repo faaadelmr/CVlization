@@ -40,7 +40,13 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }
                 <div className="absolute top-[-5rem] right-[-5rem] w-80 h-80 rounded-full" style={accentBgStyle}></div>
                 {data.personal.photo && (
                      <div className="absolute top-4 right-12 w-40 h-40">
-                        <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover rounded-full shadow-lg z-10" />
+                        <Image
+                          src={data.personal.photo}
+                          alt={data.personal.name}
+                          width={160}
+                          height={160}
+                          className="object-cover rounded-full shadow-lg z-10"
+                        />
                     </div>
                 )}
                 <div className="absolute top-16 left-12 bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md">
@@ -54,23 +60,28 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }
             {/* Main Content */}
             <main className="p-12 pt-4 flex-grow grid grid-cols-2 gap-x-12 overflow-y-auto">
                  <div style={accentColorStyle}>
-                    <Section icon={<User size={24} className="text-white"/>} title="Profile">
-                        <div className="whitespace-pre-line prose prose-sm max-w-none" style={{color: textColor, opacity: 0.9}}>{data.personal.description}</div>
-                    </Section>
-                    <Section icon={<Briefcase size={24} className="text-white"/>} title="Experience">
-                        <div className="space-y-4">
-                            {data.experience.map(exp => (
-                                <div key={exp.id}>
-                                    <h3 className="font-bold text-md">{exp.role}</h3>
-                                    <p className="text-sm font-semibold" style={accentColorStyle}>{exp.company} ({exp.date})</p>
-                                    <div className="text-xs whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{exp.description}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </Section>
+                    {data.personal.description && (
+                      <Section icon={<User size={24} className="text-white"/>} title="Profile">
+                          <div className="whitespace-pre-line prose prose-sm max-w-none" style={{color: textColor, opacity: 0.9}}>{data.personal.description}</div>
+                      </Section>
+                    )}
+                    {data.experience && data.experience.length > 0 && (
+                      <Section icon={<Briefcase size={24} className="text-white"/>} title="Experience">
+                          <div className="space-y-4">
+                              {data.experience.map(exp => (
+                                  <div key={exp.id}>
+                                      <h3 className="font-bold text-md">{exp.role}</h3>
+                                      <p className="text-sm font-semibold" style={accentColorStyle}>{exp.company} ({exp.date})</p>
+                                      <div className="text-xs whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{exp.description}</div>
+                                  </div>
+                              ))}
+                          </div>
+                      </Section>
+                    )}
                 </div>
                  <div style={accentColorStyle}>
-                    <Section icon={<GraduationCap size={24} className="text-white"/>} title="Education">
+                    {data.education && data.education.length > 0 && (
+                      <Section icon={<GraduationCap size={24} className="text-white"/>} title="Education">
                          <div className="space-y-4">
                             {data.education.map(edu => (
                                 <div key={edu.id}>
@@ -79,14 +90,17 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }
                                 </div>
                             ))}
                          </div>
-                    </Section>
-                    <Section icon={<Wrench size={24} className="text-white"/>} title="Skills">
-                       <ul className="list-disc list-inside space-y-1 text-xs" style={{color: textColor, opacity: 0.9}}>
-                            {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                                <li key={skill}>{skill}</li>
-                            ))}
-                        </ul>
-                    </Section>
+                      </Section>
+                    )}
+                    {data.skills && (
+                      <Section icon={<Wrench size={24} className="text-white"/>} title="Skills">
+                         <ul className="list-disc list-inside space-y-1 text-xs" style={{color: textColor, opacity: 0.9}}>
+                              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                                  <li key={skill}>{skill}</li>
+                              ))}
+                          </ul>
+                      </Section>
+                    )}
                     {data.projects && data.projects.length > 0 && (
                       <Section icon={<Code size={24} className="text-white"/>} title="Projects">
                           <div className="space-y-4">
@@ -123,5 +137,3 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }
         </div>
     );
 };
-
-    

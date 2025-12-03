@@ -51,7 +51,13 @@ export const QueteTemplatePreview = ({ data, color, bgColor, textColor, font }: 
                 <header className="flex items-center w-full mb-10 pl-8">
                     {data.personal.photo && (
                         <div className="w-40 h-40 relative rounded-full overflow-hidden shadow-lg flex-shrink-0 mr-8 border-4 border-white bg-white">
-                            <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                            <Image
+                              src={data.personal.photo}
+                              alt={data.personal.name}
+                              width={160}
+                              height={160}
+                              className="object-cover"
+                            />
                         </div>
                     )}
                     <div className="flex-grow">
@@ -73,18 +79,20 @@ export const QueteTemplatePreview = ({ data, color, bgColor, textColor, font }: 
                                 {data.personal.location && <p>{data.personal.location}</p>}
                             </div>
                         </section>
-                        <section>
-                            <SectionHeader icon={<Briefcase size={16} />} title="Work Experience" color={color} />
-                            <div className="space-y-4">
-                                {data.experience.map(exp => (
-                                    <div key={exp.id}>
-                                        <h3 className="font-bold text-md" style={textStyle}>{exp.role}</h3>
-                                        <p className="text-sm font-semibold mb-1" style={{ color: color }}>{exp.company} ({exp.date})</p>
-                                        <div className="text-xs whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
+                        {data.experience && data.experience.length > 0 && (
+                          <section>
+                              <SectionHeader icon={<Briefcase size={16} />} title="Work Experience" color={color} />
+                              <div className="space-y-4">
+                                  {data.experience.map(exp => (
+                                      <div key={exp.id}>
+                                          <h3 className="font-bold text-md" style={textStyle}>{exp.role}</h3>
+                                          <p className="text-sm font-semibold mb-1" style={{ color: color }}>{exp.company} ({exp.date})</p>
+                                          <div className="text-xs whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
+                                      </div>
+                                  ))}
+                              </div>
+                          </section>
+                        )}
                          {data.projects && data.projects.length > 0 && (
                             <section>
                                 <SectionHeader icon={<Code size={16} />} title="Projects" color={color} />
@@ -103,38 +111,40 @@ export const QueteTemplatePreview = ({ data, color, bgColor, textColor, font }: 
 
                     {/* Right Column */}
                     <div className="col-span-7 space-y-8">
-                        <section>
-                            <SectionHeader icon={<GraduationCap size={16} />} title="My Education" color={color} />
-                             <div className="space-y-4">
-                                {data.education.map(edu => (
-                                    <div key={edu.id} className="flex gap-4 relative">
-                                        <div className="absolute left-1.5 top-2 h-full w-px" style={{backgroundColor: `${color}40`}}></div>
-                                        <div className="flex-shrink-0 z-10 mt-1.5">
-                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }}></div>
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-sm" style={{ color }}>{edu.date}</p>
-                                            <h3 className="font-bold text-md" style={textStyle}>{edu.degree}</h3>
-                                            <p className="text-sm font-medium mb-1" style={lightTextStyle}>{edu.institution}</p>
-                                            <p className="text-xs" style={lightTextStyle}>{edu.description}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-                        <section>
-                            <SectionHeader icon={<Wrench size={16} />} title="Skills" color={color} />
-                             <div className="space-y-2">
-                                {skills.map(skill => (
-                                    <p key={skill} className="text-sm font-semibold" style={textStyle}>{skill}</p>
-                                ))}
-                            </div>
-                        </section>
+                        {data.education && data.education.length > 0 && (
+                          <section>
+                              <SectionHeader icon={<GraduationCap size={16} />} title="My Education" color={color} />
+                               <div className="space-y-4">
+                                  {data.education.map(edu => (
+                                      <div key={edu.id} className="flex gap-4 relative">
+                                          <div className="absolute left-1.5 top-2 h-full w-px" style={{backgroundColor: `${color}40`}}></div>
+                                          <div className="flex-shrink-0 z-10 mt-1.5">
+                                              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }}></div>
+                                          </div>
+                                          <div>
+                                              <p className="font-semibold text-sm" style={{ color }}>{edu.date}</p>
+                                              <h3 className="font-bold text-md" style={textStyle}>{edu.degree}</h3>
+                                              <p className="text-sm font-medium mb-1" style={lightTextStyle}>{edu.institution}</p>
+                                              <p className="text-xs" style={lightTextStyle}>{edu.description}</p>
+                                          </div>
+                                      </div>
+                                  ))}
+                              </div>
+                          </section>
+                        )}
+                        {skills.length > 0 && (
+                          <section>
+                              <SectionHeader icon={<Wrench size={16} />} title="Skills" color={color} />
+                               <div className="space-y-2">
+                                  {skills.map(skill => (
+                                      <p key={skill} className="text-sm font-semibold" style={textStyle}>{skill}</p>
+                                  ))}
+                              </div>
+                          </section>
+                        )}
                     </div>
                 </div>
             </main>
         </div>
     );
 };
-
-    

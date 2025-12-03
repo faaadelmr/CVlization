@@ -47,7 +47,13 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor, font
                 </div>
                 {data.personal.photo && (
                     <div className="w-24 h-24 relative rounded-md overflow-hidden shadow-lg border-2 flex-shrink-0" style={{borderColor: color}}>
-                        <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                        <Image
+                          src={data.personal.photo}
+                          alt={data.personal.name}
+                          width={96}
+                          height={96}
+                          className="object-cover"
+                        />
                     </div>
                 )}
             </header>
@@ -64,56 +70,64 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor, font
                              {data.personal.website && <p className="flex items-center gap-2"><Globe size={14}/> {data.personal.website}</p>}
                         </div>
                     </section>
-                     <section>
-                        <h3 className="font-bold text-lg uppercase flex items-center gap-2 mb-3" style={{ color }}><Wrench size={20}/> Keahlian</h3>
-                        <ul className="text-sm list-disc list-inside space-y-1" style={lightTextStyle}>
-                             {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                                <li key={skill}>{skill}</li>
-                            ))}
-                        </ul>
-                    </section>
+                     {data.skills && (
+                       <section>
+                          <h3 className="font-bold text-lg uppercase flex items-center gap-2 mb-3" style={{ color }}><Wrench size={20}/> Keahlian</h3>
+                          <ul className="text-sm list-disc list-inside space-y-1" style={lightTextStyle}>
+                               {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                                  <li key={skill}>{skill}</li>
+                              ))}
+                          </ul>
+                      </section>
+                     )}
                 </aside>
 
                 {/* Right Column */}
                 <main className="col-span-2 space-y-8">
-                     <section>
-                        <SectionHeader title="Profil" icon={<User size={16} color={bgColor} />} color={color} textColor={textColor} />
-                        <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-                    </section>
-                    <section>
-                        <SectionHeader title="Pengalaman Proyek" icon={<Briefcase size={16} color={bgColor} />} color={color} textColor={textColor} />
-                        <div className="space-y-5">
-                             {data.experience.map(exp => (
-                                <div key={exp.id}>
-                                    <div className="flex justify-between items-baseline gap-4">
-                                        <div className="flex-grow w-0">
-                                            <h3 className="font-bold text-md">{exp.role}</h3>
-                                            <h4 className="font-semibold text-sm" style={{ color: color }}>{exp.company}</h4>
-                                        </div>
-                                        <p className="text-xs font-mono flex-shrink-0 text-right" style={lightTextStyle}>{exp.date}</p>
-                                    </div>
-                                    <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                     <section>
-                        <SectionHeader title="Pendidikan & Sertifikasi" icon={<GraduationCap size={16} color={bgColor} />} color={color} textColor={textColor} />
-                         <div className="space-y-5">
-                            {data.education.map(edu => (
-                                <div key={edu.id}>
-                                    <div className="flex justify-between items-baseline gap-4">
-                                         <div className="flex-grow w-0">
-                                            <h3 className="font-bold text-md">{edu.degree}</h3>
-                                            <h4 className="font-semibold text-sm" style={{ color: color }}>{edu.institution}</h4>
-                                        </div>
-                                        <p className="text-xs font-mono flex-shrink-0 text-right" style={lightTextStyle}>{edu.date}</p>
-                                    </div>
-                                     <p className="text-sm whitespace-pre-line mt-1" style={lightTextStyle}>{edu.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                     {data.personal.description && (
+                        <section>
+                          <SectionHeader title="Profil" icon={<User size={16} color={bgColor} />} color={color} textColor={textColor} />
+                          <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
+                        </section>
+                     )}
+                    {data.experience && data.experience.length > 0 && (
+                      <section>
+                          <SectionHeader title="Pengalaman Proyek" icon={<Briefcase size={16} color={bgColor} />} color={color} textColor={textColor} />
+                          <div className="space-y-5">
+                               {data.experience.map(exp => (
+                                  <div key={exp.id}>
+                                      <div className="flex justify-between items-baseline gap-4">
+                                          <div className="flex-grow w-0">
+                                              <h3 className="font-bold text-md">{exp.role}</h3>
+                                              <h4 className="font-semibold text-sm" style={{ color: color }}>{exp.company}</h4>
+                                          </div>
+                                          <p className="text-xs font-mono flex-shrink-0 text-right" style={lightTextStyle}>{exp.date}</p>
+                                      </div>
+                                      <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
+                                  </div>
+                              ))}
+                          </div>
+                      </section>
+                    )}
+                     {data.education && data.education.length > 0 && (
+                        <section>
+                          <SectionHeader title="Pendidikan & Sertifikasi" icon={<GraduationCap size={16} color={bgColor} />} color={color} textColor={textColor} />
+                           <div className="space-y-5">
+                              {data.education.map(edu => (
+                                  <div key={edu.id}>
+                                      <div className="flex justify-between items-baseline gap-4">
+                                           <div className="flex-grow w-0">
+                                              <h3 className="font-bold text-md">{edu.degree}</h3>
+                                              <h4 className="font-semibold text-sm" style={{ color: color }}>{edu.institution}</h4>
+                                          </div>
+                                          <p className="text-xs font-mono flex-shrink-0 text-right" style={lightTextStyle}>{edu.date}</p>
+                                      </div>
+                                       <p className="text-sm whitespace-pre-line mt-1" style={lightTextStyle}>{edu.description}</p>
+                                  </div>
+                              ))}
+                          </div>
+                        </section>
+                     )}
                      {data.projects && data.projects.length > 0 && (
                         <section>
                             <SectionHeader title="Proyek" icon={<Code size={16} color={bgColor} />} color={color} textColor={textColor} />
@@ -133,5 +147,3 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor, font
         </div>
     );
 };
-
-    

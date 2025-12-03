@@ -31,77 +31,83 @@ export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor, fo
               {data.personal.website && (
                 <>
                   <span>&bull;</span>
-                  <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="hover:underline" style={linkStyle}>{data.personal.website}</a>
+                  <a href={`https://${data.personal.website}`} target="_blank" rel="noopener noreferrer" className="hover:underline" style={linkStyle}>{data.personal.website}</a>
                 </>
               )}
             </div>
         </header>
 
         {/* Profile / Summary */}
-        <Section>
-            <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Summary</h2>
-            <p className="text-sm whitespace-pre-line mt-2" style={lightTextStyle}>{data.personal.description}</p>
-        </Section>
+        {data.personal.description && (
+          <Section>
+              <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Summary</h2>
+              <p className="text-sm whitespace-pre-line mt-2 text-justify" style={lightTextStyle}>{data.personal.description}</p>
+          </Section>
+        )}
         
         {/* Skills */}
-        <Section>
-            <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Skills</h2>
-            <p className="text-sm whitespace-pre-line mt-2" style={lightTextStyle}>{data.skills}</p>
-        </Section>
+        {data.skills && (
+          <Section>
+              <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Skills</h2>
+              <p className="text-sm whitespace-pre-line mt-2" style={lightTextStyle}>{data.skills}</p>
+          </Section>
+        )}
         
         {/* Experience */}
-        <Section>
-            <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Experience</h2>
-            {data.experience.map(exp => (
-                <div key={exp.id} className="mb-4">
-                    <div className="flex justify-between items-baseline">
-                        <h3 className="text-lg font-bold">{exp.company}</h3>
-                        <p className="text-sm font-mono" style={lightTextStyle}>{exp.date}</p>
-                    </div>
-                    <p className="font-semibold italic">{exp.role}</p>
-                    <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
-                </div>
-            ))}
-        </Section>
+        {data.experience && data.experience.length > 0 && (
+          <Section>
+              <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Experience</h2>
+              {data.experience.map(exp => (
+                  <div key={exp.id} className="mb-4">
+                      <div className="flex justify-between items-baseline">
+                          <h3 className="text-lg font-bold">{exp.company}</h3>
+                          <p className="text-sm font-mono" style={lightTextStyle}>{exp.date}</p>
+                      </div>
+                      <p className="font-semibold italic">{exp.role}</p>
+                      <div className="text-sm whitespace-pre-line text-justify mt-1" style={lightTextStyle}>{exp.description}</div>
+                  </div>
+              ))}
+          </Section>
+        )}
         
         {/* Projects */}
         {data.projects && data.projects.length > 0 && (
-        <Section>
-            <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Projects</h2>
-            {data.projects.map(proj => (
-                <div key={proj.id} className="mb-4">
+          <Section>
+              <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Projects</h2>
+              {data.projects.map(proj => (
+                  <div key={proj.id} className="mb-4">
                      <div>
                         <h3 className="text-lg font-bold">{proj.name}</h3>
                         {proj.link && (
                           <div className="text-sm mt-1" style={lightTextStyle}>
-                            Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={linkStyle}>{proj.link}</a>
+                            Link: <a href={proj.link} target="_blank" rel="noopener noreferrer" className="hover:underline break-all" style={linkStyle}>{proj.link}</a>
                           </div>
                         )}
                     </div>
                     <p className="font-semibold italic text-sm" style={lightTextStyle}>Technologies: {proj.technologies}</p>
-                    <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{proj.description}</div>
+                    <div className="text-sm whitespace-pre-line text-justify mt-1" style={lightTextStyle}>{proj.description}</div>
                 </div>
-            ))}
-        </Section>
+              ))}
+          </Section>
         )}
         
         {/* Education */}
-        <Section>
-            <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Education</h2>
-            {data.education.map(edu => (
-                <div key={edu.id} className="mb-4">
-                    <div className="flex justify-between items-baseline">
-                        <h3 className="text-lg font-bold">{edu.institution}</h3>
-                        <p className="text-sm font-mono" style={lightTextStyle}>{edu.date}</p>
-                    </div>
-                    <p className="font-semibold italic">{edu.degree}</p>
-                    <p className="text-sm whitespace-pre-line mt-1" style={lightTextStyle}>{edu.description}</p>
-                </div>
-            ))}
-        </Section>
+        {data.education && data.education.length > 0 && (
+          <Section>
+              <h2 className="text-xl font-bold uppercase" style={sectionTitleStyle}>Education</h2>
+              {data.education.map(edu => (
+                  <div key={edu.id} className="mb-4">
+                      <div className="flex justify-between items-baseline">
+                          <h3 className="text-lg font-bold">{edu.institution}</h3>
+                          <p className="text-sm font-mono" style={lightTextStyle}>{edu.date}</p>
+                      </div>
+                      <p className="font-semibold italic">{edu.degree}</p>
+                      <p className="text-sm whitespace-pre-line mt-1 text-justify" style={lightTextStyle}>{edu.description}</p>
+                  </div>
+              ))}
+          </Section>
+        )}
         
     </div>
   );
 };
-
-    

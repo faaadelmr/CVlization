@@ -6,7 +6,9 @@ import Image from 'next/image';
 
 // Helper function to determine if a color is light or dark
 const isColorLight = (hexColor: string) => {
+  if (!hexColor.startsWith('#')) return false;
   const hex = hexColor.replace('#', '');
+  if (hex.length !== 6) return false;
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
@@ -21,6 +23,7 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor, font 
   // Use a dark color for the sidebar, ignoring user's bgColor selection for this specific template style
   const sidebarBgColor = '#2C3E50'; // A dark blue-gray
   const sidebarTextColor = '#FFFFFF'; // White text on dark sidebar
+  const iconColor = isColorLight(color) ? '#000000' : '#FFFFFF';
 
   const Section = ({ icon, title, children }: { icon: React.ReactNode, title: string, children: React.ReactNode }) => (
     <section className="mb-8">
@@ -44,7 +47,13 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor, font 
         <div className="px-8 -mt-24">
             {data.personal.photo ? (
               <div className="relative w-40 h-40 mx-auto rounded-full border-4 overflow-hidden shadow-lg" style={{ borderColor: color }}>
-                  <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover" />
+                  <Image
+                    src={data.personal.photo}
+                    alt={data.personal.name}
+                    width={160}
+                    height={160}
+                    className="object-cover"
+                  />
               </div>
             ) : (
                 <div className="w-40 h-40 mx-auto"></div> // Placeholder to maintain layout
@@ -66,50 +75,58 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor, font 
               </div>
             </div>
 
-            <div>
-              <h3 className="text-lg font-semibold border-b-2 pb-1 mb-3 flex items-center" style={{ borderColor: color, color: color }}>
-                <Star size={18} className="mr-2"/> Skills
-              </h3>
-              <ul className="space-y-1 text-sm" style={{color: sidebarTextColor, opacity: 0.9}}>
-                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                  <li key={skill}>{skill}</li>
-                ))}
-              </ul>
-            </div>
+            {data.skills && (
+              <div>
+                <h3 className="text-lg font-semibold border-b-2 pb-1 mb-3 flex items-center" style={{ borderColor: color, color: color }}>
+                  <Star size={18} className="mr-2"/> Skills
+                </h3>
+                <ul className="space-y-1 text-sm" style={{color: sidebarTextColor, opacity: 0.9}}>
+                  {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                    <li key={skill}>{skill}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Right Column */}
       <div className="w-2/3 p-10 overflow-auto">
-        <Section icon={<User size={24} color={sidebarTextColor} />} title="Profile">
-          <p className="text-sm whitespace-pre-line" style={{color: textColor, opacity: 0.8}}>{data.personal.description}</p>
-        </Section>
+        {data.personal.description && (
+          <Section icon={<User size={24} color={iconColor} />} title="Profile">
+            <p className="text-sm whitespace-pre-line" style={{color: textColor, opacity: 0.8}}>{data.personal.description}</p>
+          </Section>
+        )}
         
-        <Section icon={<Briefcase size={24} color={sidebarTextColor} />} title="Experience">
-          {data.experience.map(exp => (
-            <div key={exp.id} className="pb-6">
-              <h3 className="text-xl font-bold" style={{color: textColor}}>{exp.role}</h3>
-              <p className="text-md font-semibold mb-1" style={{color: textColor, opacity: 0.9}}>{exp.company}</p>
-              <p className="text-xs text-gray-500 mb-2">{exp.date}</p>
-              <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{exp.description}</div>
-            </div>
-          ))}
-        </Section>
+        {data.experience && data.experience.length > 0 && (
+          <Section icon={<Briefcase size={24} color={iconColor} />} title="Experience">
+            {data.experience.map(exp => (
+              <div key={exp.id} className="pb-6">
+                <h3 className="text-xl font-bold" style={{color: textColor}}>{exp.role}</h3>
+                <p className="text-md font-semibold mb-1" style={{color: textColor, opacity: 0.9}}>{exp.company}</p>
+                <p className="text-xs text-gray-500 mb-2">{exp.date}</p>
+                <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{exp.description}</div>
+              </div>
+            ))}
+          </Section>
+        )}
         
-        <Section icon={<GraduationCap size={24} color={sidebarTextColor} />} title="Education">
-          {data.education.map(edu => (
-            <div key={edu.id} className="pb-6">
-              <h3 className="text-xl font-bold" style={{color: textColor}}>{edu.degree}</h3>
-              <p className="text-md font-semibold mb-1" style={{color: textColor, opacity: 0.9}}>{edu.institution}</p>
-              <p className="text-xs text-gray-500">{edu.date}</p>
-               <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{edu.description}</div>
-            </div>
-          ))}
-        </Section>
+        {data.education && data.education.length > 0 && (
+          <Section icon={<GraduationCap size={24} color={iconColor} />} title="Education">
+            {data.education.map(edu => (
+              <div key={edu.id} className="pb-6">
+                <h3 className="text-xl font-bold" style={{color: textColor}}>{edu.degree}</h3>
+                <p className="text-md font-semibold mb-1" style={{color: textColor, opacity: 0.9}}>{edu.institution}</p>
+                <p className="text-xs text-gray-500">{edu.date}</p>
+                 <div className="text-sm whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{edu.description}</div>
+              </div>
+            ))}
+          </Section>
+        )}
 
         {data.projects && data.projects.length > 0 && (
-          <Section icon={<Code size={24} color={sidebarTextColor} />} title="Projects">
+          <Section icon={<Code size={24} color={iconColor} />} title="Projects">
             {data.projects.map(proj => (
               <div key={proj.id} className="pb-6">
                 <h3 className="text-xl font-bold" style={{color: textColor}}>{proj.name}</h3>
@@ -128,5 +145,3 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor, font 
     </div>
   );
 };
-
-    

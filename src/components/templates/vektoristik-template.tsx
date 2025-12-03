@@ -79,44 +79,54 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor, fo
                     {data.personal.photo && (
                         <div className="absolute top-1/2 left-8 -translate-y-1/2 w-40 h-40 z-10">
                             <div className="relative w-full h-full rounded-full border-[6px]" style={{ borderColor: bgColor, backgroundColor: color }}>
-                                <Image src={data.personal.photo} alt={data.personal.name} layout="fill" className="object-cover rounded-full" />
+                                <Image
+                                  src={data.personal.photo}
+                                  alt={data.personal.name}
+                                  width={160}
+                                  height={160}
+                                  className="object-cover rounded-full"
+                                />
                             </div>
                         </div>
                     )}
                 </div>
                 
                 <div className="p-8 pt-8 flex-grow overflow-y-auto">
-                    <section className="mb-8">
-                        <h2 className="text-sm font-bold uppercase tracking-wider p-2 text-center text-white mb-4" style={{ backgroundColor: color, color: headerTextColor }}>Education</h2>
-                        <div className="space-y-0">
-                            {data.education.map((edu) => (
-                               <TimelineItem 
-                                    key={edu.id}
-                                    date={edu.date}
-                                    title={edu.degree}
-                                    description={edu.institution}
-                                    color={color}
-                                    textColor={textColor}
-                               />
-                            ))}
-                        </div>
-                    </section>
+                    {data.education && data.education.length > 0 && (
+                      <section className="mb-8">
+                          <h2 className="text-sm font-bold uppercase tracking-wider p-2 text-center text-white mb-4" style={{ backgroundColor: color, color: headerTextColor }}>Education</h2>
+                          <div className="space-y-0">
+                              {data.education.map((edu) => (
+                                 <TimelineItem 
+                                      key={edu.id}
+                                      date={edu.date}
+                                      title={edu.degree}
+                                      description={edu.institution}
+                                      color={color}
+                                      textColor={textColor}
+                                 />
+                              ))}
+                          </div>
+                      </section>
+                    )}
                     
-                    <section>
-                         <h2 className="text-sm font-bold uppercase tracking-wider p-2 text-center text-white mb-4" style={{ backgroundColor: color, color: headerTextColor }}>Experience</h2>
-                        <div className="space-y-0">
-                            {data.experience.map((exp) => (
-                                <TimelineItem 
-                                    key={exp.id}
-                                    date={exp.date}
-                                    title={exp.role}
-                                    description={`${exp.company}\n${exp.description}`}
-                                    color={color}
-                                    textColor={textColor}
-                               />
-                            ))}
-                        </div>
-                    </section>
+                    {data.experience && data.experience.length > 0 && (
+                      <section>
+                           <h2 className="text-sm font-bold uppercase tracking-wider p-2 text-center text-white mb-4" style={{ backgroundColor: color, color: headerTextColor }}>Experience</h2>
+                          <div className="space-y-0">
+                              {data.experience.map((exp) => (
+                                  <TimelineItem 
+                                      key={exp.id}
+                                      date={exp.date}
+                                      title={exp.role}
+                                      description={`${exp.company}\n${exp.description}`}
+                                      color={color}
+                                      textColor={textColor}
+                                 />
+                              ))}
+                          </div>
+                      </section>
+                    )}
                 </div>
             </main>
 
@@ -147,13 +157,15 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor, fo
                     </div>
                 </SidebarSection>
                 
-                <SidebarSection title="Skills" color={sidebarBorderColor} textColor={sidebarTextColor} icon={<Wrench size={16} />}>
-                    <div className="space-y-3">
-                        {skills.map(skill => (
-                            <p key={skill} className="text-sm font-semibold uppercase">{skill}</p>
-                        ))}
-                    </div>
-                </SidebarSection>
+                {skills.length > 0 && (
+                  <SidebarSection title="Skills" color={sidebarBorderColor} textColor={sidebarTextColor} icon={<Wrench size={16} />}>
+                      <div className="space-y-3">
+                          {skills.map(skill => (
+                              <p key={skill} className="text-sm font-semibold uppercase">{skill}</p>
+                          ))}
+                      </div>
+                  </SidebarSection>
+                )}
 
                 {data.projects && data.projects.length > 0 && (
                      <SidebarSection title="Projects" color={sidebarBorderColor} textColor={sidebarTextColor} icon={<Code size={16} />}>
@@ -172,5 +184,3 @@ export const VektoristikTemplatePreview = ({ data, color, bgColor, textColor, fo
         </div>
     );
 };
-
-    
