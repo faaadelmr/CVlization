@@ -18,7 +18,7 @@ export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font
     const skills = (data.skills || '').split(',').map(s => s.trim()).filter(Boolean);
 
     return (
-        <div className="p-8 h-full overflow-auto" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
+        <div className="p-8 h-full overflow-hidden" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             {/* Header */}
             <header className="text-center mb-8 flex flex-col items-center">
                 {data.personal.photo && (

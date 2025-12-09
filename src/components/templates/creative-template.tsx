@@ -92,7 +92,7 @@ export const CreativeTemplatePreview = ({ data, color, bgColor, textColor, font 
       </div>
 
       {/* Right Column */}
-      <div className="w-2/3 p-10 overflow-auto">
+      <div className="w-2/3 p-10 overflow-hidden">
         {data.personal.description && (
           <Section icon={<User size={24} color={iconColor} />} title="Profile">
             <p className="text-sm whitespace-pre-line" style={{color: textColor, opacity: 0.8}}>{data.personal.description}</p>

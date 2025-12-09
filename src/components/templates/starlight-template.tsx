@@ -84,7 +84,7 @@ export const StarlightTemplatePreview = ({ data, color, bgColor, textColor, font
             </aside>
 
             {/* Right Column */}
-            <main className="col-span-8 p-8 rounded-2xl relative overflow-auto" style={{backgroundColor: `${color}10`}}>
+            <main className="col-span-8 p-8 rounded-2xl relative overflow-hidden" style={{backgroundColor: `${color}10`}}>
                 <StarlightPattern color={color} />
                 <div className="relative z-10">
                      {data.personal.description && (

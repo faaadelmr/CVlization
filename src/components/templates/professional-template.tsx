@@ -15,7 +15,7 @@ export const ProfessionalTemplatePreview = ({ data, color, bgColor, textColor, f
 
 
   return (
-    <div className="h-full overflow-auto p-10" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
+    <div className="h-full overflow-hidden p-10" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       {/* Header */}
       <header className="flex items-center justify-between mb-8 pb-4 border-b">
         <div>

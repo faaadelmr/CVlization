@@ -197,7 +197,7 @@ export function ResumePreviewPanel() {
         >
            <div
              id="resume-preview"
-             className={cn("w-full h-full", fontClass)}
+             className={cn("w-full h-full overflow-hidden", fontClass)}
              style={{
                fontFamily: selectedFont,
              }}

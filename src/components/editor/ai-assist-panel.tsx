@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Wand2, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 
 export function AiAssistPanel() {
-  const { handleAnalyzeResume, isAiLoading } = useResume();
+  const { handleAnalyzeResume, isAiLoading, selectedAiModel, setSelectedAiModel } = useResume();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isPdf, setIsPdf] = useState(false);
@@ -51,9 +52,38 @@ export function AiAssistPanel() {
     }
   };
 
-  const handleAnalyzeClick = () => {
+  const handleAnalyzeClick = async () => {
     if (previewUrl) {
-      handleAnalyzeResume(previewUrl);
+      try {
+        await handleAnalyzeResume(previewUrl);
+        toast({
+          title: "Success!",
+          description: "Resume analyzed successfully. Your CV has been updated.",
+        });
+      } catch (error: any) {
+        // Check for common AI-related errors and provide helpful messages
+        let errorMessage = "Failed to analyze the resume. Please try again.";
+
+        if (error?.message) {
+          const errorMsg = error.message.toLowerCase();
+
+          if (errorMsg.includes("quota") || errorMsg.includes("limit") || errorMsg.includes("rate")) {
+            errorMessage = "AI usage limit has been reached. Try using a different model or try again later.";
+          } else if (errorMsg.includes("api key") || errorMsg.includes("authentication") || errorMsg.includes("auth")) {
+            errorMessage = "AI service authentication issue. Please check your API configuration.";
+          } else if (errorMsg.includes("model") || errorMsg.includes("resource")) {
+            errorMessage = "Selected AI model is unavailable. Please try switching to a different model.";
+          } else if (errorMsg.includes("timeout") || errorMsg.includes("exceeded")) {
+            errorMessage = "AI analysis took too long. Please try again or use a different model.";
+          }
+        }
+
+        toast({
+          variant: "destructive",
+          title: "Analysis failed",
+          description: errorMessage,
+        });
+      }
     } else {
        toast({
         variant: "destructive",
@@ -72,6 +102,19 @@ export function AiAssistPanel() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="ai-model-select">Select AI Model</Label>
+          <Select value={selectedAiModel} onValueChange={(value) => setSelectedAiModel(value as 'gemini-2.5-flash' | 'gemini-2.0-flash')}>
+            <SelectTrigger id="ai-model-select">
+              <SelectValue placeholder="Select AI model" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash</SelectItem>
+              <SelectItem value="gemini-2.0-flash">Gemini 2.0 Flash</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="resume-upload">Upload Resume (Image or PDF)</Label>
           <Input id="resume-upload" type="file" onChange={handleFileChange} accept="image/*,application/pdf" />

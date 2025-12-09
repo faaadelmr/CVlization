@@ -17,7 +17,7 @@ export const AtsFriendlyTemplatePreview = ({ data, color, bgColor, textColor, fo
   const linkStyle = { color: color };
 
   return (
-    <div className="p-8 h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
+    <div className="p-8 h-full overflow-hidden" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
         {/* Header */}
         <header className="text-center mb-8">
             <h1 className="text-4xl font-bold">{data.personal.name}</h1>

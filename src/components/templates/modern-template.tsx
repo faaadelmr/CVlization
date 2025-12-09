@@ -23,7 +23,7 @@ export const ModernTemplatePreview = ({ data, color, bgColor, textColor, font }:
   const lightTextStyle = { color: textColor, opacity: 0.8 };
 
   return (
-    <div className="p-8 h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
+    <div className="p-8 h-full overflow-hidden" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       {/* Header */}
       <header className="text-center mb-10 border-b-2 pb-6 flex items-center justify-between" style={{borderColor: color}}>
         {data.personal.photo && (

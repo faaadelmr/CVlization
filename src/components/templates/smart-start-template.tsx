@@ -82,7 +82,7 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
             </aside>
 
             {/* Right Column (Main Content) */}
-            <main className="w-2/3 p-8 relative overflow-auto" style={mainBgStyle}>
+            <main className="w-2/3 p-8 relative overflow-hidden" style={mainBgStyle}>
                 <VectoristicPattern color={color} />
                 <div className="relative z-10">
                     <header className="mb-8">

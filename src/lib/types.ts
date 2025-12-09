@@ -22,14 +22,14 @@ export interface ResumeData {
     institution: string;
     degree: string;
     date: string;
-    description: string;
+    description?: string;
   }[];
   projects: {
     id: string;
     name: string;
-    description: string;
+    description?: string;
     technologies: string;
-    link: string;
+    link?: string;
   }[];
   skills: string;
 }
@@ -51,6 +51,8 @@ export interface ResumeContextProps {
   setSelectedTextColor: React.Dispatch<React.SetStateAction<string>>;
   selectedFont: Font;
   setSelectedFont: React.Dispatch<React.SetStateAction<Font>>;
+  selectedAiModel: 'gemini-2.5-flash' | 'gemini-2.0-flash';
+  setSelectedAiModel: React.Dispatch<React.SetStateAction<'gemini-2.5-flash' | 'gemini-2.0-flash'>>;
   handleAnalyzeResume: (photoDataUri: string) => Promise<void>;
   isAiLoading: boolean;
 }

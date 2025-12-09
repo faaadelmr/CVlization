@@ -12,7 +12,7 @@ export const SwissTemplatePreview = ({ data, color, bgColor, textColor, font }: 
   const lighterTextStyle = { color: textColor, opacity: 0.6 };
 
   return (
-    <div className="p-10 h-full overflow-auto" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
+    <div className="p-10 h-full overflow-hidden" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
       <div className="grid grid-cols-12 gap-x-12">
         {/* Header */}
         <header className="col-span-12 border-b-4 pb-6 mb-8 flex items-center justify-between" style={{ borderColor: textColor }}>

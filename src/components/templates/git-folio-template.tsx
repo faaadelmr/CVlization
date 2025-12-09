@@ -25,7 +25,7 @@ const CommandLine = ({ children }: { children: React.ReactNode }) => (
 export const GitFolioTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
     const fontStyle = { fontFamily: font || 'monospace' };
     return (
-        <div className="p-8 h-full overflow-auto" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
+        <div className="p-8 h-full overflow-hidden" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             {/* Header */}
             <header className="mb-8">
                 <div className="flex items-center justify-between mb-4">

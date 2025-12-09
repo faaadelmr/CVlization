@@ -37,7 +37,7 @@ export const ConstructTemplatePreview = ({ data, color, bgColor, textColor, font
     const lightTextStyle = { color: textColor, opacity: 0.8 };
     
     return (
-        <div className="relative h-full overflow-auto p-8" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
+        <div className="relative h-full overflow-hidden p-8" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             {/* Header with Caution Tape effect */}
             <header className="relative flex items-center justify-between gap-6 mb-8 p-4 z-10" style={{ border: `3px solid ${color}`}}>
                  <CautionTapePattern color={color} />

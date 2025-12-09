@@ -20,7 +20,7 @@ export const TimelineTemplatePreview = ({ data, color, bgColor, textColor, font 
   const accentColorStyle = { color };
 
   return (
-    <div className="h-full overflow-auto flex flex-col" style={{ ...fontStyle, ...bodyBgStyle }}>
+    <div className="h-full overflow-hidden flex flex-col" style={{ ...fontStyle, ...bodyBgStyle }}>
       {/* Header Section */}
       <header className="flex text-white p-8" style={headerBgStyle}>
         <div className="w-1/3 flex flex-col justify-center pr-6">

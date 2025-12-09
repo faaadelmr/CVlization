@@ -1,14 +1,10 @@
-
 'use server';
 /**
- * @fileOverview An AI flow to analyze a resume image or PDF text and extract structured data.
- *
- * - analyzeResume - A function that handles the resume analysis process.
- * - AnalyzeResumeInput - The input type for the analyzeResume function.
- * - AnalyzeResumeOutput - The return type for the analyzeResume function.
+ * @fileOverview Function to analyze a resume image or PDF text with a specific model and extract structured data.
  */
 
 import { ai } from '@/ai/genkit';
+import { getGeminiModel } from '@/ai/genkit';
 import { z } from 'zod';
 
 const PersonalInfoSchema = z.object({
@@ -50,26 +46,27 @@ const AnalyzeResumeOutputSchema = z.object({
   projects: z.array(ProjectSchema).describe("A list of personal or professional projects.").optional(),
   skills: z.string().describe('A comma-separated list of skills.'),
 });
-export type AnalyzeResumeOutput = z.infer<typeof AnalyzeResumeOutputSchema>;
 
-const AnalyzeResumeInputSchema = z.object({
-  photoDataUri: z
-    .string()
-    .describe(
-      "An image of a resume or a PDF file, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
-    ),
-});
-export type AnalyzeResumeInput = z.infer<typeof AnalyzeResumeInputSchema>;
+type AnalyzeResumeOutput = z.infer<typeof AnalyzeResumeOutputSchema>;
 
-export async function analyzeResume(input: AnalyzeResumeInput): Promise<AnalyzeResumeOutput> {
-  return analyzeResumeFlow(input);
+interface AnalyzeResumeInput {
+  photoDataUri: string;
+  model: 'gemini-2.5-flash' | 'gemini-2.0-flash';
 }
 
-const prompt = ai.definePrompt({
-  name: 'analyzeResumePrompt',
-  input: { schema: AnalyzeResumeInputSchema },
-  output: { schema: AnalyzeResumeOutputSchema },
-  prompt: `You are an expert resume parser. Analyze the provided resume content (which can be from an image or extracted text from a PDF) and extract the information into a structured JSON format.
+export async function analyzeResumeWithModel(input: AnalyzeResumeInput): Promise<AnalyzeResumeOutput> {
+  const { photoDataUri, model } = input;
+
+  // Get the selected model
+  const selectedModel = getGeminiModel(model);
+
+  // Create a prompt with the specific model
+  const prompt = ai.definePrompt({
+    name: 'analyzeResumePromptWithModel',
+    input: { schema: z.object({ photoDataUri: z.string() }) },
+    output: { schema: AnalyzeResumeOutputSchema },
+    model: selectedModel,
+    prompt: `You are an expert resume parser. Analyze the provided resume content (which can be from an image or extracted text from a PDF) and extract the information into a structured JSON format.
 
 Extract the following sections:
 - Personal Details (name, role, email, phone, location, website, and a professional summary/objective as description)
@@ -83,20 +80,12 @@ Pay close attention to formatting the extracted text correctly, especially for d
 Resume Content:
 {{media url=photoDataUri}}
 `,
-});
+  });
 
-const analyzeResumeFlow = ai.defineFlow(
-  {
-    name: 'analyzeResumeFlow',
-    inputSchema: AnalyzeResumeInputSchema,
-    outputSchema: AnalyzeResumeOutputSchema,
-  },
-  async (input) => {
-    const { output } = await prompt(input);
+  const { output } = await prompt({ photoDataUri });
 
-    if (!output) {
-      throw new Error('Failed to get a structured response from the AI.');
-    }
-    return output;
+  if (!output) {
+    throw new Error('Failed to get a structured response from the AI.');
   }
-);
+  return output;
+}
