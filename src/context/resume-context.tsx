@@ -1,11 +1,10 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { ResumeContextProps, ResumeData, Template, Font, Language } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
-import { analyzeResume } from '@/ai/flows/analyze-resume-flow';
-import { analyzeResumeWithModel } from '@/ai/flows/analyze-resume-with-model';
+import { analyzeResumeWithPuter, type PuterAiModel } from '@/lib/puter-ai';
 
 const ResumeContext = createContext<ResumeContextProps | undefined>(undefined);
 
@@ -18,20 +17,13 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [selectedFont, setSelectedFont] = useState<Font>('Lato');
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('en');
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [selectedAiModel, setSelectedAiModel] = useState<'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-2.0-flash-lite' | 'gemini-1.5-pro'>('gemini-2.5-flash');
+  const [selectedAiModel, setSelectedAiModel] = useState<PuterAiModel>('gemini-2.5-flash');
 
   const handleAnalyzeResume = async (photoDataUri: string) => {
     setIsAiLoading(true);
     try {
-      let analyzedData;
-
-      // Use the selected model for analysis
-      if (selectedAiModel === 'gemini-2.5-flash' || selectedAiModel === 'gemini-2.0-flash' || selectedAiModel === 'gemini-2.0-flash-lite' || selectedAiModel === 'gemini-1.5-pro') {
-        analyzedData = await analyzeResumeWithModel({ photoDataUri, model: selectedAiModel });
-      } else {
-        // Fallback to default model if something goes wrong
-        analyzedData = await analyzeResume({ photoDataUri });
-      }
+      // Use Puter.js free Gemini API (client-side)
+      const analyzedData = await analyzeResumeWithPuter(photoDataUri, selectedAiModel);
 
       // Add unique IDs to experience, education and projects items
       const experienceWithIds = analyzedData.experience.map(exp => ({ ...exp, id: crypto.randomUUID() }));

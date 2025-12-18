@@ -103,27 +103,34 @@ export function AiAssistPanel() {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="ai-model-select">Select AI Model</Label>
-          <Select value={selectedAiModel} onValueChange={(value) => setSelectedAiModel(value as 'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-2.0-flash-lite' | 'gemini-1.5-pro')}>
+          <Label htmlFor="ai-model-select">Select AI Model (Free via Puter.js)</Label>
+          <Select value={selectedAiModel} onValueChange={(value) => setSelectedAiModel(value as any)}>
             <SelectTrigger id="ai-model-select">
               <SelectValue placeholder="Select AI model" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="gemini-3-flash-preview">🚀 Gemini 3 Flash (Latest)</SelectItem>
+              <SelectItem value="gemini-3-pro-preview">🧠 Gemini 3 Pro (Most Capable)</SelectItem>
+              <SelectItem value="gemini-2.5-pro">⭐ Gemini 2.5 Pro (High Quality)</SelectItem>
               <SelectItem value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Fast)</SelectItem>
-              <SelectItem value="gemini-2.0-flash">🚀 Gemini 2.0 Flash (Balanced)</SelectItem>
-              <SelectItem value="gemini-2.0-flash-lite">💨 Gemini 2.0 Flash Lite (Fastest)</SelectItem>
-              <SelectItem value="gemini-1.5-pro">👁️ Gemini 1.5 Pro (Best for Images/PDF)</SelectItem>
+              <SelectItem value="gemini-2.5-flash-lite">💨 Gemini 2.5 Flash Lite</SelectItem>
+              <SelectItem value="gemini-2.0-flash">🎯 Gemini 2.0 Flash (Stable)</SelectItem>
+              <SelectItem value="gemini-2.0-flash-lite">🪶 Gemini 2.0 Flash Lite</SelectItem>
+              <SelectItem value="gemini-1.5-flash">📋 Gemini 1.5 Flash (Legacy)</SelectItem>
             </SelectContent>
           </Select>
           <p className="text-xs text-muted-foreground">
-            {selectedAiModel === 'gemini-1.5-pro'
-              ? '✨ Best for reading images and PDFs with complex layouts'
-              : selectedAiModel === 'gemini-2.0-flash-lite'
-                ? '⚡ Fastest response, good for simple documents'
-                : selectedAiModel === 'gemini-2.0-flash'
-                  ? '🎯 Balanced speed and accuracy'
-                  : '🔥 Latest model with great performance'}
+            {selectedAiModel === 'gemini-3-pro-preview'
+              ? '🧠 Most capable model - best for complex documents'
+              : selectedAiModel === 'gemini-3-flash-preview'
+                ? '🚀 Latest & fastest Gemini 3 model'
+                : selectedAiModel === 'gemini-2.5-pro'
+                  ? '⭐ High quality results with good speed'
+                  : selectedAiModel.includes('lite')
+                    ? '🪶 Lightweight - fastest response time'
+                    : '⚡ Balanced speed and accuracy'}
           </p>
+          <p className="text-xs text-green-600 dark:text-green-400">✅ Free & Unlimited via Puter.js</p>
         </div>
 
         <div className="space-y-2">
