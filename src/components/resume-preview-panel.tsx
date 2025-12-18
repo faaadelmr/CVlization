@@ -94,7 +94,7 @@ const templateMap = {
 };
 
 export function ResumePreviewPanel() {
-  const { resumeData, selectedTemplate, selectedColor, selectedFont, selectedBgColor, selectedTextColor } = useResume();
+  const { resumeData, selectedTemplate, selectedColor, selectedFont, selectedBgColor, selectedTextColor, selectedLanguage } = useResume();
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
   const resumeRef = useRef<HTMLDivElement>(null);
@@ -153,6 +153,7 @@ export function ResumePreviewPanel() {
           bgColor: selectedBgColor,
           textColor: selectedTextColor,
           font: selectedFont,
+          language: selectedLanguage,
           fileName,
         }),
       });
@@ -234,6 +235,7 @@ export function ResumePreviewPanel() {
                   bgColor={selectedBgColor}
                   textColor={selectedTextColor}
                   font={selectedFont}
+                  language={selectedLanguage}
                 />
               </div>
             ) : (

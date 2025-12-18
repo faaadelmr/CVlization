@@ -2,7 +2,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { ResumeContextProps, ResumeData, Template, Font } from '@/lib/types';
+import type { ResumeContextProps, ResumeData, Template, Font, Language } from '@/lib/types';
 import { initialData } from '@/lib/initial-data';
 import { analyzeResume } from '@/ai/flows/analyze-resume-flow';
 import { analyzeResumeWithModel } from '@/ai/flows/analyze-resume-with-model';
@@ -16,6 +16,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [selectedBgColor, setSelectedBgColor] = useState<string>('#FFFFFF'); // White
   const [selectedTextColor, setSelectedTextColor] = useState<string>('#1F2937'); // Black
   const [selectedFont, setSelectedFont] = useState<Font>('Lato');
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>('en');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [selectedAiModel, setSelectedAiModel] = useState<'gemini-2.5-flash' | 'gemini-2.0-flash'>('gemini-2.5-flash');
 
@@ -35,18 +36,18 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Add unique IDs to experience, education and projects items
       const experienceWithIds = analyzedData.experience.map(exp => ({ ...exp, id: crypto.randomUUID() }));
       const educationWithIds = analyzedData.education.map(edu => ({ ...edu, id: crypto.randomUUID() }));
-      const projectsWithIds = (analyzedData.projects || []).map(proj => ({...proj, id: crypto.randomUUID()}));
+      const projectsWithIds = (analyzedData.projects || []).map(proj => ({ ...proj, id: crypto.randomUUID() }));
 
       const fullData = {
-          ...initialData,
-          ...analyzedData,
-          personal: {
-              ...initialData.personal,
-              ...analyzedData.personal,
-          },
-          experience: experienceWithIds,
-          education: educationWithIds,
-          projects: projectsWithIds,
+        ...initialData,
+        ...analyzedData,
+        personal: {
+          ...initialData.personal,
+          ...analyzedData.personal,
+        },
+        experience: experienceWithIds,
+        education: educationWithIds,
+        projects: projectsWithIds,
       }
 
       setResumeData(fullData);
@@ -73,6 +74,8 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setSelectedTextColor,
     selectedFont,
     setSelectedFont,
+    selectedLanguage,
+    setSelectedLanguage,
     selectedAiModel,
     setSelectedAiModel,
     handleAnalyzeResume,
@@ -93,3 +96,4 @@ export const useResume = (): ResumeContextProps => {
   }
   return context;
 };
+

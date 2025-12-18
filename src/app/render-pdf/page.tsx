@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { TemplatePreviewComponent } from '@/components/template-preview';
-import type { Font } from '@/lib/types';
+import type { Font, Language } from '@/lib/types';
 
 function RenderContent() {
     const searchParams = useSearchParams();
@@ -14,6 +14,7 @@ function RenderContent() {
         bgColor: string;
         textColor: string;
         font: Font;
+        language: Language;
     } | null>(null);
 
     useEffect(() => {
@@ -23,6 +24,7 @@ function RenderContent() {
         const bgColorParam = searchParams.get('bgColor');
         const textColorParam = searchParams.get('textColor');
         const fontParam = searchParams.get('font');
+        const languageParam = searchParams.get('language');
 
         if (dataParam) {
             try {
@@ -33,7 +35,8 @@ function RenderContent() {
                     color: colorParam || '#1f2937',
                     bgColor: bgColorParam || '#ffffff',
                     textColor: textColorParam || '#000000',
-                    font: (fontParam as Font) || 'Inter'
+                    font: (fontParam as Font) || 'Inter',
+                    language: (languageParam as Language) || 'en'
                 });
             } catch (e) {
                 console.error('Error parsing resume data:', e);
@@ -77,6 +80,7 @@ function RenderContent() {
                 bgColor={templateData.bgColor}
                 textColor={templateData.textColor}
                 font={templateData.font}
+                language={templateData.language}
             />
         </div>
     );
@@ -102,3 +106,4 @@ export default function RenderPdfPage() {
         </Suspense>
     );
 }
+

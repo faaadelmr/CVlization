@@ -36,6 +36,7 @@ export interface ResumeData {
 
 export type Template = 'git-folio' | 'ats-friendly' | 'blox' | 'ledger' | 'construct' | 'starlight' | 'modern' | 'classic' | 'creative' | 'swiss' | 'elegant' | 'professional' | 'timeline' | 'smart-start' | 'vektoristik' | 'awesome' | 'cooper' | 'quete' | 'diamond' | 'hexagonvy';
 export type Font = 'Inter' | 'Space Grotesk' | 'Roboto' | 'Lato' | 'Montserrat' | 'Open Sans' | 'Merriweather' | 'Source Sans Pro' | 'Playfair Display';
+export type Language = 'en' | 'id';
 
 
 export interface ResumeContextProps {
@@ -51,8 +52,11 @@ export interface ResumeContextProps {
   setSelectedTextColor: React.Dispatch<React.SetStateAction<string>>;
   selectedFont: Font;
   setSelectedFont: React.Dispatch<React.SetStateAction<Font>>;
+  selectedLanguage: Language;
+  setSelectedLanguage: React.Dispatch<React.SetStateAction<Language>>;
   selectedAiModel: 'gemini-2.5-flash' | 'gemini-2.0-flash';
   setSelectedAiModel: React.Dispatch<React.SetStateAction<'gemini-2.5-flash' | 'gemini-2.0-flash'>>;
   handleAnalyzeResume: (photoDataUri: string) => Promise<void>;
   isAiLoading: boolean;
 }
+

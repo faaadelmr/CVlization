@@ -5,7 +5,7 @@ import { useResume } from "@/context/resume-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import type { Font, Template } from "@/lib/types";
+import type { Font, Template, Language } from "@/lib/types";
 import { useState, useRef, useLayoutEffect } from "react";
 import { ProfessionalTemplatePreview } from "../templates/professional-template";
 import { ModernTemplatePreview } from "../templates/modern-template";
@@ -55,10 +55,10 @@ const templates: { id: Template, name: string, component: React.FC<any> }[] = [
 
 const accentColors = [
   { id: 'white', value: '#FFFFFF', name: 'White' },
-    { id: 'ivory', value: '#FFFFF0', name: 'Ivory' },
-    { id: 'light-gray', value: '#F5F5F5', name: 'Light Gray' },
-    { id: 'beige', value: '#F5F5DC', name: 'Beige' },
-    { id: 'light-blue', value: '#E6F0FF', name: 'Light Blue' },
+  { id: 'ivory', value: '#FFFFF0', name: 'Ivory' },
+  { id: 'light-gray', value: '#F5F5F5', name: 'Light Gray' },
+  { id: 'beige', value: '#F5F5DC', name: 'Beige' },
+  { id: 'light-blue', value: '#E6F0FF', name: 'Light Blue' },
   { id: 'black', value: '#1F2937', name: 'Black' },
   { id: 'midnight-blue', value: '#2c3e50', name: 'Midnight Blue' },
   { id: 'slate-gray', value: '#708090', name: 'Slate Gray' },
@@ -79,22 +79,22 @@ const accentColors = [
 ];
 
 const textColors = [
-    { id: 'black', value: '#1F2937', name: 'Black' },
-    { id: 'gray', value: '#4B5563', name: 'Gray' },
-    { id: 'slate', value: '#475569', name: 'Slate' },
-    { id: 'white', value: '#FFFFFF', name: 'White' },
-    { id: 'stone', value: '#F5F5F4', name: 'Stone' },
+  { id: 'black', value: '#1F2937', name: 'Black' },
+  { id: 'gray', value: '#4B5563', name: 'Gray' },
+  { id: 'slate', value: '#475569', name: 'Slate' },
+  { id: 'white', value: '#FFFFFF', name: 'White' },
+  { id: 'stone', value: '#F5F5F4', name: 'Stone' },
 ]
 
 const bgColors = [
-    { id: 'white', value: '#FFFFFF', name: 'White' },
-    { id: 'ivory', value: '#FFFFF0', name: 'Ivory' },
-    { id: 'light-gray', value: '#F5F5F5', name: 'Light Gray' },
-    { id: 'beige', value: '#F5F5DC', name: 'Beige' },
-    { id: 'light-blue', value: '#E6F0FF', name: 'Light Blue' },
-    { id: 'black', value: '#1F2937', name: 'Black' },
-    { id: 'dark-charcoal', value: '#2C2C2C', name: 'Dark Charcoal' },
-    { id: 'navy', value: '#1A2A45', name: 'Navy' },
+  { id: 'white', value: '#FFFFFF', name: 'White' },
+  { id: 'ivory', value: '#FFFFF0', name: 'Ivory' },
+  { id: 'light-gray', value: '#F5F5F5', name: 'Light Gray' },
+  { id: 'beige', value: '#F5F5DC', name: 'Beige' },
+  { id: 'light-blue', value: '#E6F0FF', name: 'Light Blue' },
+  { id: 'black', value: '#1F2937', name: 'Black' },
+  { id: 'dark-charcoal', value: '#2C2C2C', name: 'Dark Charcoal' },
+  { id: 'navy', value: '#1A2A45', name: 'Navy' },
 ];
 
 
@@ -110,15 +110,15 @@ const fonts: { id: Font; name: string }[] = [
   { id: 'Playfair Display', name: 'Playfair Display' },
 ];
 
-const ColorPicker = ({ title, colors, selectedColor, onColorChange }: { title: string, colors: {id: string, value: string, name: string}[], selectedColor: string, onColorChange: (color: string) => void }) => {
+const ColorPicker = ({ title, colors, selectedColor, onColorChange }: { title: string, colors: { id: string, value: string, name: string }[], selectedColor: string, onColorChange: (color: string) => void }) => {
   return (
     <div>
       <h3 className="text-xl font-headline mb-4">{title}</h3>
       <div className="flex items-center gap-3">
         <div className="relative">
-          <Input 
-            type="color" 
-            value={selectedColor} 
+          <Input
+            type="color"
+            value={selectedColor}
             onChange={(e) => onColorChange(e.target.value)}
             className="w-10 h-10 p-1 cursor-pointer"
           />
@@ -166,74 +166,89 @@ const TemplateCard = ({ template, isSelected, onClick, resumeData, color, bgColo
   }, []);
 
   return (
-      <Card
-        onClick={onClick}
-        className={cn(
-          "cursor-pointer transition-all overflow-hidden",
-          isSelected ? "ring-2 ring-primary" : "hover:shadow-md"
-        )}
-      >
-        <CardHeader className="p-4">
-          <CardTitle className="text-base font-body">{template.name}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-           <div ref={containerRef} className="aspect-[210/297] w-full overflow-hidden bg-background relative">
-              <div
-                className="absolute origin-top-left"
-                style={{
-                  transform: `scale(${scale})`,
-                  transformOrigin: 'top left',
-                }}
-              >
-                 <div className="w-[840px] h-[1188px]">
-                    <TemplateComponent data={resumeData} color={color} bgColor={bgColor} textColor={textColor} />
-                 </div>
-              </div>
+    <Card
+      onClick={onClick}
+      className={cn(
+        "cursor-pointer transition-all overflow-hidden",
+        isSelected ? "ring-2 ring-primary" : "hover:shadow-md"
+      )}
+    >
+      <CardHeader className="p-4">
+        <CardTitle className="text-base font-body">{template.name}</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div ref={containerRef} className="aspect-[210/297] w-full overflow-hidden bg-background relative">
+          <div
+            className="absolute origin-top-left"
+            style={{
+              transform: `scale(${scale})`,
+              transformOrigin: 'top left',
+            }}
+          >
+            <div className="w-[840px] h-[1188px]">
+              <TemplateComponent data={resumeData} color={color} bgColor={bgColor} textColor={textColor} />
             </div>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
 export function StylePanel() {
-  const { resumeData, selectedTemplate, setSelectedTemplate, selectedColor, setSelectedColor, selectedFont, setSelectedFont, selectedBgColor, setSelectedBgColor, selectedTextColor, setSelectedTextColor } = useResume();
+  const { resumeData, selectedTemplate, setSelectedTemplate, selectedColor, setSelectedColor, selectedFont, setSelectedFont, selectedBgColor, setSelectedBgColor, selectedTextColor, setSelectedTextColor, selectedLanguage, setSelectedLanguage } = useResume();
 
   return (
     <div className="space-y-8">
-      <ColorPicker 
+      <ColorPicker
         title="Text Color"
         colors={textColors}
         selectedColor={selectedTextColor}
         onColorChange={setSelectedTextColor}
       />
-       <ColorPicker 
+      <ColorPicker
         title="Background Color"
         colors={bgColors}
         selectedColor={selectedBgColor}
         onColorChange={setSelectedBgColor}
       />
-       <ColorPicker 
+      <ColorPicker
         title="Accent Color"
         colors={accentColors}
         selectedColor={selectedColor}
         onColorChange={setSelectedColor}
       />
-       <div>
+      <div>
         <h3 className="text-xl font-headline mb-4">Font</h3>
         <div className="space-y-2">
-           <Label htmlFor="font-select">Select a font family</Label>
-           <Select value={selectedFont} onValueChange={(value) => setSelectedFont(value as Font)}>
-             <SelectTrigger id="font-select">
-               <SelectValue placeholder="Select font" />
-             </SelectTrigger>
-             <SelectContent>
-               {fonts.map(font => (
-                 <SelectItem key={font.id} value={font.id} style={{fontFamily: font.id}}>
-                   {font.name}
-                 </SelectItem>
-               ))}
-             </SelectContent>
-           </Select>
+          <Label htmlFor="font-select">Select a font family</Label>
+          <Select value={selectedFont} onValueChange={(value) => setSelectedFont(value as Font)}>
+            <SelectTrigger id="font-select">
+              <SelectValue placeholder="Select font" />
+            </SelectTrigger>
+            <SelectContent>
+              {fonts.map(font => (
+                <SelectItem key={font.id} value={font.id} style={{ fontFamily: font.id }}>
+                  {font.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div>
+        <h3 className="text-xl font-headline mb-4">Section Language</h3>
+        <div className="space-y-2">
+          <Label htmlFor="language-select">Select section title language</Label>
+          <Select value={selectedLanguage} onValueChange={(value) => setSelectedLanguage(value as Language)}>
+            <SelectTrigger id="language-select">
+              <SelectValue placeholder="Select language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">🇬🇧 English</SelectItem>
+              <SelectItem value="id">🇮🇩 Bahasa Indonesia</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div>
@@ -257,4 +272,4 @@ export function StylePanel() {
   );
 }
 
-    
+

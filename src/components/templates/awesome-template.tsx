@@ -1,8 +1,10 @@
 
 "use client";
-import type { ResumeData, Font } from '@/lib/types';
+import type { ResumeData, Font, Language } from '@/lib/types';
 import { Mail, Phone, Globe, Award, Briefcase, GraduationCap, User, Wrench, Code } from 'lucide-react';
 import Image from 'next/image';
+import { t } from '@/lib/translations';
+import { getMailtoLink, getWhatsAppLink, getWebsiteLink } from '@/lib/contact-links';
 
 const Section = ({ icon, title, children }: { icon: React.ReactNode, title: string, children: React.ReactNode }) => (
     <div className="mb-6">
@@ -28,24 +30,24 @@ const ContactItem = ({ icon, text }: { icon: React.ReactNode, text: string | Rea
 );
 
 
-export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font, language = 'en' }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font, language?: Language }) => {
     const fontStyle = { fontFamily: font };
     const accentColorStyle = { color: color };
     const accentBgStyle = { backgroundColor: color };
 
     return (
-        <div className="bg-white rounded-2xl shadow-2xl w-full h-full relative overflow-hidden flex flex-col" style={{...fontStyle, backgroundColor: bgColor, color: textColor}}>
+        <div className="bg-white rounded-2xl shadow-2xl w-full h-full relative overflow-hidden flex flex-col" style={{ ...fontStyle, backgroundColor: bgColor, color: textColor }}>
             {/* Header */}
             <header className="relative w-full h-48 flex-shrink-0">
                 <div className="absolute top-[-5rem] right-[-5rem] w-80 h-80 rounded-full" style={accentBgStyle}></div>
                 {data.personal.photo && (
-                     <div className="absolute top-4 right-12 w-40 h-40">
+                    <div className="absolute top-4 right-12 w-40 h-40">
                         <Image
-                          src={data.personal.photo}
-                          alt={data.personal.name}
-                          width={160}
-                          height={160}
-                          className="object-cover rounded-full shadow-lg z-10"
+                            src={data.personal.photo}
+                            alt={data.personal.name}
+                            width={160}
+                            height={160}
+                            className="object-cover rounded-full shadow-lg z-10"
                         />
                     </div>
                 )}
@@ -59,79 +61,79 @@ export const AwesomeTemplatePreview = ({ data, color, bgColor, textColor, font }
 
             {/* Main Content */}
             <main className="p-12 pt-4 flex-grow grid grid-cols-2 gap-x-12 overflow-y-auto">
-                 <div style={accentColorStyle}>
+                <div style={accentColorStyle}>
                     {data.personal.description && (
-                      <Section icon={<User size={24} className="text-white"/>} title="Profile">
-                          <div className="whitespace-pre-line prose prose-sm max-w-none" style={{color: textColor, opacity: 0.9}}>{data.personal.description}</div>
-                      </Section>
+                        <Section icon={<User size={24} className="text-white" />} title={t(language, 'profile')}>
+                            <div className="whitespace-pre-line prose prose-sm max-w-none" style={{ color: textColor, opacity: 0.9 }}>{data.personal.description}</div>
+                        </Section>
                     )}
                     {data.experience && data.experience.length > 0 && (
-                      <Section icon={<Briefcase size={24} className="text-white"/>} title="Experience">
-                          <div className="space-y-4">
-                              {data.experience.map(exp => (
-                                  <div key={exp.id}>
-                                      <h3 className="font-bold text-md">{exp.role}</h3>
-                                      <p className="text-sm font-semibold" style={accentColorStyle}>{exp.company} ({exp.date})</p>
-                                      <div className="text-xs whitespace-pre-line prose max-w-none" style={{color: textColor, opacity: 0.8}}>{exp.description}</div>
-                                  </div>
-                              ))}
-                          </div>
-                      </Section>
+                        <Section icon={<Briefcase size={24} className="text-white" />} title={t(language, 'experience')}>
+                            <div className="space-y-4">
+                                {data.experience.map(exp => (
+                                    <div key={exp.id}>
+                                        <h3 className="font-bold text-md">{exp.role}</h3>
+                                        <p className="text-sm font-semibold" style={accentColorStyle}>{exp.company} ({exp.date})</p>
+                                        <div className="text-xs whitespace-pre-line prose max-w-none" style={{ color: textColor, opacity: 0.8 }}>{exp.description}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </Section>
                     )}
                 </div>
-                 <div style={accentColorStyle}>
+                <div style={accentColorStyle}>
                     {data.education && data.education.length > 0 && (
-                      <Section icon={<GraduationCap size={24} className="text-white"/>} title="Education">
-                         <div className="space-y-4">
-                            {data.education.map(edu => (
-                                <div key={edu.id}>
-                                    <h3 className="font-bold text-md">{edu.degree}</h3>
-                                    <p className="text-sm font-semibold" style={accentColorStyle}>{edu.institution} ({edu.date})</p>
-                                </div>
-                            ))}
-                         </div>
-                      </Section>
+                        <Section icon={<GraduationCap size={24} className="text-white" />} title={t(language, 'education')}>
+                            <div className="space-y-4">
+                                {data.education.map(edu => (
+                                    <div key={edu.id}>
+                                        <h3 className="font-bold text-md">{edu.degree}</h3>
+                                        <p className="text-sm font-semibold" style={accentColorStyle}>{edu.institution} ({edu.date})</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Section>
                     )}
                     {data.skills && (
-                      <Section icon={<Wrench size={24} className="text-white"/>} title="Skills">
-                         <ul className="list-disc list-inside space-y-1 text-xs" style={{color: textColor, opacity: 0.9}}>
-                              {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
-                                  <li key={skill}>{skill}</li>
-                              ))}
-                          </ul>
-                      </Section>
+                        <Section icon={<Wrench size={24} className="text-white" />} title={t(language, 'skills')}>
+                            <ul className="list-disc list-inside space-y-1 text-xs" style={{ color: textColor, opacity: 0.9 }}>
+                                {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
+                                    <li key={skill}>{skill}</li>
+                                ))}
+                            </ul>
+                        </Section>
                     )}
                     {data.projects && data.projects.length > 0 && (
-                      <Section icon={<Code size={24} className="text-white"/>} title="Projects">
-                          <div className="space-y-4">
-                            {data.projects.map(proj => (
-                                <div key={proj.id}>
-                                    <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-md hover:underline inline-block" style={accentColorStyle}>{proj.name}</a>
-                                    {proj.link && (
-                                      <div className="text-xs mt-1" style={{color: textColor, opacity: 0.8}}>
-                                        Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={accentColorStyle}>{proj.link}</a>
-                                      </div>
-                                    )}
-                                    <div className="text-xs whitespace-pre-line prose max-w-none mt-1" style={{color: textColor, opacity: 0.8}}>{proj.description}</div>
-                                    <p className="text-xs font-semibold" style={{color: textColor, opacity: 0.9}}>Technologies: {proj.technologies}</p>
-                                </div>
-                            ))}
-                        </div>
-                      </Section>
+                        <Section icon={<Code size={24} className="text-white" />} title={t(language, 'projects')}>
+                            <div className="space-y-4">
+                                {data.projects.map(proj => (
+                                    <div key={proj.id}>
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-md hover:underline inline-block" style={accentColorStyle}>{proj.name}</a>
+                                        {proj.link && (
+                                            <div className="text-xs mt-1" style={{ color: textColor, opacity: 0.8 }}>
+                                                Link: <a href={proj.link} target="_blank" rel="noreferrer" className="hover:underline break-all" style={accentColorStyle}>{proj.link}</a>
+                                            </div>
+                                        )}
+                                        <div className="text-xs whitespace-pre-line prose max-w-none mt-1" style={{ color: textColor, opacity: 0.8 }}>{proj.description}</div>
+                                        <p className="text-xs font-semibold" style={{ color: textColor, opacity: 0.9 }}>Technologies: {proj.technologies}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Section>
                     )}
                 </div>
             </main>
 
             {/* Footer */}
-            <footer className="border-t mt-auto p-6 flex-shrink-0" style={{...accentColorStyle, color: textColor, borderColor: `${textColor}20` }}>
+            <footer className="border-t mt-auto p-6 flex-shrink-0" style={{ ...accentColorStyle, color: textColor, borderColor: `${textColor}20` }}>
                 <div className="grid grid-cols-3 gap-4">
-                     <ContactItem icon={<Mail size={16} className="text-white"/>} text={data.personal.email} />
-                     <ContactItem icon={<Phone size={16} className="text-white"/>} text={data.personal.phone} />
-                     {data.personal.website && (
-                       <ContactItem icon={<Globe size={16} className="text-white"/>} text={
-                         <a href={`https://${data.personal.website}`} target="_blank" rel="noreferrer" className="hover:underline break-all">{data.personal.website}</a>
-                       } />
-                     )}
+                    <ContactItem icon={<Mail size={16} className="text-white" />} text={<a href={getMailtoLink(data.personal.email)} className="hover:underline">{data.personal.email}</a>} />
+                    <ContactItem icon={<Phone size={16} className="text-white" />} text={<a href={getWhatsAppLink(data.personal.phone)} target="_blank" rel="noreferrer" className="hover:underline">{data.personal.phone}</a>} />
+                    {data.personal.website && (
+                        <ContactItem icon={<Globe size={16} className="text-white" />} text={
+                            <a href={getWebsiteLink(data.personal.website)} target="_blank" rel="noreferrer" className="hover:underline break-all">{data.personal.website}</a>
+                        } />
+                    )}
                 </div>
             </footer>
         </div>

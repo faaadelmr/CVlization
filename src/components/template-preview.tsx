@@ -1,5 +1,5 @@
 // src/components/template-preview.tsx
-import type { ResumeData, Font } from '@/lib/types';
+import type { ResumeData, Font, Language } from '@/lib/types';
 import { ModernTemplatePreview } from '@/components/templates/modern-template';
 import { ClassicTemplatePreview } from '@/components/templates/classic-template';
 import { CreativeTemplatePreview } from '@/components/templates/creative-template';
@@ -11,7 +11,7 @@ import { SmartStartTemplatePreview } from '@/components/templates/smart-start-te
 import { VektoristikTemplatePreview } from '@/components/templates/vektoristik-template';
 import { AwesomeTemplatePreview } from '@/components/templates/awesome-template';
 import { CooperTemplatePreview } from '@/components/templates/cooper-template';
-import { QueteTemplatePreview } from '@/components/templates/quate-template';
+import { QuateTemplatePreview } from '@/components/templates/quate-template';
 import { DiamondTemplatePreview } from '@/components/templates/diamond-template';
 import { HexagonvyTemplatePreview } from '@/components/templates/hexagonvy-template';
 import { StarlightTemplatePreview } from '@/components/templates/starlight-template';
@@ -28,6 +28,7 @@ interface TemplatePreviewComponentProps {
   bgColor: string;
   textColor: string;
   font: Font;
+  language?: Language;
 }
 
 // Helper function to ensure IDs are present in the resume data
@@ -55,7 +56,8 @@ export const TemplatePreviewComponent = ({
   color,
   bgColor,
   textColor,
-  font
+  font,
+  language = 'en'
 }: TemplatePreviewComponentProps) => {
   const templateMap: Record<string, React.ComponentType<any> | undefined> = {
     'git-folio': GitFolioTemplatePreview,
@@ -66,7 +68,7 @@ export const TemplatePreviewComponent = ({
     starlight: StarlightTemplatePreview,
     hexagonvy: HexagonvyTemplatePreview,
     diamond: DiamondTemplatePreview,
-    quate: QueteTemplatePreview,
+    quate: QuateTemplatePreview,
     cooper: CooperTemplatePreview,
     awesome: AwesomeTemplatePreview,
     vektoristik: VektoristikTemplatePreview,
@@ -100,6 +102,7 @@ export const TemplatePreviewComponent = ({
         bgColor={bgColor}
         textColor={textColor}
         font={font}
+        language={language}
       />
     </div>
   );

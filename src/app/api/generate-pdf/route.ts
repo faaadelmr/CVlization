@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { resumeData, template, color, bgColor, textColor, font, fileName } = body;
+    const { resumeData, template, color, bgColor, textColor, font, language, fileName } = body;
 
     // Validate required fields
     if (!resumeData) {
@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
       bgColor: bgColor || '#ffffff',
       textColor: textColor || '#000000',
       font: font || 'Inter',
+      language: language || 'en',
     });
 
     const renderUrl = `${baseUrl}/render-pdf?${params.toString()}`;
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
     await browser.close();
 
     // Return PDF as response
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(Buffer.from(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

@@ -1,8 +1,10 @@
 
 "use client";
-import type { ResumeData, Font } from '@/lib/types';
+import type { ResumeData, Font, Language } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, CheckSquare, Briefcase, GraduationCap, Star, Code } from 'lucide-react';
 import Image from 'next/image';
+import { t } from '@/lib/translations';
+import { getMailtoLink, getWhatsAppLink, getWebsiteLink } from '@/lib/contact-links';
 
 const SectionHeader = ({ icon, title, color }: { icon: React.ReactNode, title: string, color: string }) => (
     <div className="flex items-center gap-3 mb-4">
@@ -26,7 +28,7 @@ const VectoristicPattern = ({ color }: { color: string }) => (
     </div>
 );
 
-export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font }) => {
+export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, font, language = 'en' }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font, language?: Language }) => {
     const fontStyle = { fontFamily: font };
     const sidebarBgStyle = { backgroundColor: color };
     const sidebarTextStyle = { color: '#FFFFFF' };
@@ -44,33 +46,33 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
                         <div className="bg-white p-2 shadow-lg">
                             <div className="relative w-48 h-56 border-8 border-white">
                                 <Image
-                                  src={data.personal.photo}
-                                  alt={data.personal.name}
-                                  width={192}
-                                  height={224}
-                                  className="object-cover"
+                                    src={data.personal.photo}
+                                    alt={data.personal.name}
+                                    width={192}
+                                    height={224}
+                                    className="object-cover"
                                 />
                                 <div className="absolute inset-0 border-2" style={{ borderColor: color }}></div>
                             </div>
                         </div>
                     ) : (
-                         <div className="w-48 h-56" style={{ backgroundColor: `${color}99`}}></div>
+                        <div className="w-48 h-56" style={{ backgroundColor: `${color}99` }}></div>
                     )}
                 </div>
 
                 <div className={data.personal.photo ? "mt-64" : "mt-8"}>
                     <section className="mb-8">
-                        <SectionHeader icon={<CheckSquare size={16} color={color} />} title="Kontak" color="white" />
+                        <SectionHeader icon={<CheckSquare size={16} color={color} />} title={t(language, 'contact')} color="white" />
                         <div className="space-y-3 text-sm" style={sidebarTextStyle}>
-                            <p className="flex items-center gap-3"><Phone size={14} /> {data.personal.phone}</p>
-                            {data.personal.website && <p className="flex items-center gap-3"><Globe size={14} /> {data.personal.website}</p>}
-                            <p className="flex items-center gap-3"><Mail size={14} /> {data.personal.email}</p>
+                            <a href={getWhatsAppLink(data.personal.phone)} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:underline"><Phone size={14} /> {data.personal.phone}</a>
+                            {data.personal.website && <a href={getWebsiteLink(data.personal.website)} target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:underline"><Globe size={14} /> {data.personal.website}</a>}
+                            <a href={getMailtoLink(data.personal.email)} className="flex items-center gap-3 hover:underline"><Mail size={14} /> {data.personal.email}</a>
                             <p className="flex items-center gap-3"><MapPin size={14} /> {data.personal.location}</p>
                         </div>
                     </section>
                     {data.skills && (
                         <section>
-                            <SectionHeader icon={<CheckSquare size={16} color={color} />} title="Keahlian" color="white" />
+                            <SectionHeader icon={<CheckSquare size={16} color={color} />} title={t(language, 'skills')} color="white" />
                             <div className="space-y-2 text-sm" style={sidebarTextStyle}>
                                 {(data.skills || '').split(',').map(skill => skill.trim()).filter(Boolean).map(skill => (
                                     <p key={skill}>{skill}</p>
@@ -93,28 +95,28 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
                             <h2 className="text-2xl font-semibold" style={mainAccentColorStyle}>{data.personal.role}</h2>
                         </div>
                         {data.personal.description && (
-                          <p className="mt-4 text-sm whitespace-pre-line" style={lightTextStyle}>
-                              {data.personal.description}
-                          </p>
+                            <p className="mt-4 text-sm whitespace-pre-line" style={lightTextStyle}>
+                                {data.personal.description}
+                            </p>
                         )}
                     </header>
                     {data.experience && data.experience.length > 0 && (
-                      <section className="mb-8">
-                          <SectionHeader icon={<Briefcase size={16} color="white" />} title="Pengalaman Kerja" color={color} />
-                          <div className="space-y-4">
-                              {data.experience.map(exp => (
-                                  <div key={exp.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
-                                      <h3 className="font-bold text-lg" style={mainTextStyle}>{exp.role}</h3>
-                                      <p className="font-semibold" style={mainAccentColorStyle}>{exp.company} | {exp.date}</p>
-                                      <div className="text-sm mt-1 whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
-                                  </div>
-                              ))}
-                          </div>
-                      </section>
+                        <section className="mb-8">
+                            <SectionHeader icon={<Briefcase size={16} color="white" />} title={t(language, 'workHistory')} color={color} />
+                            <div className="space-y-4">
+                                {data.experience.map(exp => (
+                                    <div key={exp.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
+                                        <h3 className="font-bold text-lg" style={mainTextStyle}>{exp.role}</h3>
+                                        <p className="font-semibold" style={mainAccentColorStyle}>{exp.company} | {exp.date}</p>
+                                        <div className="text-sm mt-1 whitespace-pre-line prose max-w-none" style={lightTextStyle}>{exp.description}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
                     )}
                     {data.education && data.education.length > 0 && (
                         <section className="mb-8">
-                            <SectionHeader icon={<GraduationCap size={16} color="white" />} title="Pendidikan" color={color} />
+                            <SectionHeader icon={<GraduationCap size={16} color="white" />} title={t(language, 'education')} color={color} />
                             <div className="space-y-4">
                                 {data.education.map(edu => (
                                     <div key={edu.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
@@ -128,8 +130,8 @@ export const SmartStartTemplatePreview = ({ data, color, bgColor, textColor, fon
                     )}
                     {data.projects && data.projects.length > 0 && (
                         <section>
-                            <SectionHeader icon={<Code size={16} color="white" />} title="Proyek" color={color} />
-                             <div className="space-y-4">
+                            <SectionHeader icon={<Code size={16} color="white" />} title={t(language, 'projects')} color={color} />
+                            <div className="space-y-4">
                                 {data.projects.map(proj => (
                                     <div key={proj.id} className="border-l-2 pl-4" style={{ borderColor: color }}>
                                         <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold text-lg hover:underline" style={mainAccentColorStyle}>{proj.name}</a>

@@ -1,8 +1,10 @@
 
 "use client";
-import type { ResumeData, Font } from '@/lib/types';
+import type { ResumeData, Font, Language } from '@/lib/types';
 import { Mail, Phone, MapPin, Globe, Code } from 'lucide-react';
 import Image from 'next/image';
+import { t } from '@/lib/translations';
+import { getMailtoLink, getWhatsAppLink, getWebsiteLink } from '@/lib/contact-links';
 
 const SectionHeader = ({ title, color, textColor }: { title: string, color: string, textColor: string }) => (
     <div className='flex items-center gap-3 mb-4'>
@@ -11,7 +13,7 @@ const SectionHeader = ({ title, color, textColor }: { title: string, color: stri
     </div>
 );
 
-export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font }: { data: ResumeData, color: string, bgColor:string, textColor: string, font?: Font }) => {
+export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font, language = 'en' }: { data: ResumeData, color: string, bgColor: string, textColor: string, font?: Font, language?: Language }) => {
     const fontStyle = { fontFamily: font };
     const lightTextStyle = { color: textColor, opacity: 0.7 };
     const lighterTextStyle = { color: textColor, opacity: 0.5 };
@@ -26,11 +28,11 @@ export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font
                         <div className="w-full h-full" style={{ backgroundColor: color }}>
                             <div className="relative w-full h-full" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', transform: 'scale(0.95)' }}>
                                 <Image
-                                  src={data.personal.photo}
-                                  alt={data.personal.name}
-                                  width={160}
-                                  height={160}
-                                  className="object-cover"
+                                    src={data.personal.photo}
+                                    alt={data.personal.name}
+                                    width={160}
+                                    height={160}
+                                    className="object-cover"
                                 />
                             </div>
                         </div>
@@ -40,10 +42,10 @@ export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font
                 <p className="text-md mt-1 mb-4 uppercase tracking-[0.2em]" style={lightTextStyle}>{data.personal.role}</p>
 
                 <div className="w-full flex items-center justify-center gap-x-6 text-xs" style={lightTextStyle}>
-                    <p className="flex items-center gap-2"><Phone size={14} style={{ color }}/> {data.personal.phone}</p>
-                    <p className="flex items-center gap-2"><Mail size={14} style={{ color }}/> {data.personal.email}</p>
-                    {data.personal.website && <p className="flex items-center gap-2"><Globe size={14} style={{ color }}/> {data.personal.website}</p>}
-                    {data.personal.location && <p className="flex items-center gap-2"><MapPin size={14} style={{ color }}/> {data.personal.location}</p>}
+                    <a href={getWhatsAppLink(data.personal.phone)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:underline"><Phone size={14} style={{ color }} /> {data.personal.phone}</a>
+                    <a href={getMailtoLink(data.personal.email)} className="flex items-center gap-2 hover:underline"><Mail size={14} style={{ color }} /> {data.personal.email}</a>
+                    {data.personal.website && <a href={getWebsiteLink(data.personal.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:underline"><Globe size={14} style={{ color }} /> {data.personal.website}</a>}
+                    {data.personal.location && <p className="flex items-center gap-2"><MapPin size={14} style={{ color }} /> {data.personal.location}</p>}
                 </div>
             </header>
 
@@ -54,28 +56,28 @@ export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font
                 {/* Left Column */}
                 <aside className="col-span-5 space-y-8">
                     {data.personal.description && (
-                      <section>
-                          <SectionHeader title="Profile About Me" color={color} textColor={textColor} />
-                          <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
-                      </section>
+                        <section>
+                            <SectionHeader title={t(language, 'profile')} color={color} textColor={textColor} />
+                            <p className="text-sm whitespace-pre-line" style={lightTextStyle}>{data.personal.description}</p>
+                        </section>
                     )}
                     {skills.length > 0 && (
-                      <section>
-                          <SectionHeader title="Skills" color={color} textColor={textColor} />
-                          <ul className="space-y-1 text-sm list-disc list-inside" style={lightTextStyle}>
-                              {skills.map(skill => (
-                                  <li key={skill}>{skill}</li>
-                              ))}
-                          </ul>
-                      </section>
+                        <section>
+                            <SectionHeader title={t(language, 'skills')} color={color} textColor={textColor} />
+                            <ul className="space-y-1 text-sm list-disc list-inside" style={lightTextStyle}>
+                                {skills.map(skill => (
+                                    <li key={skill}>{skill}</li>
+                                ))}
+                            </ul>
+                        </section>
                     )}
                     {data.projects && data.projects.length > 0 && (
-                         <section>
-                            <SectionHeader title="Projects" color={color} textColor={textColor} />
+                        <section>
+                            <SectionHeader title={t(language, 'projects')} color={color} textColor={textColor} />
                             <div className="space-y-4">
                                 {data.projects.map(proj => (
                                     <div key={proj.id} className="text-sm">
-                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline" style={{color}}>{proj.name}</a>
+                                        <a href={proj.link} target="_blank" rel="noreferrer" className="font-bold hover:underline" style={{ color }}>{proj.name}</a>
                                         <p className="text-xs mt-1" style={lightTextStyle}>{proj.description}</p>
                                         <p className="text-xs mt-1 font-semibold" style={lightTextStyle}>Technologies: {proj.technologies}</p>
                                     </div>
@@ -88,43 +90,43 @@ export const HexagonvyTemplatePreview = ({ data, color, bgColor, textColor, font
                 {/* Right Column */}
                 <main className="col-span-7 space-y-8">
                     {data.experience && data.experience.length > 0 && (
-                      <section>
-                          <SectionHeader title="Work Experience" color={color} textColor={textColor} />
-                          <div className="space-y-6">
-                              {data.experience.map(exp => (
-                                  <div key={exp.id} className="grid grid-cols-3 gap-x-4">
-                                      <div className="col-span-1 text-sm text-right" style={lightTextStyle}>
-                                          <p className="font-semibold">{exp.date}</p>
-                                          <p>{exp.company}</p>
-                                      </div>
-                                      <div className="col-span-2">
-                                          <h3 className="font-bold uppercase text-md">{exp.role}</h3>
-                                          <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
-                                      </div>
-                                  </div>
-                              ))}
-                          </div>
-                      </section>
-                    )}
-                     {data.education && data.education.length > 0 && (
                         <section>
-                          <SectionHeader title="My Education" color={color} textColor={textColor} />
-                          <div className="space-y-6">
-                              {data.education.map(edu => (
-                                  <div key={edu.id} className="grid grid-cols-3 gap-x-4">
-                                      <div className="col-span-1 text-sm text-right" style={lightTextStyle}>
-                                          <p className="font-semibold">{edu.date}</p>
-                                      </div>
-                                      <div className="col-span-2">
-                                          <h3 className="font-bold uppercase text-md">{edu.degree}</h3>
-                                          <p className="text-sm -mt-1" style={lightTextStyle}>{edu.institution}</p>
-                                          {edu.description && <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{edu.description}</div>}
-                                      </div>
-                                  </div>
-                              ))}
-                          </div>
+                            <SectionHeader title={t(language, 'workHistory')} color={color} textColor={textColor} />
+                            <div className="space-y-6">
+                                {data.experience.map(exp => (
+                                    <div key={exp.id} className="grid grid-cols-3 gap-x-4">
+                                        <div className="col-span-1 text-sm text-right" style={lightTextStyle}>
+                                            <p className="font-semibold">{exp.date}</p>
+                                            <p>{exp.company}</p>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <h3 className="font-bold uppercase text-md">{exp.role}</h3>
+                                            <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{exp.description}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </section>
-                     )}
+                    )}
+                    {data.education && data.education.length > 0 && (
+                        <section>
+                            <SectionHeader title={t(language, 'education')} color={color} textColor={textColor} />
+                            <div className="space-y-6">
+                                {data.education.map(edu => (
+                                    <div key={edu.id} className="grid grid-cols-3 gap-x-4">
+                                        <div className="col-span-1 text-sm text-right" style={lightTextStyle}>
+                                            <p className="font-semibold">{edu.date}</p>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <h3 className="font-bold uppercase text-md">{edu.degree}</h3>
+                                            <p className="text-sm -mt-1" style={lightTextStyle}>{edu.institution}</p>
+                                            {edu.description && <div className="text-sm whitespace-pre-line prose max-w-none mt-1" style={lightTextStyle}>{edu.description}</div>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                 </main>
             </div>
         </div>
