@@ -120,10 +120,10 @@ export function ResumePreviewPanel() {
     updateScale();
     window.addEventListener('resize', updateScale);
     const resizeObserver = new ResizeObserver(updateScale);
-    if(containerRef.current) {
+    if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
     }
-    
+
     return () => {
       window.removeEventListener('resize', updateScale);
       if (containerRef.current) {
@@ -140,32 +140,52 @@ export function ResumePreviewPanel() {
     setLoading(true);
 
     try {
-      // Serialize the resume data and other settings to pass as URL parameters
-      const params = new URLSearchParams({
-        data: encodeURIComponent(JSON.stringify(resumeData)),
-        template: selectedTemplate,
-        color: selectedColor,
-        bgColor: selectedBgColor,
-        textColor: selectedTextColor,
-        font: selectedFont,
+      // Call the PDF generation API
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          resumeData,
+          template: selectedTemplate,
+          color: selectedColor,
+          bgColor: selectedBgColor,
+          textColor: selectedTextColor,
+          font: selectedFont,
+          fileName,
+        }),
       });
 
-      // Open the print page in a new window/tab with the data
-      const printWindow = window.open(`/print?${params.toString()}`, '_blank');
-
-      if (!printWindow) {
-        throw new Error('Popup blocked. Please allow popups for this site.');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to generate PDF');
       }
 
-      // The print window will handle the printing automatically
-    } catch (error) {
-      console.error("Error opening print window:", error);
-      alert('Error opening print window: ' + error.message);
+      // Get the PDF blob
+      const blob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      console.error("Error generating PDF:", error);
+      alert('Error generating PDF: ' + (error.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
   };
-  
+
   const fontClass = `font-${selectedFont.toLowerCase().replace(' ', '-')}`;
 
   return (
@@ -187,43 +207,43 @@ export function ResumePreviewPanel() {
           </Button>
         )}
       </div>
-      <div 
+      <div
         ref={containerRef}
         className="w-full max-w-4xl mx-auto flex-grow flex items-center justify-center"
       >
-        <div 
+        <div
           className="bg-white dark:bg-card-foreground/5 shadow-xl rounded-lg w-full aspect-[210/297] overflow-hidden border border-border/30 transition-all duration-300 hover:shadow-2xl"
           id="resume-container"
         >
-           <div
-             id="resume-preview"
-             className={cn("w-full h-full overflow-hidden", fontClass)}
-             style={{
-               fontFamily: selectedFont,
-             }}
-           >
-              {isClient ? (
-                <div 
-                  ref={resumeRef}
-                  className="w-[840px] h-[1188px] transform origin-top-left transition-transform duration-300" 
-                  style={{ transform: `scale(${scale})` }}
-                >
-                  <TemplatePreview
-                    data={resumeData}
-                    color={selectedColor}
-                    bgColor={selectedBgColor}
-                    textColor={selectedTextColor}
-                    font={selectedFont}
-                  />
+          <div
+            id="resume-preview"
+            className={cn("w-full h-full overflow-hidden", fontClass)}
+            style={{
+              fontFamily: selectedFont,
+            }}
+          >
+            {isClient ? (
+              <div
+                ref={resumeRef}
+                className="w-[840px] h-[1188px] transform origin-top-left transition-transform duration-300"
+                style={{ transform: `scale(${scale})` }}
+              >
+                <TemplatePreview
+                  data={resumeData}
+                  color={selectedColor}
+                  bgColor={selectedBgColor}
+                  textColor={selectedTextColor}
+                  font={selectedFont}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center p-8">
+                <div className="text-center">
+                  <Skeleton className="w-full h-full max-w-md mx-auto rounded-lg" />
+                  <p className="mt-4 text-sm text-muted-foreground">Loading your resume preview...</p>
                 </div>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center p-8">
-                  <div className="text-center">
-                    <Skeleton className="w-full h-full max-w-md mx-auto rounded-lg" />
-                    <p className="mt-4 text-sm text-muted-foreground">Loading your resume preview...</p>
-                  </div>
-                </div>
-              )}
+              </div>
+            )}
           </div>
         </div>
       </div>
