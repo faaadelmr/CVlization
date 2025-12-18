@@ -18,7 +18,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [selectedFont, setSelectedFont] = useState<Font>('Lato');
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('en');
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [selectedAiModel, setSelectedAiModel] = useState<'gemini-2.5-flash' | 'gemini-2.0-flash'>('gemini-2.5-flash');
+  const [selectedAiModel, setSelectedAiModel] = useState<'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-2.0-flash-lite' | 'gemini-1.5-pro'>('gemini-2.5-flash');
 
   const handleAnalyzeResume = async (photoDataUri: string) => {
     setIsAiLoading(true);
@@ -26,7 +26,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       let analyzedData;
 
       // Use the selected model for analysis
-      if (selectedAiModel === 'gemini-2.5-flash' || selectedAiModel === 'gemini-2.0-flash') {
+      if (selectedAiModel === 'gemini-2.5-flash' || selectedAiModel === 'gemini-2.0-flash' || selectedAiModel === 'gemini-2.0-flash-lite' || selectedAiModel === 'gemini-1.5-pro') {
         analyzedData = await analyzeResumeWithModel({ photoDataUri, model: selectedAiModel });
       } else {
         // Fallback to default model if something goes wrong

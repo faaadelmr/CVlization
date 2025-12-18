@@ -85,7 +85,7 @@ export function AiAssistPanel() {
         });
       }
     } else {
-       toast({
+      toast({
         variant: "destructive",
         title: "No file selected",
         description: "Please upload an image or PDF of your resume first.",
@@ -104,15 +104,26 @@ export function AiAssistPanel() {
       <CardContent className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="ai-model-select">Select AI Model</Label>
-          <Select value={selectedAiModel} onValueChange={(value) => setSelectedAiModel(value as 'gemini-2.5-flash' | 'gemini-2.0-flash')}>
+          <Select value={selectedAiModel} onValueChange={(value) => setSelectedAiModel(value as 'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-2.0-flash-lite' | 'gemini-1.5-pro')}>
             <SelectTrigger id="ai-model-select">
               <SelectValue placeholder="Select AI model" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash</SelectItem>
-              <SelectItem value="gemini-2.0-flash">Gemini 2.0 Flash</SelectItem>
+              <SelectItem value="gemini-2.5-flash">⚡ Gemini 2.5 Flash (Fast)</SelectItem>
+              <SelectItem value="gemini-2.0-flash">🚀 Gemini 2.0 Flash (Balanced)</SelectItem>
+              <SelectItem value="gemini-2.0-flash-lite">💨 Gemini 2.0 Flash Lite (Fastest)</SelectItem>
+              <SelectItem value="gemini-1.5-pro">👁️ Gemini 1.5 Pro (Best for Images/PDF)</SelectItem>
             </SelectContent>
           </Select>
+          <p className="text-xs text-muted-foreground">
+            {selectedAiModel === 'gemini-1.5-pro'
+              ? '✨ Best for reading images and PDFs with complex layouts'
+              : selectedAiModel === 'gemini-2.0-flash-lite'
+                ? '⚡ Fastest response, good for simple documents'
+                : selectedAiModel === 'gemini-2.0-flash'
+                  ? '🎯 Balanced speed and accuracy'
+                  : '🔥 Latest model with great performance'}
+          </p>
         </div>
 
         <div className="space-y-2">
@@ -125,11 +136,11 @@ export function AiAssistPanel() {
             <p className="text-sm text-muted-foreground">File Preview:</p>
             <div className="border rounded-lg p-4 bg-secondary/50 flex items-center justify-center">
               {isPdf ? (
-                 <div className="flex flex-col items-center gap-2 text-center">
-                    <FileText className="w-16 h-16 text-primary" />
-                    <p className="text-sm font-medium">{selectedFile.name}</p>
-                    <p className="text-xs text-muted-foreground">PDF preview is not available. Ready to be analyzed.</p>
-                 </div>
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <FileText className="w-16 h-16 text-primary" />
+                  <p className="text-sm font-medium">{selectedFile.name}</p>
+                  <p className="text-xs text-muted-foreground">PDF preview is not available. Ready to be analyzed.</p>
+                </div>
               ) : (
                 <Image
                   src={previewUrl}
@@ -151,7 +162,7 @@ export function AiAssistPanel() {
             </>
           ) : (
             <>
-             <Wand2 className="mr-2 h-4 w-4" />
+              <Wand2 className="mr-2 h-4 w-4" />
               Analyze Resume
             </>
           )}
