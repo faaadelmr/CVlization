@@ -65,8 +65,8 @@ function RenderContent() {
         <div
             id="pdf-render-container"
             style={{
-                width: '210mm',
-                height: '297mm',
+                width: '840px',
+                height: '1188px',
                 margin: 0,
                 padding: 0,
                 backgroundColor: 'white',

@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
 
     const page = await browser.newPage();
 
-    // Set viewport to A4 size at 96 DPI
+    // Set viewport to match preview size (840x1188 pixels)
     await page.setViewport({
-      width: 794, // 210mm at 96 DPI
-      height: 1123, // 297mm at 96 DPI
+      width: 840, // Same as preview width
+      height: 1188, // Same as preview height
       deviceScaleFactor: 2,
     });
 

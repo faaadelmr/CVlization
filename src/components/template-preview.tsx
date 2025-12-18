@@ -90,10 +90,10 @@ export const TemplatePreviewComponent = ({
 
   return (
     <div className="p-0 m-0 w-full h-full" style={{
-      width: '210mm',
-      height: '297mm',
-      maxWidth: '210mm',
-      maxHeight: '297mm',
+      width: '840px',
+      height: '1188px',
+      maxWidth: '840px',
+      maxHeight: '1188px',
       overflow: 'hidden'
     }}>
       <TemplatePreview
